@@ -142,7 +142,7 @@ const CardModal = () => {
                       >
                         <div className="main-area">
                           <div className="transfer-area">
-                            <p>Set a transfer limit for paylio payment Card</p>
+                            <p>Set a transfer limit for settl payment Card</p>
                             <p className="mdr">Transfer Limit</p>
                           </div>
                           <form action="#">

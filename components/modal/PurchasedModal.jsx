@@ -27,7 +27,7 @@ const PurchasedModal = () => {
                     <Image className="mb-60" src={success} alt="icon" />
                     <h5>
                       You successfully purchased <span>0.010 BTC</span> from
-                      Paylio
+                      settl
                     </h5>
                     <ul>
                       <li>
