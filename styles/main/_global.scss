@@ -378,6 +378,10 @@ label {
     box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.3);
     background-color: var(--bs-white);
   }
+  .login-header-section {
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.3);
+    background-color: var(--bs-white);
+  }
 }
 
 @media (max-width: 575px) {
@@ -620,6 +624,7 @@ label {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 .icon-dashboard:before {
   content: "\0043";
 }

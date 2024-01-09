@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
       {/* Transaction Modal */}
       <TransactionModal />
 
-      {/* AddRecipients Modal */}
+      {/* AddRecipients Modal */} 
       <AddRecipientsModal />
 
       <NavBar />
