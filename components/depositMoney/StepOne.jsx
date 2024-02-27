@@ -102,7 +102,7 @@ const StepOne = () => {
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-              <h4>Pagar a tarjeta</h4>
+              <h4>Pagar con tarjeta</h4>
               <div className="icon-area">
                 <Image src={support_icon} alt="icon" />
               </div>
