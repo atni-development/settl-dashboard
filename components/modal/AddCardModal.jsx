@@ -474,7 +474,7 @@ const AddCardModal = () => {
                           <label htmlFor="month">Mes</label>
                            <select ref={monthRef} value={validTrhuMonth} onChange={handleValidThruMonth} className="w-100">
                             {months.map((itm) => (
-                              <option value={itm}>{itm}</option>
+                              <option value={itm}  key={itm}>{itm}</option>
                             ))}
                           </select>
                         </div>
@@ -484,7 +484,7 @@ const AddCardModal = () => {
                           <label htmlFor="year">Año</label>
                           <select ref={yearRef} value={validTrhuyear} onChange={handleValidThruYear} className="w-100">
                             {years.map((itm) => (
-                              <option value={itm}>{itm}</option>
+                              <option value={itm}  key={itm}>{itm}</option>
                             ))}
                           </select>
                         </div>
@@ -525,7 +525,7 @@ const AddCardModal = () => {
                           <label htmlFor="year">Día de corte</label>
                           <select ref={closingDayRef} value={closingDay} onChange={handleClosingDay} className="w-100">
                             {availableDays.map((itm) => (
-                              <option value={itm}>{itm}</option>
+                              <option value={itm}  key={itm}>{itm}</option>
                             ))}
                           </select>
                         </div>
@@ -565,7 +565,7 @@ const AddCardModal = () => {
                           <label htmlFor="postal">Estado</label>
                           <select ref={stateRef} value={stateCity} onChange={handleStateChange} className="w-100">
                             {mexStatesAccented.map((itm) => (
-                              <option value={itm}>{itm}</option>
+                              <option value={itm}  key={itm}>{itm}</option>
                             ))}
                           </select>
                         </div>
@@ -575,7 +575,7 @@ const AddCardModal = () => {
                           <label htmlFor="postal">País</label>
                           <select ref={countryRef} value={country} className="w-100">
                             {countrys.map((itm) => (
-                              <option value={itm}>{itm}</option>
+                              <option value={itm}  key={itm}>{itm}</option>
                             ))}
                           </select>
                         </div>

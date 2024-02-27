@@ -156,7 +156,7 @@ const StepOne = () => {
                     </div>
                     */}
                     {allCards.map((item, index) => (
-                      <div className="single-card">
+                      <div className="single-card"     key={index}>
                         <input
                           type="radio"
                           key={index}
@@ -166,8 +166,8 @@ const StepOne = () => {
                           value={item.cardNumber}
                           onClick={(e) => handleChecked(e, item)}
                         />
-                        <label htmlFor={item.cardNumber}>
-                        <div className="col-xl-12 col-lg-12 col-md-12">
+                        <label htmlFor={item.cardNumber}     key={index}>
+                        <div className="col-xl-12 col-lg-12 col-md-12"     key={index}>
                           <span className="wrapper"></span>
                           <Image src={visa_card} alt="image" />
                           <p>Mastercard Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
