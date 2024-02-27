@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useMediaQuery } from "react-responsive";
-
+import firebase_app from "@/firebase/config";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 const { createContext, useState, useEffect } = require("react");
 
 const SettlContext = createContext();
@@ -30,6 +31,8 @@ const SettlProvider = ({ children }) => {
     setNotificationActive(!notificationActive);
   };
 
+  
+
   /*const languageActiveHandler = () => {
     setNotificationActive(false);
     setUserActive(false);
@@ -42,6 +45,13 @@ const SettlProvider = ({ children }) => {
     } else {
       setActiveLefMenu(true);
     }
+    var auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (!user) { 
+        router.push("/login");
+        console.log("user is logged out")
+      }
+    });
   }, [isDesktopOrLaptop]);
 
   useEffect(() => {

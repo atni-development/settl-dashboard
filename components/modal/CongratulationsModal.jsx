@@ -2,8 +2,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaTimes } from "react-icons/fa";
 import success from "/public/images/icon/success.png";
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 
 const CongratulationsModal = () => {
+  const [currentAmount, setCurrentAmout] = useState(0);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      var currentAmount = localStorage.getItem('amountToPay');
+      setCurrentAmout(currentAmount);
+      console.log("Current amount: " + currentAmount);
+    }
+  }, []);
+
+
+  const onClose = event => {
+    console.log("ON CLOSE");;
+    localStorage.removeItem('current_card');
+    localStorage.removeItem('amountToPay');
+    localStorage.removeItem('commisionToPay');
+    router.push("/");
+  }
+
   return (
     <div className="congratulations-popup purchased-popup">
       <div className="container-fruid">
@@ -32,11 +54,17 @@ const CongratulationsModal = () => {
                     <Image className="mb-60" src={success} alt="icon" />
                     <h4 className="mb-30">Solicitud enviada</h4>
                     <p>
-                      Tu solicitud de pago por el montó de $30,000.00 MXN ha sido enviada exitosamente, se enviará un correo de confirmación en cuanto se haya efectuado el pago.
+                      Tu solicitud de pago ha sido enviada exitosamente, se enviará un correo de confirmación en cuanto se haya efectuado el pago.
                     </p>
-                    <Link href="/" className="mt-40">
-                      Regresar al panel principal
-                    </Link>
+                  
+                    <Link
+                    href=""
+                            type="button"
+                            className="mt-40"
+                            data-bs-toggle="modal"
+                            data-bs-target="#congratulationsMod"
+                            onClick={onClose}
+                          > Regresar al panel principal</Link>
                   </div>
                 </div>
               </div>

@@ -18,15 +18,21 @@ const UserArea = () => {
     console.log("logout");
     const auth = getAuth();
     signOut(auth).then(() => {
+      localStorage.setItem('email',null);
+      localStorage.setItem('phone',null);
+      localStorage.setItem('name',null);
+      localStorage.setItem('userId', null);
       router.push("/login");
+      
     }).catch((error) => {
       // An error happened.
     });
   };
+
   const [phone, setPhone] = useState("");
   const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
-const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -34,11 +40,11 @@ const [email, setEmail] = useState("");
       let userId = localStorage.getItem('userId');
       let phone = localStorage.getItem('userphoneId');
       let email = localStorage.getItem('email');
-    
+
       setPhone(phone);
       setUserId(userId);
       setEmail(email);
-      setName(name); 
+      setName(name);
     }
   }, []);
 

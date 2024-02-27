@@ -7,8 +7,41 @@ import excel from "/public/images/icon/excel.png";
 import pdf from "/public/images/icon/pdf.png";
 import printer from "/public/images/icon/printer.png";
 import search from "/public/images/icon/search.png";
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
+import { getFirestore, collection, onSnapshot } from "firebase/firestore";
+
 
 const TransactionsMain = () => {
+  const [transactions, setTransactions] = useState([]);
+  const [loadong, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      //setCurrentCard(card);
+      var db = getFirestore();
+      setLoading(true);
+      let userId = localStorage.getItem('userId').trim();
+      var collectionPath = "Users/" + userId + "/payment_requests";
+      const q = collection(db, collectionPath);
+      onSnapshot(q, (querySnapshot) => {
+        var transactions = [];
+        querySnapshot.forEach((doc) => {
+          transactions.push(doc.data());
+        });
+        console.log("Transactions: ");
+        console.log(transactions);
+        if (transactions.length > 0) {
+          setTransactions(transactions);
+          //setCurrentCard(cards[0]);
+        } else {
+          setTransactions([]);
+        }
+       
+      })
+    }
+  }, []);
+
   return (
     <section className="dashboard-section body-collapse transactions">
       <div className="overlay pt-120">
@@ -36,7 +69,7 @@ const TransactionsMain = () => {
                 <div className="top-items">
                   <h6>Todas las transacciones</h6>
                   <div className="export-area">
-                    <ul className="d-flex align-items-center">
+                  {/*   <ul className="d-flex align-items-center">
                       <li>
                         <Link href="#">
                           <Image src={printer} alt="icon" />
@@ -44,7 +77,7 @@ const TransactionsMain = () => {
                         </Link>
                       </li>
                     
-                    </ul>
+                    </ul> */}
                   </div>
                 </div>
                 {/* Filter */}

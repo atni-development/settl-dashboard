@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     var auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (user) { 
         setLoading(false);
         const uid = user.uid;
         console.log("uid", uid)

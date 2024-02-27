@@ -10,7 +10,7 @@ const AccountDetails = () => {
     <>
       <div className="top-area">
         <div className="left-side">
-          <h5>Hola Ivan, por pagar en tu tarjeta:</h5>
+          <h5>Hola Ivan, por pagar:</h5>
           <h2>$30,700.00</h2>
           <h5 className="receive">
             Por el último pago recibido <span>$30,000</span>
@@ -27,7 +27,7 @@ const AccountDetails = () => {
       <div className="bottom-area">
         <div className="left-side">
           <Link href="/deposit-money/step-1" className="cmn-btn">
-            Pagar otro mes en mi tarjeta
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </Link>
         </div>
       
