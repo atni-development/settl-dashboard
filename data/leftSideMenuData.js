@@ -52,7 +52,7 @@ const leftSideMenuData = [
     id: 3,
     icon: <i className="icon-deposit"></i>,
     path: "deposit-money",
-    name: "Pagar con tarjeta",
+    name: "Pagar a tarjeta",
     url: "/deposit-money/step-1",
   },
   /*{
