@@ -67,8 +67,12 @@ const StepThree = () => {
             setSuccess(true);
             showModalRef.current.click();
           }
-          setSuccess(true);
-          showModalRef.current.click();
+          setTimeout(
+            function() {
+              setSuccess(true);
+              showModalRef.current.click();
+            }, 2000);
+       
 
         } else {
           router.push("/deposit-money/step-2");
@@ -272,7 +276,7 @@ const StepThree = () => {
                   {error && <Alert color="danger">{error}</Alert>}
 
                     <div className="top-area">
-                      <h6>Confirma la cantidad y la tarjeta a pagar</h6>
+                      <h6>Confirme la cantidad y la tarjeta a pagar</h6>
                       <div className="right">
                       {(!loading && !success)? <Link  href="/deposit-money/step-2">
                           <i className="icon-h-edit"></i>
