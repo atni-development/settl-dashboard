@@ -63,7 +63,7 @@ const StepThree = () => {
           console.log("currents amount is: " + amount);
           var params = parseQueryString();
           console.log(params);
-          if(params["settlPaymentId"]){
+          if(params){
             setSuccess(true);
             showModalRef.current.click();
           }
