@@ -62,7 +62,7 @@ const StepThree = () => {
           setCurrentCommision(currentCommision);
           console.log("currents amount is: " + amount);
           var params = parseQueryString();
-
+          console.log(params);
           if(params["settlPaymentId"]){
             setSuccess(true);
             showModalRef.current.click();
