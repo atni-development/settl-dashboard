@@ -62,10 +62,11 @@ const StepThree = () => {
           setCurrentCommision(currentCommision);
           console.log("currents amount is: " + amount);
           console.log(params);
+          var params = parseQueryString();
+
           if(params['settlPaymentId']){
           setTimeout(
             function() {
-              var params = parseQueryString();
 
             
                 setSuccess(true);
