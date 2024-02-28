@@ -61,16 +61,16 @@ const StepThree = () => {
           setCurrentAmout(amount);
           setCurrentCommision(currentCommision);
           console.log("currents amount is: " + amount);
-          var params = parseQueryString();
           console.log(params);
-          if(params){
-            setSuccess(true);
-            showModalRef.current.click();
-          }
+         
           setTimeout(
             function() {
-              setSuccess(true);
-              showModalRef.current.click();
+              var params = parseQueryString();
+
+              if(params['settlPaymentId']){
+                setSuccess(true);
+                showModalRef.current.click();
+              }
             }, 2000);
        
 
