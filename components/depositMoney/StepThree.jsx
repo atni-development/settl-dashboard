@@ -131,7 +131,8 @@ const StepThree = () => {
                   case "The card was declined by the bank":
                     setError("La tarjeta fue declinada por el banco, por favor intenta con otra tarjeta o contacta a tu banco para más información");
                     break;
-                  default:  setError(result.data.message);
+                  //default:  setError(result.data.message);
+                  default:  setError("Se produjo un error al procesar la información de pago.");
                   break;
                 }
                
