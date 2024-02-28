@@ -82,10 +82,12 @@ const StepThree = () => {
           phone: phone
         };
     
-        const response = await axios.get('https://ipinfo.io/?token=6d105865cbf95e', {
+        /*const response = await axios.get('https://ipinfo.io/?token=6d105865cbf95e', {
           'Access-Control-Allow-Origin': true,
-        });
-        var userData = response.data;
+        });*/
+        
+        
+        //var userData = response.data;
         console.log(userData);
         var paymentData = {
           paymentStatus: "PENDING",
@@ -93,10 +95,10 @@ const StepThree = () => {
           method: "credit_card",
           card: currentCard,
           amount: currentAmount,
-          comission: currentComission,
+          comission: currentComission, 
           requested_date: new Date(),
           device_session_id: deviceDataId,
-          client_info:userData,
+         // client_info:userData,
           userData: currentUserData
         };
 
