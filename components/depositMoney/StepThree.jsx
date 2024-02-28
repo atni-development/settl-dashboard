@@ -3,9 +3,11 @@ import Link from "next/link";
 import support_icon from "/public/images/icon/support-icon.png";
 import { useState, useEffect, useRef } from 'react';
 import { getFunctions, httpsCallable } from "firebase/functions";
+
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import Head from "next/head";
 import { Alert } from 'reactstrap';
+import { useSearchParams } from 'next/navigation'
 
 import { useRouter } from 'next/router';
 import { Button } from "reactstrap";
@@ -23,6 +25,20 @@ const StepThree = () => {
   const [currentEmail, setCurrentEmail] = useState(null);
   const [currentComission, setCurrentCommision] = useState(0);
   const router = useRouter();
+  const searchParams = useSearchParams()
+  var parseQueryString = function() {
+    var str = window.location.search;
+    var objURL = {};
+
+    str.replace(
+        new RegExp( "([^?=&]+)(=([^&]*))?", "g" ),
+        function( $0, $1, $2, $3 ){
+            objURL[ $1 ] = $3;
+        }
+    );
+    
+    return objURL;
+};
 
 
   useEffect(() => {
@@ -40,9 +56,19 @@ const StepThree = () => {
         console.log("current card is: " + card.cardNumber);
         if (currentAmount !== null && currentCommision !== null) {
           var amount = currentAmount;
+          var search = window.location.search
+          console.log("Search: " + search);
           setCurrentAmout(amount);
           setCurrentCommision(currentCommision);
-          console.log("current amount is: " + amount);
+          console.log("currents amount is: " + amount);
+          var params = parseQueryString();
+
+          if(params["settlPaymentId"]){
+            setSuccess(true);
+            showModalRef.current.click();
+          }
+        
+
         } else {
           router.push("/deposit-money/step-2");
         }
@@ -115,10 +141,29 @@ const StepThree = () => {
             console.log("Server responded");
             console.log(result);
             if(result.data.status === "Success"){
-              console.log("Payment processed successfully");
-              setLoading(false);
-              setSuccess(true);
-              showModalRef.current.click();
+              if(result.data.payload.error_message !== null){
+                setError(result.data.payload.error);
+                setLoading(false);
+              }else{  
+                if(result.data.payload.payment_method){
+                  if(result.data.payload.payment_method.type !== "redirect"){
+                    console.log("Payment processed successfully");
+                    setLoading(false);
+                    setSuccess(true);
+                    showModalRef.current.click();
+                  }else{
+                    localStorage.setItem('pending_return', true);
+                    e.preventDefault();
+                    router.push(result.data.payload.payment_method.url);
+                  }
+
+                }else{
+                  console.log("Payment processed successfully");
+                  setLoading(false);
+                  setSuccess(true);
+                  showModalRef.current.click();
+                }
+              }
             }else{
               console.log("Error");
               setLoading(false);
@@ -155,8 +200,6 @@ const StepThree = () => {
             console.error("Error writing document: ", error);
           });
 
-
-       
       } else {
         console.log("OpenPay is not loaded");
         setLoading(false);
@@ -279,6 +322,10 @@ const StepThree = () => {
                     {(!loading && !success)? <Link href="/deposit-money/step-2">Regresar</Link>:<p></p>}
                     <Link
                     style={{display: "none"}}
+                    onClick={(e)=> {
+                      e.preventDefault();
+                  
+                     }}
                       href="#"
                       ref={showModalRef}
                       className="active"

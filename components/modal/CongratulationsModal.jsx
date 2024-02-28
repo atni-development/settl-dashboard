@@ -54,7 +54,7 @@ const CongratulationsModal = () => {
                     <Image className="mb-60" src={success} alt="icon" />
                     <h4 className="mb-30">Solicitud enviada</h4>
                     <p>
-                      Tu solicitud de pago ha sido enviada exitosamente, se enviará un correo de confirmación en cuanto se haya efectuado el pago.
+                      Tu solicitud de pago ha sido generada, se enviará una notificación por correo electrónico en cuanto la transacción se haya confirmado.
                     </p>
                   
                     <Link
