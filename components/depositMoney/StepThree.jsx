@@ -67,7 +67,8 @@ const StepThree = () => {
             setSuccess(true);
             showModalRef.current.click();
           }
-        
+          setSuccess(true);
+          showModalRef.current.click();
 
         } else {
           router.push("/deposit-money/step-2");
