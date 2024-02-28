@@ -88,7 +88,7 @@ const StepThree = () => {
         
         
         //var userData = response.data;
-        console.log(userData);
+        //console.log(userData);
         var paymentData = {
           paymentStatus: "PENDING",
           chargeStatus: "PENDING",
