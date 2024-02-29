@@ -229,7 +229,10 @@ const StepOne = () => {
                       </button>
                     </div>
                   </div>
+                  <img src="/images/cards_accepted.png" alt="icon" />
+
                 </div>
+             
                 <div className="footer-area mt-40">
                   <Link href="#" className="d-none">
                     Regresar
