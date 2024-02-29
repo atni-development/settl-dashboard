@@ -229,7 +229,6 @@ const StepOne = () => {
                       </button>
                     </div>
                   </div>
-                  <img src="/images/cards_accepted.png" alt="icon" />
 
                 </div>
              

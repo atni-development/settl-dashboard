@@ -580,6 +580,8 @@ const AddCardModal = () => {
                           </select>
                         </div>
                       </div>
+                      <img src="/images/cards_accepted.png" alt="icon" />
+
                       <div className="col-12">
                         <div className="btn-border w-100">
 
