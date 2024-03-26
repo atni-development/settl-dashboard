@@ -1,11 +1,17 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 
-const Select = ({ data = [], btn = "", btnText = "" }) => {
+const Select = ({ data = [], btn = "", btnText = "", setSharedState }) => {
   const [selected, setSelected] = useState(data[0]);
 
+  function question(e) {
+    console.log(e);
+    setSelected(e);
+    setSharedState(e)
+  }
+
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox value={selected} onChange={question}>
       <div className="selector">
         <Listbox.Button className={btn}>
           {/* <Image src={selected?.icon} alt="icon" /> */}

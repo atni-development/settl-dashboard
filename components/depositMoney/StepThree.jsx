@@ -67,12 +67,9 @@ const StepThree = () => {
           if(params['settlPaymentId']){
           setTimeout(
             function() {
-
-            
                 setSuccess(true);
                 showModalRef.current.click();
-              
-            }, 2000);
+            }, 100);
           }
        
 
