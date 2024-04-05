@@ -144,10 +144,10 @@ const AddCardModal = () => {
       error = true;
       setError("Debes ingresar la ciudad de la dirección de facturación");
     }
-    if(closingMonth === "February" && closingDay > 28){
+    /*if(closingMonth === "February" && closingDay > 28){
       error = true;
       setError("El día de corte no puede ser mayor a 28 para el mes de Febrero");
-    }
+    }*/
     if (cardNumber === "") {
       error = true;
       setError("Debes ingresar el número de tarjeta");
@@ -471,7 +471,7 @@ const AddCardModal = () => {
                       </div>
                       <div className="col-md-4">
                         <div className="single-input">
-                          <label htmlFor="month">Mes</label>
+                          <label htmlFor="month">Mes de vencimiento</label>
                            <select ref={monthRef} value={validTrhuMonth} onChange={handleValidThruMonth} className="w-100">
                             {months.map((itm) => (
                               <option value={itm}  key={itm}>{itm}</option>
@@ -481,7 +481,7 @@ const AddCardModal = () => {
                       </div>
                       <div className="col-md-4">
                         <div className="single-input">
-                          <label htmlFor="year">Año</label>
+                          <label htmlFor="year">Año de vencimiento</label>
                           <select ref={yearRef} value={validTrhuyear} onChange={handleValidThruYear} className="w-100">
                             {years.map((itm) => (
                               <option value={itm}  key={itm}>{itm}</option>
@@ -489,7 +489,7 @@ const AddCardModal = () => {
                           </select>
                         </div>
                       </div>
-                      <div className="col-md-4">
+                      <div className="col-md-2">
                         <div className="single-input">
                           <label htmlFor="year">CVV</label>
                           <input
@@ -501,7 +501,7 @@ const AddCardModal = () => {
                       </div>
                     
 
-                      <div className="col-md-4">
+                      {/*<div className="col-md-4">
                         <div className="single-input">
                           <label htmlFor="year">Mes de corte</label>
                           <select ref={closingMonthRef} value={closingMonth} onChange={handleMonthChange} className="w-100">
@@ -519,8 +519,8 @@ const AddCardModal = () => {
                             <option value="December">Diciembre</option>
                           </select>
                         </div>
-                      </div>
-                      <div className="col-md-4">
+                            </div>*/}
+                      <div className="col-md-2">
                         <div className="single-input">
                           <label htmlFor="year">Día de corte</label>
                           <select ref={closingDayRef} value={closingDay} onChange={handleClosingDay} className="w-100">
@@ -530,16 +530,7 @@ const AddCardModal = () => {
                           </select>
                         </div>
                       </div>
-                      <div className="col-md-4">
-                        <div className="single-input">
-                          <label htmlFor="postal">Código postal</label>
-                          <input
-                            ref={postalRef}
-                            type="number" id="postal" placeholder="01000"
-                            maxlength="5"
-                            onChange={(event) => setPostal(event.target.value)} />
-                        </div>
-                      </div>
+
                       <div className="col-md-12">
                         <div className="single-input">
                           <label htmlFor="postal">Dirección</label>
@@ -570,7 +561,7 @@ const AddCardModal = () => {
                           </select>
                         </div>
                       </div>
-                      <div className="col-md-4">
+                      {/*<div className="col-md-4">
                         <div className="single-input">
                           <label htmlFor="postal">País</label>
                           <select ref={countryRef} value={country} className="w-100">
@@ -578,6 +569,16 @@ const AddCardModal = () => {
                               <option value={itm}  key={itm}>{itm}</option>
                             ))}
                           </select>
+                        </div>
+                            </div>*/}
+                             <div className="col-md-4">
+                        <div className="single-input">
+                          <label htmlFor="postal">Código postal</label>
+                          <input
+                            ref={postalRef}
+                            type="number" id="postal" placeholder="01000"
+                            maxlength="5"
+                            onChange={(event) => setPostal(event.target.value)} />
                         </div>
                       </div>
                       <img src="/images/cards_accepted.png" alt="icon" />
