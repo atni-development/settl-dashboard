@@ -136,7 +136,7 @@ const StepOne = () => {
                 <div className="table-area">
                   <div className="head-area">
                     <h4>Tarjetas de crédito agregadas</h4>
-                    {noCards ? <p>Debes registrar una tarjeta para continuar</p> : <p>Selecciona una tarjeta para pagar</p>}
+                    {noCards ? <p>Debes registrar una tarjeta para continuar.</p> : <p>Selecciona una tarjeta para pagar</p>}
                   </div>
                   {error && <Alert color="danger">{error}</Alert>}
                   <div className="card-area d-flex flex-wrap">
