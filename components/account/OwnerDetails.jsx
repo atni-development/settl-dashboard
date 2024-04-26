@@ -3,8 +3,49 @@ import Link from "next/link";
 import delete_2 from "/public/images/icon/delete-2.png";
 import logout from "/public/images/icon/logout.png";
 import owner_profile from "/public/images/owner-profile.png";
+import { useState, useEffect } from 'react';
+import { getAuth, signOut } from "firebase/auth";
 
 const OwnerDetails = () => {
+
+  const [phone, setPhone] = useState("");
+  const [userId, setUserId] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [created_date, setCreated_date] = useState("");
+
+  const onLogOut = event => {
+    console.log("logout");
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      localStorage.setItem('email',null);
+      localStorage.setItem('phone',null);
+      localStorage.setItem('name',null);
+      localStorage.setItem('userId', null);
+      localStorage.setItem('created_date', null);
+      router.push("/login");
+      
+    }).catch((error) => {
+      // An error happened.
+    });
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      let name = localStorage.getItem('name');
+      let userId = localStorage.getItem('userId');
+      let phone = localStorage.getItem('userphoneId');
+      let email = localStorage.getItem('email');
+      let created_date = localStorage.getItem('created_date');
+
+      setPhone(phone);
+      setUserId(userId);
+      setEmail(email);
+      setName(name);
+      setCreated_date(created_date);
+    }
+  }, []);
+
   return (
     <div className="owner-details">
       <div className="profile-area">
@@ -12,7 +53,7 @@ const OwnerDetails = () => {
           <Image src={owner_profile} alt="image" />
         </div>
         <div className="name-area">
-          <h6>María Pérez García</h6>
+          <h6>{name}</h6>
           <p className="active-status">Activo</p>
         </div>
       </div>
@@ -20,27 +61,27 @@ const OwnerDetails = () => {
         <ul>
           <li>
             <p>ID:</p>
-            <span className="mdr">Rex49484</span>
+            <span className="mdr">{userId}</span>
           </li>
           <li>
             <p>Registrado el:</p>
-            <span className="mdr">Feb 25,2023</span>
+            <span className="mdr">{created_date}</span>
           </li>
-          <li>
+          {/* <li>
             <p>Identidad:</p>
             <span className="mdr">Confirmada</span>
-          </li>
+          </li> */}
         </ul>
       </div>
       <div className="owner-action">
-        <Link href="#">
+        <Link href="" onClick={onLogOut}>
           <Image src={logout} alt="image" />
           Cerrar sesión
         </Link>
-        <Link href="#" className="delete">
+        {/* <Link href="#" className="delete">
           <Image src={delete_2} alt="image" />
           Borrar cuenta
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

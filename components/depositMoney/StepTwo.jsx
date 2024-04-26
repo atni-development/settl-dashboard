@@ -64,7 +64,7 @@ const StepTwo = () => {
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-              <h4>Pagar con tarjeta</h4>
+              <h4>Comprar tiempo</h4>
               <div className="icon-area">
                 <Image src={support_icon} alt="icon" />
               </div>
@@ -78,7 +78,7 @@ const StepTwo = () => {
                         href="/deposit-money/step-1"
                         className="single-link active"
                       >
-                        Selecciona el método de pago
+                        Selecciona qué tarjeta quieres gestionar con Settl
                       </Link>
                     </li>
                     <li>
@@ -86,7 +86,7 @@ const StepTwo = () => {
                         href="/deposit-money/step-2"
                         className="single-link active"
                       >
-                        Introduce la cantidad a pagar
+                        Introduce la cantidad
                       </Link>
                     </li>
                     <li>
@@ -100,13 +100,13 @@ const StepTwo = () => {
                   </ul>
                 </div>
               </div>
-              <div className="col-xl-8 col-lg-8 col-md-7">
+              <div className="col-xl-9 col-lg-8 col-md-7">
                 <div className="table-area">
                   <form action="#">
                     <div className="send-banance">
                       {error && <Alert color="danger">{error}</Alert>}
 
-                      <span className="mdr">Escribe la cantidad que desees pagar a la tarjeta de crédito</span>
+                      <p>Escribe la cantidad a gestionar con Settl</p>
 
                       <div className="input-area">
                         <p><b>$</b></p>
@@ -115,13 +115,13 @@ const StepTwo = () => {
                           className="xxlr"
                           min="0"
                           maxLength={4}
-                          placeholder=" Ejemplo 400.00"
+                          placeholder=" Ejemplo 1000.00"
                           type="number"
                         />
                         <p>MXN</p>
                       </div>
                       <p>
-                        Comisión:<b>${comision}</b>  ·   Máximo disponible<b>$30,700.00</b>
+                        Comisión:<b>${comision}</b>  ·   Máximo disponible<b>$5000.00</b>
                       </p>
                     </div>
                   </form>

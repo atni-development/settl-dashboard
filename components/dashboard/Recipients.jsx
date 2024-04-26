@@ -5,8 +5,28 @@ import recipients_1 from "/public/images/recipients-1.png";
 import recipients_2 from "/public/images/recipients-2.png";
 import recipients_3 from "/public/images/recipients-3.png";
 import recipients_4 from "/public/images/recipients-4.png";
+import { useState, useEffect } from 'react';
 
 const Recipients = () => {
+  const [phone, setPhone] = useState("");
+  const [userId, setUserId] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      let name = localStorage.getItem('name');
+      let userId = localStorage.getItem('userId');
+      let phone = localStorage.getItem('userphoneId');
+      let email = localStorage.getItem('email');
+
+      setPhone(phone);
+      setUserId(userId);
+      setEmail(email);
+      setName(name);
+    }
+  }, []);
+
   return (
     <div className="single-item">
       <div className="section-text d-flex align-items-center justify-content-between">
@@ -21,17 +41,10 @@ const Recipients = () => {
           <p className="left d-flex align-items-center">
             <Image src={recipients_1} alt="icon" />
             <span className="info">
-              <span>Ivan Casillas</span>
-              <span>Tarjeta habiente principal</span>
+              <span>{name}</span>
             </span>
           </p>
-          <p className="right">
-            <span> +$60,000</span>
-            <span>Pagado</span>
-          </p>
         </li>
-    
-        
       </ul>
     </div>
   );

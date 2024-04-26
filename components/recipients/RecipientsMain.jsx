@@ -27,12 +27,12 @@ const RecipientsMain = () => {
               <div className="transactions-main">
                 <div className="filters-item d-flex justify-content-lg-between">
                   <div className="single-item search-area">
-                    <form action="#" className="flex-fill">
+                  {/*   <form action="#" className="flex-fill">
                       <div className="form-group d-flex align-items-center">
                         <Image src={search} alt="icon" />
                         <input type="text" placeholder="Escribe tu búsqueda..." />
                       </div>
-                    </form>
+                    </form> */}
                   </div>
                   <div className="right-area w-100 d-flex align-items-center">
                     <div className="single-item">

@@ -48,12 +48,12 @@ const NavBar = () => {
                   onClick={() => setActiveLefMenu((prev) => !prev)}
                 />
               </div>
-              <form action="#" className="flex-fill">
+            {/*   <form action="#" className="flex-fill">
                 <div className="form-group d-flex align-items-center">
                   <Image src={search} alt="icon" />
                   <input type="text" placeholder="Escribe tu búsqueda..." />
                 </div>
-              </form>
+              </form> */}
               <div className="dashboard-nav">
                 {/* Language Area 
                 <LanguageArea />*/}

@@ -6,8 +6,9 @@ import option from "/public/images/icon/option.png";
 import paylio_card from "/public/images/paylio-card-large.png";
 import paypal_card from "/public/images/paypal-card-large.png";
 import visa_card from "/public/images/visa-card-large.png";
+import { Button } from "reactstrap";
 
-const LinkedPaymentSystem = () => {
+const LinkedPaymentSystem = ({ data = {}, noCards = true }) => {
   return (
     <>
       <div className="section-text d-flex align-items-center justify-content-between">
@@ -24,76 +25,33 @@ const LinkedPaymentSystem = () => {
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <li>
-                <Link className="dropdown-item" href="/account">
+                <Button className="dropdown-item" onClick={() => console.log("Agregar tarjeta")}
+                  data-bs-toggle="modal"
+                  data-backdrop="static" data-keyboard="false"
+                  data-bs-target="#addcardMod">
                   Agregar tarjeta
-                </Link>
+                </Button>
               </li>
-              
+
             </ul>
           </div>
         </div>
       </div>
       <div className="row">
-        <div className="col-6">
-          <div className="single-card">
-            <button
-              type="button"
-              className="reg w-100"
-              data-bs-toggle="modal"
-              data-bs-target="#cardMod"
-            >
-              <Image src={visa_card} alt="image" className="w-100" />
-            </button>
+        { data.length > 0 ? data.map((item, index) => (
+          <div className="col-6">
+           
+            <label htmlFor={item.cardNumber} key={index}>
+              <div className="col-xl-12 col-lg-12 col-md-12" key={index}>
+                <span className="wrapper"></span>
+                <Image src={visa_card} alt="image" />
+                <p>Mastercard Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
+            </label>
+
           </div>
-        </div>
-        <div className="col-6">
-          <div className="single-card">
-            <button
-              type="button"
-              className="reg w-100"
-              data-bs-toggle="modal"
-              data-bs-target="#cardMod"
-            >
-              <Image src={paylio_card} alt="image" className="w-100" />
-            </button>
-          </div>
-        </div>
-        <div className="col-6">
-          <div className="single-card">
-            <button
-              type="button"
-              className="reg w-100"
-              data-bs-toggle="modal"
-              data-bs-target="#cardMod"
-            >
-              <Image src={paypal_card} alt="image" className="w-100" />
-            </button>
-          </div>
-        </div>
-        <div className="col-6">
-          <div className="single-card">
-            <button
-              type="button"
-              className="reg w-100"
-              data-bs-toggle="modal"
-              data-bs-target="#cardMod"
-            >
-              <Image src={blockchain_card} alt="image" className="w-100" />
-            </button>
-          </div>
-        </div>
-        <div className="col-6">
-          <div className="single-card">
-            <button
-              type="button"
-              className="reg w-100"
-              data-bs-toggle="modal"
-              data-bs-target="#addcardMod"
-            >
-              <Image src={add_new} alt="image" className="w-100" />
-            </button>
-          </div>
-        </div>
+
+        )): <div className="col-12">No hay tarjetas agregadas</div>}
+
       </div>
     </>
   );

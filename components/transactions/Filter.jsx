@@ -7,7 +7,7 @@ const dateSelect = [
 ];
 
 const balance = [
-  { id: 1, name: "Todas las transacciones" },
+  { id: 1, name: "Todas las operaciones" },
   { id: 2, name: "Pendientes" },
   { id: 3, name: "Canceladas" },
   { id: 4, name: "En progreso" },

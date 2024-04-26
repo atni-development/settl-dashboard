@@ -19,7 +19,7 @@ const TransactionsMain = () => {
 
 
   const balance = [
-    { id: "all", name: "Todas las transacciones" },
+    { id: "all", name: "Todas las operaciones" },
     { id: "Pendiente", name: "Pendientes" },
     { id: "Completada", name: "Canceladas" },
     { id: "En progreso", name: "En progreso" },
@@ -93,7 +93,7 @@ const TransactionsMain = () => {
   
 
   function onClearFilters() {
-    //setSelectedFilter({id: 'all', name: 'Todas las transacciones'});
+    //setSelectedFilter({id: 'all', name: 'Todas las operaciones'});
     setFilteredTransactions(transactions);
   }
 
@@ -157,11 +157,18 @@ const TransactionsMain = () => {
               transaction.classColor = "normal";
             }
             if (transaction.chargeStatus.toLowerCase() == "success") {
-              
+              transaction.chargeStatusText = "Completado";
+  
               transaction.chargeClassColor = "completed";
             }
             if (transaction.chargeStatus.toLowerCase() == "error") {
+              transaction.chargeStatusText = "Cargo declinado";
               transaction.chargeClassColor = "cancelled";
+            }
+            if (transaction.chargeStatus.toLowerCase() == "completed") {
+              transaction.chargeStatusText = "Completado";
+  
+              transaction.chargeClassColor = "completed";
             }
           });
 
@@ -195,16 +202,16 @@ const TransactionsMain = () => {
           <div className="head-area">
             <div className="row">
               <div className="col-lg-5 col-md-4">
-                <h4>Transacciones</h4>
+                <h4>Operaciones</h4>
               </div>
               <div className="col-lg-7 col-md-8">
                 <div className="transactions-right d-flex align-items-center">
-                  <form action="#" className="flex-fill">
+                  {/* <form action="#" className="flex-fill">
                     <div className="form-group d-flex align-items-center">
                       <Image src={search} alt="icon" />
                       <input type="text" placeholder="Escribe tu búsqueda..." />
                     </div>
-                  </form>
+                  </form> */}
                 </div>
               </div>
             </div>
@@ -213,7 +220,7 @@ const TransactionsMain = () => {
             <div className="col-xl-12">
               <div className="transactions-main">
                 <div className="top-items">
-                  <h6>Todas las transacciones</h6>
+                  <h6>Todas las operaciones</h6>
                   <div className="export-area">
                     {/*   <ul className="d-flex align-items-center">
                       <li>
@@ -273,7 +280,7 @@ const TransactionsMain = () => {
                           <p className="mdr">{payment.requested_date.toDate().toLocaleDateString("es-MX", {day: "numeric", year: "numeric", month:"short"})}</p>
                         </td>
                         <td>
-                          <p className={payment.chargeClassColor}>{payment.message == "Success"? "Completado": payment.message}</p>
+                          <p className={payment.chargeClassColor}>{payment.chargeStatusText}</p>
                         </td>
                         <td>
                           <p className={payment.classColor}>{payment.paymentStatus}</p>
@@ -291,7 +298,7 @@ const TransactionsMain = () => {
                     <div className="col-lg-5 col-md-4"></div>
 
                     <div className="col-lg-5 col-md-4">
-                      <h5>No se tienen transacciones registradas </h5><br></br>
+                      <h5>No se tienen operaciones registradas </h5><br></br>
                     </div></div>}
 
                 {/* {filteredTransactions.length > 0 ? <Pagination /> : <div></div>} */}

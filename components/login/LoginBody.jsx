@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 
 import Link from "next/link";
 import { useRouter } from 'next/router';
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail,  } from "firebase/auth";
+import { getFirestore, collection, addDoc, serverTimestamp} from "firebase/firestore";
 import Script from 'next/script';
 
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
@@ -64,102 +64,6 @@ const LoginBody = () => {
     }
   };
 
-  /*const onForgetPassword = event => {
-    //e.preventDefault();
-    var body = {
-      "card_number": "5555555555554444",
-      "holder_name": "Juan Perez Ramirez",
-      "expiration_year": "27",
-      "expiration_month": "12",
-      "cvv2": "110",
-      "address": {
-        "city": "Querétaro",
-        "country_code": "MX",
-        "postal_code": "76900",
-        "line1": "Av 5 de Febrero",
-        "line2": "Roble 207",
-        "line3": "col carrillo",
-        "state": "Queretaro"
-      }
-    };
-    const encodedToken = Buffer.from("sk_86e55dd39d8249e79fc3661f2d520756:").toString('base64');
-    const headers = {
-      'Authorization': 'Basic ' + encodedToken
-    }
-    console.log(headers)
-    console.log(JSON.stringify(body))
-    var request = axios.post('https://sandbox-api.openpay.mx/v1/mdjfxaujamxkjpeernxz/tokens', body, {
-      headers
-    }).then((response) => {
-      console.log("FIRST RESPONSE successful");
-      console.log(response);
-      OpenPay.setId('mdjfxaujamxkjpeernxz');
-      OpenPay.setApiKey('pk_db2479b316df4f4db0c85a09c3b833c5');
-      OpenPay.setSandboxMode(true);
-      var deviceDataId = OpenPay.deviceData.setup("formId");
-      console.log("WAITING 5 SECONDS")
-      setTimeout('', 500);
-      console.log("5 SECONDS DONE")
-
-      var chargeBody = {
-        "method": "card",
-        "amount": 6000.00,
-        "description": " Cargo 3D Secure ",
-        "order_id": "000000014",
-        "source_id": response.data.id,
-        "redirect_url": "http://localhost:3000/login",
-        "use_3d_secure": "false",
-        device_session_id: deviceDataId,
-        "customer" : {
-          "name" : "Juan",
-          "last_name" : "Perez Ramirez",
-          "phone_number" : "4423456723",
-          "email" : "juan.vazquez@empresa.com.mx"
-     }
-        
-      };
-      var chargeRequest = axios.post('https://sandbox-api.openpay.mx/v1/mdjfxaujamxkjpeernxz/charges', chargeBody, {
-        headers
-      }).then((response) => {
-        console.log("response CHARGE successful");
-        console.log(response);
-        var data = response.data;
-      
-          //Transaction can not be partially refunded today, try tomorrow
-          console.log("WAITING 6 SECONDS")
-    
-          var devolucionBody = {
-            "description" : "devolución",
-            "amount" : 100.00
-         };
-          var devRequest = axios.post('https://sandbox-api.openpay.mx/v1/mdjfxaujamxkjpeernxz/charges/'+data.id+'/refund', devolucionBody, {
-            headers
-          }).then((response) => {
-            console.log("response DEV successful");
-            console.log(response);
-          }).catch((error) => {
-            console.log("Error happen devolviendo");
-            console.log(error);
-            console.log(error.response);
-            console.log(error.response.data);
-          });
-      
-      }).catch((error) => {
-        console.log("Error CHARGE happen");
-        console.log(error);
-        console.log(error.response);
-        console.log(error.response.data);
-      });
-
-
-    }).catch((error) => {
-      console.log("Error happen");
-      console.log(error);
-      console.log(error.response);
-      console.log(error.response.data);
-    });
-    console.log(request)
-  };*/
 
   const onSubmit = event => {
     event.preventDefault();
@@ -200,8 +104,95 @@ const LoginBody = () => {
               localStorage.setItem('email', data.email);
               localStorage.setItem('phone', data.phone);
               localStorage.setItem('name', data.name);
+              localStorage.setItem('created_date', data.created_date.toDate().toLocaleDateString("es-MX"));
               localStorage.setItem('userId', authUser.user.uid);
-              router.push("/");
+              console.log("User data is: " + data.email + " " + data.phone + " " + data.name + " " + data.created_date + " " + authUser.user.uid)
+
+              var nVer = navigator.appVersion;
+var nAgt = navigator.userAgent;
+var browserName  = navigator.appName;
+var fullVersion  = ''+parseFloat(navigator.appVersion); 
+var majorVersion = parseInt(navigator.appVersion,10);
+var nameOffset,verOffset,ix;
+
+// In Opera, the true version is after "OPR" or after "Version"
+if ((verOffset=nAgt.indexOf("OPR"))!=-1) {
+ browserName = "Opera";
+ fullVersion = nAgt.substring(verOffset+4);
+ if ((verOffset=nAgt.indexOf("Version"))!=-1) 
+   fullVersion = nAgt.substring(verOffset+8);
+}
+// In MS Edge, the true version is after "Edg" in userAgent
+else if ((verOffset=nAgt.indexOf("Edg"))!=-1) {
+ browserName = "Microsoft Edge";
+ fullVersion = nAgt.substring(verOffset+4);
+}
+// In MSIE, the true version is after "MSIE" in userAgent
+else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
+ browserName = "Microsoft Internet Explorer";
+ fullVersion = nAgt.substring(verOffset+5);
+}
+// In Chrome, the true version is after "Chrome" 
+else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
+ browserName = "Chrome";
+ fullVersion = nAgt.substring(verOffset+7);
+}
+// In Safari, the true version is after "Safari" or after "Version" 
+else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
+ browserName = "Safari";
+ fullVersion = nAgt.substring(verOffset+7);
+ if ((verOffset=nAgt.indexOf("Version"))!=-1) 
+   fullVersion = nAgt.substring(verOffset+8);
+}
+// In Firefox, the true version is after "Firefox" 
+else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
+ browserName = "Firefox";
+ fullVersion = nAgt.substring(verOffset+8);
+}
+// In most other browsers, "name/version" is at the end of userAgent 
+else if ( (nameOffset=nAgt.lastIndexOf(' ')+1) < 
+          (verOffset=nAgt.lastIndexOf('/')) ) 
+{
+ browserName = nAgt.substring(nameOffset,verOffset);
+ fullVersion = nAgt.substring(verOffset+1);
+ if (browserName.toLowerCase()==browserName.toUpperCase()) {
+  browserName = navigator.appName;
+ }
+}
+// trim the fullVersion string at semicolon/space if present
+if ((ix=fullVersion.indexOf(";"))!=-1)
+   fullVersion=fullVersion.substring(0,ix);
+if ((ix=fullVersion.indexOf(" "))!=-1)
+   fullVersion=fullVersion.substring(0,ix);
+
+majorVersion = parseInt(''+fullVersion,10);
+if (isNaN(majorVersion)) {
+ fullVersion  = ''+parseFloat(navigator.appVersion); 
+ majorVersion = parseInt(navigator.appVersion,10);
+}
+var OSName="Unknown OS";
+if (navigator.appVersion.indexOf("Win")!=-1) OSName="Windows";
+if (navigator.appVersion.indexOf("Mac")!=-1) OSName="MacOS";
+if (navigator.appVersion.indexOf("X11")!=-1) OSName="UNIX";
+if (navigator.appVersion.indexOf("Linux")!=-1) OSName="Linux";
+var paymentData = {
+  browserName: browserName,
+  appName: navigator.appName,
+  appVersion: navigator.appVersion,
+  OSName: OSName,
+  platform: navigator.platform,
+  userAgent: navigator.userAgent,
+  version: fullVersion,
+  created_date: serverTimestamp()
+};
+
+const q = collection(db, "Users/"+authUser.user.uid+"/sessions");
+addDoc(q, paymentData).then((docRef) => {
+  router.push("/");
+}).catch((error) => {});
+
+
+              
             } else {
               setError("Se produjo un error al obtener el perfil del usuario. Error 201")
               console.error("Error writing document: ", error);
@@ -217,7 +208,13 @@ const LoginBody = () => {
           if (error.code == "auth/invalid-credential") {
             setError("El correo electrónico o la contraseña son incorrectos")
           } else {
-            setError(error.message + " Código: " + error.code)
+            if (error.code == "auth/user-disabled"){
+              setError("Por seguridad se bloqueó tu cuenta, contacta al administrador de la plataforma")
+
+            }else{
+              setError(error.message + " Código: " + error.code)
+
+            }
           }
         });
     }
@@ -248,7 +245,7 @@ const LoginBody = () => {
                 <div className="reg-google">
                   <Link href="#">
                     <FaGoogle />
-                    Regístrate con Google
+                    Inicia sesión con Google
                   </Link>
                 </div>
                 <span className="or">o conitnua con</span>
@@ -291,7 +288,7 @@ const LoginBody = () => {
 
                       <FormGroup row>
                         <Col>
-                          <Button>Regístrate</Button>
+                          <Button>Inicia sesión</Button>
                         </Col>
                       </FormGroup>
                     </Form>
@@ -299,7 +296,7 @@ const LoginBody = () => {
                 </Row>
               </Container>
 
-              <div className="forgot-pass mt-30 text-center">
+              <div className="forgot-pass text-center">
                 <Link href="" onClick={onForgetPassword}>Olvidé mi contraseña</Link>
               </div>
             </div>

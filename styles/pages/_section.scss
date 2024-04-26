@@ -1,4 +1,9 @@
 // Login registration
+.align-left{
+  text-align: left;
+
+}
+
 .login-reg {
   margin-top: -60px;
   .single-input {
@@ -104,6 +109,17 @@
       }
     }
   }
+  .bd-example-modal-lg .modal-dialog{
+    display: table;
+    position: relative;
+    margin: 0 auto;
+    top: calc(50% - 24px);
+  }
+  
+  .bd-example-modal-lg .modal-dialog .modal-content{
+    background-color: transparent;
+    border: none;
+  }
   .acc-details {
     background: #4341cc;
     border-radius: 10px;
@@ -116,6 +132,11 @@
       h2,
       h4 {
         color: var(--bs-white);
+      }
+      .green-text {
+        display: inline;
+
+        color: #24ff00;
       }
       h2 {
         margin: 25px 0 15px;
@@ -148,7 +169,7 @@
       }
       .right-bottom {
         h4 {
-          margin: 25px 0 15px;
+          margin: 0px 0px 0px 0px;
         }
         h5 {
           color: #24ff00;
@@ -1233,7 +1254,7 @@
             }
             &.last {
               &::before {
-                content: "4";
+                content: "3";
               }
               &::after {
                 display: none;
@@ -1675,6 +1696,7 @@
         border-radius: 20px;
         margin: 10px 0;
         input {
+          
           padding: 0;
           padding-right: 25px;
           margin: 0;
@@ -1682,6 +1704,10 @@
           background-color: transparent;
           font-weight: bold;
         }
+        input::placeholder {
+          font-size: 22px !important;
+        }
+        
       }
       .selector {
         button {
@@ -1702,6 +1728,11 @@
         align-items: center;
         margin-top: 20px;
         span {
+          text-align: start;
+        }
+        .small-text {
+          display: inline !important;
+          font-size: 10px !important;
           text-align: start;
         }
       }

@@ -22,6 +22,8 @@ const UserArea = () => {
       localStorage.setItem('phone',null);
       localStorage.setItem('name',null);
       localStorage.setItem('userId', null);
+      localStorage.setItem('created_date', null);
+
       router.push("/login");
       
     }).catch((error) => {

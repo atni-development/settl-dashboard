@@ -2,8 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, serverTimestamp, getFirestore, collection, addDoc } from "firebase/firestore"; 
 
 import { useState } from 'react';
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
@@ -60,6 +59,10 @@ const SignUpBody = () => {
       }
     }
 
+    if(name.split(" ").length<2){
+      currentError = "El nombre debe contener nombre y apellido"
+    }
+
     if (email === "") {
       currentError = "El correo electrónico es requerido"
     } else {
@@ -91,24 +94,127 @@ const SignUpBody = () => {
         .then(authUser => {
           console.log("Success. The user is created in Firebase "+authUser.user.uid)
           var db = getFirestore();
+
+          
           setDoc(doc(db, "Users", authUser.user.uid), {
             name: name,
             email: email,
             phone: phone,
             provider: "password",
+            created_date: serverTimestamp(),
+            sendAnnouncements: true,
+            sendPaymentNotifications: true,
+            sendMadeRequestNotifications: true,
+            sendPaymentProblemsNotifications: true,
+            sendPromosNotifications: true,
+            sendAccountUpdateNotifications: true,
           }).then(() => {
             localStorage.setItem('email',email);
             localStorage.setItem('phone',phone);
             localStorage.setItem('name',name);
             localStorage.setItem('userId', authUser.user.uid);
-            router.push("deposit-money/step-1");
+            localStorage.setItem('created_date', new Date().toLocaleDateString("es-MX"));
+            var nVer = navigator.appVersion;
+            var nAgt = navigator.userAgent;
+            var browserName  = navigator.appName;
+            var fullVersion  = ''+parseFloat(navigator.appVersion); 
+            var majorVersion = parseInt(navigator.appVersion,10);
+            var nameOffset,verOffset,ix;
+            
+            // In Opera, the true version is after "OPR" or after "Version"
+            if ((verOffset=nAgt.indexOf("OPR"))!=-1) {
+             browserName = "Opera";
+             fullVersion = nAgt.substring(verOffset+4);
+             if ((verOffset=nAgt.indexOf("Version"))!=-1) 
+               fullVersion = nAgt.substring(verOffset+8);
+            }
+            // In MS Edge, the true version is after "Edg" in userAgent
+            else if ((verOffset=nAgt.indexOf("Edg"))!=-1) {
+             browserName = "Microsoft Edge";
+             fullVersion = nAgt.substring(verOffset+4);
+            }
+            // In MSIE, the true version is after "MSIE" in userAgent
+            else if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
+             browserName = "Microsoft Internet Explorer";
+             fullVersion = nAgt.substring(verOffset+5);
+            }
+            // In Chrome, the true version is after "Chrome" 
+            else if ((verOffset=nAgt.indexOf("Chrome"))!=-1) {
+             browserName = "Chrome";
+             fullVersion = nAgt.substring(verOffset+7);
+            }
+            // In Safari, the true version is after "Safari" or after "Version" 
+            else if ((verOffset=nAgt.indexOf("Safari"))!=-1) {
+             browserName = "Safari";
+             fullVersion = nAgt.substring(verOffset+7);
+             if ((verOffset=nAgt.indexOf("Version"))!=-1) 
+               fullVersion = nAgt.substring(verOffset+8);
+            }
+            // In Firefox, the true version is after "Firefox" 
+            else if ((verOffset=nAgt.indexOf("Firefox"))!=-1) {
+             browserName = "Firefox";
+             fullVersion = nAgt.substring(verOffset+8);
+            }
+            // In most other browsers, "name/version" is at the end of userAgent 
+            else if ( (nameOffset=nAgt.lastIndexOf(' ')+1) < 
+                      (verOffset=nAgt.lastIndexOf('/')) ) 
+            {
+             browserName = nAgt.substring(nameOffset,verOffset);
+             fullVersion = nAgt.substring(verOffset+1);
+             if (browserName.toLowerCase()==browserName.toUpperCase()) {
+              browserName = navigator.appName;
+             }
+            }
+            // trim the fullVersion string at semicolon/space if present
+            if ((ix=fullVersion.indexOf(";"))!=-1)
+               fullVersion=fullVersion.substring(0,ix);
+            if ((ix=fullVersion.indexOf(" "))!=-1)
+               fullVersion=fullVersion.substring(0,ix);
+            
+            majorVersion = parseInt(''+fullVersion,10);
+            if (isNaN(majorVersion)) {
+             fullVersion  = ''+parseFloat(navigator.appVersion); 
+             majorVersion = parseInt(navigator.appVersion,10);
+            }
+            var OSName="Unknown OS";
+            if (navigator.appVersion.indexOf("Win")!=-1) OSName="Windows";
+            if (navigator.appVersion.indexOf("Mac")!=-1) OSName="MacOS";
+            if (navigator.appVersion.indexOf("X11")!=-1) OSName="UNIX";
+            if (navigator.appVersion.indexOf("Linux")!=-1) OSName="Linux";
+            var paymentData = {
+              browserName: browserName,
+              appName: navigator.appName,
+              appVersion: navigator.appVersion,
+              OSName: OSName,
+              platform: navigator.platform,
+              userAgent: navigator.userAgent,
+              version: fullVersion,
+              created_date: serverTimestamp()
+            };
+            
+            const q = collection(db, "Users/"+authUser.user.uid+"/sessions");
+            addDoc(q, paymentData).then((docRef) => {
+            
+              router.push("deposit-money/step-1");
+            }).catch((error) => {});
+
           }).catch((error) => {
             setError("Se produjo un error al crear el usuario. Error 202")
             console.error("Error writing document: ", error);
           });
         })
         .catch(error => {
-          setError(error.message)
+          if (error.code == "auth/email-already-in-use") {
+            setError("Ya existe una cuenta en uso con el correo electrónico")
+          } else {
+            if (error.code == "auth/user-disabled"){
+              setError("Por seguridad se bloqueó tu cuenta, contacta al administrador de la plataforma")
+
+            }else{
+              setError(error.message + " Código: " + error.code)
+
+            }
+          }
         });
     }
   };
@@ -133,7 +239,7 @@ const SignUpBody = () => {
                 <div className="reg-google">
                   <Link href="#">
                     <FaGoogle />
-                    Inicia sesión con Google
+                    Regístrate con Google
                   </Link>
                 </div>
                 <span className="or">o continua con</span>
@@ -146,7 +252,7 @@ const SignUpBody = () => {
                       onSubmit={onSubmit}>
                       {error && <Alert color="danger">{error}</Alert>}
                       <FormGroup row>
-                        <Label for="signUpName" sm={4}>Nombre compeleto</Label>
+                        <Label className="align-left" for="signUpName" sm={4}>Nombre completo</Label>
                         <Col sm={8}>
                           <Input
                             type="text"
@@ -158,7 +264,7 @@ const SignUpBody = () => {
                         </Col>
                       </FormGroup>
                       <FormGroup row>
-                        <Label for="signUpEmail" sm={4}>Correo Electrónico</Label>
+                        <Label className="align-left" for="signUpEmail" sm={4}>Correo Electrónico</Label>
                         <Col sm={8}>
                           <Input
                             type="email"
@@ -170,7 +276,7 @@ const SignUpBody = () => {
                         </Col>
                       </FormGroup>
                       <FormGroup row>
-                        <Label for="signUpCellphone" sm={4}>Celular</Label>
+                        <Label  className="align-left" for="signUpCellphone" sm={4}>Celular</Label>
                         <Col sm={8}>
                           <Input
                             type="number"
@@ -182,7 +288,7 @@ const SignUpBody = () => {
                         </Col>
                       </FormGroup>
                       <FormGroup row>
-                        <Label for="signUpPassword" sm={4}>Contraseña</Label>
+                        <Label className="align-left" for="signUpPassword" sm={4}>Contraseña</Label>
                         <Col sm={8}>
                           <Input
                             type="password"
@@ -194,7 +300,7 @@ const SignUpBody = () => {
                         </Col>
                       </FormGroup>
                       <FormGroup row>
-                        <Label for="signUpPassword2" sm={4}>Confirma tu contraseña</Label>
+                        <Label className="align-left" for="signUpPassword2" sm={4}>Confirma tu contraseña</Label>
                         <Col sm={8}>
                           <Input
                             type="password"

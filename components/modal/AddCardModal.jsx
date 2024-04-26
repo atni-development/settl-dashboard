@@ -1,7 +1,7 @@
 import { FaTimes } from "react-icons/fa";
 import { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
-import { addDoc, getDoc, getDocs, collection } from "firebase/firestore";
+import { addDoc, getDoc, getDocs, collection, doc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import axios from 'axios';
 
@@ -101,7 +101,7 @@ const AddCardModal = () => {
     "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
   ];
   var years = [
-     "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030","2031", "2032", "2033", "2034", "2035"
+     "2024", "2025", "2026", "2027", "2028", "2029", "2030","2031", "2032", "2033", "2034", "2035"
   ];
 
   var cardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/
@@ -144,6 +144,17 @@ const AddCardModal = () => {
       error = true;
       setError("Debes ingresar la ciudad de la dirección de facturación");
     }
+    var today = new Date();
+    var currentMonth = today.getMonth() + 1;
+    var currentYear = today.getFullYear();
+    if(validTrhuyear < currentYear){
+      error = true;
+      setError("El año de vencimiento de la tarjeta no puede ser menor al año actual");
+    }
+    if(validTrhuyear == currentYear && validTrhuMonth < currentMonth){
+      error = true;
+      setError("El mes de vencimiento de la tarjeta no puede ser menor al mes actual");
+    }
     /*if(closingMonth === "February" && closingDay > 28){
       error = true;
       setError("El día de corte no puede ser mayor a 28 para el mes de Febrero");
@@ -156,14 +167,7 @@ const AddCardModal = () => {
       error = true;
       setError("Debes ingresar el CVV de la tarjeta");
     }
-    if (validTrhuMonth === "") {
-      error = true;
-      setError("Debes ingresar el mes de vencimiento de la tarjeta");
-    }
-    if (validTrhuyear === "") {
-      error = true;
-      setError("Debes ingresar el año de vencimiento de la tarjeta");
-    }
+
     if (cardHolderName === "") {
       error = true;
       setError("Debes ingresar el nombre del titular de la tarjeta");
@@ -174,35 +178,30 @@ const AddCardModal = () => {
     }
    
     if (error == false) {
-      const options = {
-        method: 'POST',
-        url: 'https://bin-ip-checker.p.rapidapi.com/',
-        params: { bin: cardNumber.substring(0, 6) },
-        headers: {
-          'content-type': 'application/json',
-          'X-RapidAPI-Key': 'b03649ea75msheaca750379d398cp146a4fjsn663e8bb43948',
-          'X-RapidAPI-Host': 'bin-ip-checker.p.rapidapi.com'
-        },
-        data: { bin: cardNumber.substring(0, 6) }
-      };
+      var db = getFirestore();
 
-      try {
+      var finalBin = cardNumber.substring(0, 6);
+      console.log("BIN: " + finalBin);
+      const docRef = doc(db, "Bins", finalBin);
+      const docSnap = await getDoc(docRef);
+      console.log("DOC SNAP");
+      console.log(docSnap);
+ 
         setLoading(true);
-        const response = await axios.request(options);
-        console.log(response.data);
         setLoading(false);
-        if (response.data.code == 200) {
+        if (docSnap.exists()) {
+          var binData = docSnap.data();
+          console.log("BIN DATA");
+          console.log(binData);
+         // binData = binData.data();
           console.log("BIN RESPONSE");
-          if (response.data.BIN.brand === "VISA" || response.data.BIN.brand === "MASTERCARD") {
+          if (binData.brand === "VISA" || binData.brand === "MASTER CARD") {
             console.log("Tarjeta válida");
-            setBank(response.data.BIN.issuer.name);
-            if (response.data.BIN.type !== "CREDIT") {
+            setBank(binData.institution);
+            if (binData.type.toLowerCase() !== "crédito") {
               setError("La tarjeta introducida es de débito, por favor verifica que la información sea correcta.");
             } else {
-              if (response.data.BIN.currency !== "MXN") {
-                setError("La tarjeta debe de estar en pesos mexicanos para poder ser utilizada en la plataforma. Por favor verifica que la información sea correcta.");
-              } else {
-                var db = getFirestore();
+             
                 let userId = localStorage.getItem('userId').trim();
                 var collectionRoute = "Users/" + userId + "/cards";
                 console.log("Collection route: " + collectionRoute)
@@ -224,7 +223,7 @@ const AddCardModal = () => {
                     console.log("La tarjeta no ha sido registrada");
                     var cardData = {
                       status: "ACTIVE",
-                      bank: response.data.BIN.issuer.name,
+                      bank: binData.institution,
                       cardNumber: cardNumber,
                       cardCVV: cardCVV,
                       validTrhuMonth: validTrhuMonth,
@@ -238,15 +237,15 @@ const AddCardModal = () => {
                       country: "México",
                       state: stateCity,
                       country_code: "MX",
+                      bin: binData
                     }
-                    cardData.bin = response.data.BIN;
                     addDoc(collection(db, collectionRoute), cardData).then((docRef) => {
                       setError(null);
                       setInformation("La tarjeta ha sido verificada exitosamente");
                       setSuccess(true);
   
                       if (bankRef && bankRef.current) {
-                        bankRef.current.value = response.data.BIN.issuer.name;
+                        bankRef.current.value = binData.institution
                       }
                     })
                       .catch((error) => {
@@ -266,26 +265,15 @@ const AddCardModal = () => {
                   console.error(error);
                 }
               }
-
-
-            }
-
           } else {
             error = true;
             setError("La tarjeta introducida no es válida, el proceso sólo es compatible con Visa y Mastercard.");
           }
         } else {
           error = true;
-          setError("Se produjo un error al verficar la numeración de la tarjeta. Por favor revisa que la información proporcionada sea correcta.");
+          setError("Se produjo un error al verficar la numeración de la tarjeta. Por favor revisa que la información proporcionada sea correcta y que la tarjeta pertenezca a alguna insitutición bancaria que opere en la República Mexicana.");
         }
-      } catch (error) {
-        error = true;
-        setError("Se produjo un error al verficar la numeración de la tarjeta. Por favor revisa que la información proporcionada sea correcta y que tu conexión a internet sea estable.");
-        setLoading(false);
-        console.log("ERROR EN EL REQUEST")
-        console.error(error);
-        console.error(error.message);
-      }
+    
 
 
     } else {
@@ -337,6 +325,7 @@ const AddCardModal = () => {
 
 
   const onClose = event => {
+    try{
     console.log("ON CLOSE");
     closeRef.current.click();
     setLoading(false);
@@ -364,6 +353,8 @@ const AddCardModal = () => {
     if (bankRef && bankRef.current) {
       bankRef.current.value = "";
     }
+  }catch(error){
+  }
   }
 
   const handleBankChange = (event) => {
@@ -432,7 +423,7 @@ const AddCardModal = () => {
                     <div className="row justify-content-center">
                       {success ? <div className="col-md-12">
                         <div className="single-input">
-                          <label htmlFor="cardHolder">Banco receptor</label>
+                          <label htmlFor="cardHolder">Banco o institución financiera</label>
                           <input
                             ref={bankRef}
                             disabled
@@ -447,7 +438,7 @@ const AddCardModal = () => {
                    
                       <div className="col-md-6">
                         <div className="single-input">
-                          <label htmlFor="cardHolder">Nombre en la tarjeta</label>
+                          <label htmlFor="cardHolder">Nombre del titular</label>
                           <input
                             ref={nameRef}
                             type="text"

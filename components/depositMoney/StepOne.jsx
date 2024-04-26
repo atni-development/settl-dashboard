@@ -70,18 +70,19 @@ const StepOne = () => {
             setAllCards(cards);
             setNoCards(false);
           }
-          if (change.type === "modified") {
-            cards[cards.indexOf(doc.data())] = change.doc.data();
+          /*if (change.type === "modified") {
+            change.newIndex
+            cards[cards.indexOf(change.doc.data())] = change.doc.data();
             setAllCards(cards);
             setNoCards(false);
           }
           if (change.type === "removed") {
-            cards.splice(cards.indexOf(doc.data()), 1);
+            cards.splice(cards.indexOf(change.doc.data()), 1);
             setAllCards(cards);
             if (cards.length == 0) {
               setNoCards(true);
             }
-          }
+          }*/
         });
 
         /* if (cards.length > 0) {
@@ -102,7 +103,7 @@ const StepOne = () => {
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-              <h4>Pagar con tarjeta</h4>
+              <h4>Comprar tiempo</h4>
               <div className="icon-area">
                 <Image src={support_icon} alt="icon" />
               </div>
@@ -113,7 +114,7 @@ const StepOne = () => {
                   <ul>
                     <li>
                       <Link href="#" className="single-link active">
-                        Selecciona el método de pago
+                        Selecciona qué tarjeta quieres gestionar con Settl
                       </Link>
                     </li>
                     <li>
@@ -121,7 +122,7 @@ const StepOne = () => {
                         href="/deposit-money/step-2"
                         className="single-link two"
                       >
-                        Introduce la cantidad a pagar
+                        Introduce la cantidad
                       </Link>
                     </li>
                     <li>
@@ -135,7 +136,7 @@ const StepOne = () => {
               <div className="col-xl-9 col-lg-8 col-md-7">
                 <div className="table-area">
                   <div className="head-area">
-                    <h4>Tarjetas de crédito agregadas</h4>
+                    <h4>Tarjetas de crédito asociadas</h4>
                     {noCards ? <p>Debes registrar una tarjeta para continuar.</p> : <p>Selecciona una tarjeta para pagar</p>}
                   </div>
                   {error && <Alert color="danger">{error}</Alert>}
@@ -215,7 +216,7 @@ const StepOne = () => {
                       </label>
                     </div> */}
                     <div className="single-card">
-                      <button
+                      <div
                         type="button"
                         className="reg w-100 p-0"
                         data-bs-toggle="modal"
@@ -226,7 +227,7 @@ const StepOne = () => {
                               <Image src={add_card} alt="image" className="w-100" />
                             </div>
               
-                      </button>
+                      </div>
                     </div>
                   </div>
 

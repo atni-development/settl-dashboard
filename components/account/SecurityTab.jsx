@@ -3,8 +3,57 @@ import Link from "next/link";
 import imac from "/public/images/icon/imac.png";
 import ipad from "/public/images/icon/ipad.png";
 import iphone from "/public/images/icon/iphone.png";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { useState, useEffect } from 'react';
+import { doc, getDoc, getDocs, collection, query, where, onSnapshot } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 const SecurityTab = () => {
+  const [email, setEmail] = useState("");
+  const [resetSent, setResetSent] = useState(false);
+  const [sendError, setSendError] = useState("");
+  const [sessions, setSessions] = useState([]);
+
+  const sendResetPassword = event => {
+    const email = localStorage.getItem('email');
+    const auth = getAuth();
+    if(!resetSent){
+      sendPasswordResetEmail(auth, email)
+      .then(() => {
+        setResetSent(true);
+      })
+      .catch((error) => {
+        setSendError("Se ha producido un error al enviar el correo de confirmación. Inténtelo de nuevo más tarde.");
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+    }else{
+
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      //setCurrentCard(card);
+      var db = getFirestore();
+      let userId = localStorage.getItem('userId').trim();
+      var collectionPath = "Users/" + userId + "/sessions";
+      const q = collection(db, collectionPath);
+      onSnapshot(q, (querySnapshot) => {
+        console.log("Current cards: ");
+        var cards = [];
+        querySnapshot.forEach((doc) => {
+          cards.push(doc.data());
+        });
+        setSessions(cards);
+        
+      });
+    }
+
+  }, []);
+
+
   return (
     <div
       className="tab-pane fade"
@@ -12,7 +61,7 @@ const SecurityTab = () => {
       role="tabpanel"
       aria-labelledby="security-tab"
     >
-      <div className="single-content authentication d-flex align-items-center justify-content-between">
+{/*       <div className="single-content authentication d-flex align-items-center justify-content-between">
         <div className="left">
           <h5>Autenticación de dos factores</h5>
           <p>
@@ -22,17 +71,23 @@ const SecurityTab = () => {
         <div className="right">
           <button>Activar</button>
         </div>
-      </div>
+      </div> */}
       <div className="change-pass mb-40">
         <div className="row">
           <div className="col-sm-6">
             <h5>Cambiar la contraseña</h5>
             <p>
-              Puede cambiar la contraseña si siente que su cuenta ha sido comprometida, o en la página de iniciar sesión si la olvidó
+              Puede cambiar la contraseña si siente que su cuenta ha sido comprometida, o en la página de iniciar sesión si la olvidó. Se le enviará un correo de confirmación en donde podrá restablecer su contraseña.
             </p>
-            <Link href="#">¿Olvidó la contraseña?</Link>
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-2"></div>
+          <div className="col-sm-4">
+            
+             <Link href="" onClick={sendResetPassword} className="active">{resetSent?"¡Correo de confirmación enviado!":"Enviar correo de confirmación"}</Link>
+         {sendError?<p>{sendError}</p>:null}
+         
+          </div>
+  {/*         <div className="col-sm-6">
             <form action="#">
               <div className="row justify-content-center">
                 <div className="col-md-12">
@@ -74,13 +129,13 @@ const SecurityTab = () => {
                 </div>
               </div>
             </form>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="single-content additional-security">
         <h5>Seguridad adicional</h5>
     
-        <div className="single-setting">
+       {/*  <div className="single-setting">
           <div className="left">
             <h6>MFA</h6>
             <p>Google Authenticator</p>
@@ -88,7 +143,7 @@ const SecurityTab = () => {
           <div className="right">
             <button>Confirugar</button>
           </div>
-        </div>
+        </div> */}
         <div className="single-setting">
           <div className="left">
             <h6>Certificado de seguirdad</h6>
@@ -101,51 +156,31 @@ const SecurityTab = () => {
       </div>
       <div className="single-content your-devices">
         <div className="head-item d-flex align-items-center justify-content-between">
-          <h5>Your devices</h5>
+          <h5>Tus dispositivos</h5>
           <Link href="#">Cerrar sesión en todos los dispositivos</Link>
         </div>
-        <div className="single-setting">
-          <div className="left">
-            <div className="icon-area">
-              <Image src={iphone} alt="icon" />
+        {
+          sessions.map(session =>
+            <div className="single-setting">
+            <div className="left">
+              <div className="icon-area">
+                <Image src={iphone} alt="icon" />
+              </div>
+              <div className="text-area">
+                <h6>{session.OSName} ({(session.platform)})</h6>
+                <p>{session.browserName}</p>
+               <p>{session.appVersion}</p>
+
+                <p>Inició sesión a las {session.created_date.toDate().toLocaleDateString("es-MX")} {session.created_date.toDate().toLocaleTimeString("es-MX")}</p>
+              </div>
             </div>
-            <div className="text-area">
-              <h6>iPhone 13 Pro Max</h6>
-              <p>Ciudad de México· 20 de Febrero a las 03:00 pm</p>
-            </div>
+          {/*   <div className="right">
+              <button>Cerrar sesión</button>
+            </div> */}
           </div>
-          <div className="right">
-            <button>Cerrar sesión</button>
-          </div>
-        </div>
-        <div className="single-setting">
-          <div className="left">
-            <div className="icon-area">
-              <Image src={ipad} alt="icon" />
-            </div>
-            <div className="text-area">
-              <h6>iPad Pro</h6>
-              <p>Ciudad de México· 20 de Febrero a las 03:00 pm</p>
-            </div>
-          </div>
-          <div className="right">
-          <button>Cerrar sesión</button>
-          </div>
-        </div>
-        <div className="single-setting">
-          <div className="left">
-            <div className="icon-area">
-              <Image src={imac} alt="icon" />
-            </div>
-            <div className="text-area">
-              <h6>iMac OSX</h6>
-              <p>Ciudad de México· 20 de Febrero a las 03:00 pm</p>
-            </div>
-          </div>
-          <div className="right">
-          <button>Cerrar sesión</button>
-          </div>
-        </div>
+          )
+        }
+   
       </div>
     </div>
   );

@@ -6,10 +6,27 @@ import { useContext } from "react";
 import { FaTimes } from "react-icons/fa";
 import invite_now_illus from "/public/images/invite-now-illus.png";
 import logo from "/public/images/logo.png";
+import { getAuth, signOut } from "firebase/auth";
 
 const LeftSideMenu = () => {
   const { activeLefMenu, setActiveLefMenu, getPath } =
     useContext(SettlContext);
+
+    const onLogOut = event => {
+      console.log("logout");
+      const auth = getAuth();
+      signOut(auth).then(() => {
+        localStorage.setItem('email',null);
+        localStorage.setItem('phone',null);
+        localStorage.setItem('name',null);
+        localStorage.setItem('userId', null);
+        localStorage.setItem('created_date', null);
+        router.push("/login");
+        
+      }).catch((error) => {
+        // An error happened.
+      });
+    };
 
   return (
     <div className={`sidebar-wrapper ${!activeLefMenu && "active"}`}>
@@ -44,27 +61,27 @@ const LeftSideMenu = () => {
           </Link>
         </li>
         <li>
-          <Link href="#">
+          <Link href="https://settl.mx/help-center">
             <i className="icon-support"></i> <span>Soporte</span>
           </Link>
         </li>
         <li>
-          <Link href="#">
+          <Link href="" onClick={onLogOut}>
             <i className="icon-quit"></i> <span>Cerrar sesión</span>
           </Link>
         </li>
       </ul>
-      <div className="pt-120">
+     {/*  <div className="pt-120">
         <div className="invite-now">
           <div className="img-area">
             <Image src={invite_now_illus} alt="Image" />
           </div>
           <p>Invita a un amigo y obtén $100 cuando haga su primera transacción</p>
-          <Link href="#" className="cmn-btn">
+          <Link href="" onClick={onLogOut} className="cmn-btn">
             Invitar ahora
           </Link>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -3,8 +3,48 @@ import confirm from "/public/images/icon/confirm.png";
 import not_confirm from "/public/images/icon/not-confirm.png";
 import pending from "/public/images/icon/pending.png";
 import owner_profile_2 from "/public/images/owner-profile-2.png";
-
+import { useState, useEffect } from 'react';
+import { getAuth, signOut } from "firebase/auth";
 const AccountTab = () => {
+  
+  const [phone, setPhone] = useState("");
+  const [userId, setUserId] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [created_date, setCreated_date] = useState("");
+
+  const onLogOut = event => {
+    console.log("logout");
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      localStorage.setItem('email',null);
+      localStorage.setItem('phone',null);
+      localStorage.setItem('name',null);
+      localStorage.setItem('userId', null);
+      localStorage.setItem('created_date', null);
+      router.push("/login");
+      
+    }).catch((error) => {
+      // An error happened.
+    });
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      let name = localStorage.getItem('name');
+      let userId = localStorage.getItem('userId');
+      let phone = localStorage.getItem('userphoneId');
+      let email = localStorage.getItem('email');
+      let created_date = localStorage.getItem('created_date');
+
+      setPhone(phone);
+      setUserId(userId);
+      setEmail(email);
+      setName(name);
+      setCreated_date(created_date);
+    }
+  }, []);
+
   return (
     <div
       className="tab-pane fade show active"
@@ -35,44 +75,39 @@ const AccountTab = () => {
       </div>
       <form action="#">
         <div className="row justify-content-center">
-          <div className="col-md-6">
+          <div className="col-md-12">
             <div className="single-input">
               <label htmlFor="fName1">Nombre</label>
-              <input type="text" id="fName1" placeholder="María" />
+              <input type="text" id="fName1" placeholder={name} />
             </div>
           </div>
-          <div className="col-md-6">
-            <div className="single-input">
-              <label htmlFor="lName1">Apellidos</label>
-              <input type="text" id="lName1" placeholder="Pérez García" />
-            </div>
-          </div>
+          
           <div className="col-md-12">
             <div className="single-input">
               <label htmlFor="email1">Correo electrónico</label>
               <div className="row input-status d-flex align-items-center">
-                <div className="col-6">
+                <div className="col-12">
                   <input
                     type="text"
                     id="email1"
-                    placeholder="ejemplo@gmail.com"
+                    placeholder={email}
                   />
                 </div>
-                <div className="col-6">
+              {/*   <div className="col-6">
                   <span className="pending">
                     <Image src={pending} alt="icon" />
                     Pendiente de confirmación
                   </span>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
-          <div className="col-md-12">
+          {/* <div className="col-md-12">
             <div className="single-input">
               <label htmlFor="phone1">Teléfono</label>
               <div className="row input-status d-flex align-items-center">
                 <div className="col-6">
-                  <input type="text" id="phone1" placeholder="(316) 555-0116" />
+                  <input type="text" id="phone1" placeholder="(55) 12345678" />
                 </div>
                 <div className="col-6">
                   <span className="confirm">
@@ -105,14 +140,14 @@ const AccountTab = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="col-md-12">
             <div className="single-input">
               <label htmlFor="address">Dirección</label>
               <input
                 type="text"
                 id="address"
-                placeholder="Av. de los Insurgentes Sur 724, Col del Valle Nte, Benito Juárez, 03100 Ciudad de México, CDMX"
+                placeholder=""
               />
             </div>
           </div>

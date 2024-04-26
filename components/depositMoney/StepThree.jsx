@@ -19,6 +19,10 @@ const StepThree = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const showModalRef = useRef()
+  const showPendingModalRef = useRef()
+
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [signature, setSignature] = useState(false);
 
   const [currentCard, setCurrentCard] = useState({});
   const [currentAmount, setCurrentAmout] = useState(0);
@@ -40,7 +44,7 @@ const StepThree = () => {
     return objURL;
 };
 
-
+  
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
       //setCurrentCard(card);
@@ -65,11 +69,63 @@ const StepThree = () => {
           var params = parseQueryString();
 
           if(params['settlPaymentId']){
-          setTimeout(
-            function() {
-                setSuccess(true);
-                showModalRef.current.click();
-            }, 100);
+            setTermsAccepted(true);
+            setSignature(true);
+            setLoading(true);
+            setTimeout(
+              function() {
+            const functions = getFunctions();
+
+            const checkPayment = httpsCallable(functions, 'getPaymentInfo');
+            checkPayment({ paymentId: params['settlPaymentId'], })
+              .then((result) => {
+                console.log("Server responded");
+                console.log(result);
+                if(result.data.payload.status === "completed"){
+                  //console.log("Payment processed successfully");
+                  //setLoading(false);
+                  //setSuccess(true);
+                  //showModalRef.current.click();
+                  
+                  const createWebhook = httpsCallable(functions, 'createPaymentWebhook');
+                  createWebhook({ paymentId: params['settlPaymentId'], userEmail: currentEmail})
+                  .then((result) => {
+                    console.log("webhook created ");
+                    console.log(result);
+                  console.log("Payment processed nut pending");
+                  setLoading(false);
+                  setSuccess(true);
+                  showModalRef.current.click();
+                  }).catch((error) => {
+                    console.log("Error creating webhook");
+                    setLoading(false);
+                    setError("Se produjo un error al procesar la información de pago. Error 698")
+                  });
+                }else{
+                  const createWebhook = httpsCallable(functions, 'createPaymentWebhook');
+                  createWebhook({ paymentId: params['settlPaymentId'], userEmail: currentEmail})
+                  .then((result) => {
+                    console.log("webhook created ");
+                    console.log(result);
+                  console.log("Payment processed nut pending");
+                  setLoading(false);
+                  setSuccess(true);
+                  showPendingModalRef.current.click();
+                  }).catch((error) => {
+                    console.log("Error creating webhook");
+                    setLoading(false);
+                    setError("Se produjo un error al procesar la información de pago. Error 698")
+                  });
+                }
+              })
+              .catch((error) => {
+                setLoading(false);
+                setError("Se produjo un error al registar al procesar la información de pago. Error 585")
+                console.error("Error writing document: ", error);
+              });
+    
+            
+            }, 3000);
           }
        
 
@@ -92,137 +148,145 @@ const StepThree = () => {
   }
 
   const onSubmit = async (e) => {
+    e.preventDefault();
+
     setError(null);
     setLoading(true);
     console.log("OpenPay is loaded")
-    try{
-    var phone = localStorage.getItem('phone');
-    if (phone !== null) {
-      if (typeof OpenPay !== 'undefined') {
-        //OpenPay.setId('mdjfxaujamxkjpeernxz');
-        //OpenPay.setApiKey('pk_db2479b316df4f4db0c85a09c3b833c5');
-        //OpenPay.setSandboxMode(true);
-        OpenPay.setId('metmqgrlkjtzv38toph7');
-        OpenPay.setApiKey('pk_0e254f67b6934dc190aee7e0f023ab7f');
-        OpenPay.setSandboxMode(false);
-        var deviceDataId = OpenPay.deviceData.setup("formId");
-        console.log("Device Data ID: " + deviceDataId);
-        var db = getFirestore();
-        var currentUserData = {
-          email: localStorage.getItem('email'),
-          uid:  localStorage.getItem('userId'),
-          name: localStorage.getItem('name'),
-          phone: phone
-        };
+    if(termsAccepted && signature){
+      try{
+        var phone = localStorage.getItem('phone');
+        if (phone !== null) {
+          if (typeof OpenPay !== 'undefined') {
+            //OpenPay.setId('mdjfxaujamxkjpeernxz');
+            //OpenPay.setApiKey('pk_db2479b316df4f4db0c85a09c3b833c5');
+            //OpenPay.setSandboxMode(true);
+            OpenPay.setId('metmqgrlkjtzv38toph7');
+            OpenPay.setApiKey('pk_0e254f67b6934dc190aee7e0f023ab7f');
+            OpenPay.setSandboxMode(false);
+            var deviceDataId = OpenPay.deviceData.setup("formId");
+            console.log("Device Data ID: " + deviceDataId);
+            var db = getFirestore();
+            var currentUserData = {
+              email: localStorage.getItem('email'),
+              uid:  localStorage.getItem('userId'),
+              name: localStorage.getItem('name'),
+              phone: phone
+            };
+        
+            /*const response = await axios.get('https://ipinfo.io/?token=6d105865cbf95e', {
+              'Access-Control-Allow-Origin': true,
+            });*/
+            
+            
+            //var userData = response.data;
+            //console.log(userData);
+            var paymentData = {
+              paymentStatus: "Pending",
+              chargeStatus: "Pending",
+              method: "credit_card",
+              card: currentCard,
+              amount: currentAmount,
+              comission: currentComission, 
+              requested_date: new Date(),
+              device_session_id: deviceDataId,
+             // client_info:userData,
+              userData: currentUserData
+            };
     
-        /*const response = await axios.get('https://ipinfo.io/?token=6d105865cbf95e', {
-          'Access-Control-Allow-Origin': true,
-        });*/
-        
-        
-        //var userData = response.data;
-        //console.log(userData);
-        var paymentData = {
-          paymentStatus: "PENDING",
-          chargeStatus: "PENDING",
-          method: "credit_card",
-          card: currentCard,
-          amount: currentAmount,
-          comission: currentComission, 
-          requested_date: new Date(),
-          device_session_id: deviceDataId,
-         // client_info:userData,
-          userData: currentUserData
-        };
-
-
-        let userId = localStorage.getItem('userId').trim();
-        var collectionPath = "Users/" + userId + "/payment_requests";
-        const q = collection(db, collectionPath);
-        addDoc(q, paymentData).then((docRef) => {
-          console.log("Document written with ID: ", docRef.id);
-          const functions = getFunctions();
-        const processsPayment = httpsCallable(functions, 'processNewPayment');
-        processsPayment({ paymentId: docRef.id, deviceId: deviceDataId, phoneNumber: phone})
-          .then((result) => {
-            console.log("Server responded");
-            console.log(result);
-            if(result.data.status === "Success"){
-              if(result.data.payload.error_message !== null){
-                setError(result.data.payload.error);
-                setLoading(false);
-              }else{  
-                if(result.data.payload.payment_method){
-                  if(result.data.payload.payment_method.type !== "redirect"){
-                    console.log("Payment processed successfully");
+    
+            let userId = localStorage.getItem('userId').trim();
+            var collectionPath = "Users/" + userId + "/payment_requests";
+            const q = collection(db, collectionPath);
+            addDoc(q, paymentData).then((docRef) => {
+              console.log("Document written with ID: ", docRef.id);
+              const functions = getFunctions();
+            const processsPayment = httpsCallable(functions, 'processNewPayment');
+            processsPayment({ paymentId: docRef.id, deviceId: deviceDataId, phoneNumber: phone})
+              .then((result) => {
+                console.log("Server responded");
+                console.log(result);
+                if(result.data.status === "Success"){
+                  if(result.data.payload.error_message !== null){
+                    setError(result.data.payload.error);
                     setLoading(false);
-                    setSuccess(true);
-                    showModalRef.current.click();
-                  }else{
-                    localStorage.setItem('pending_return', true);
-                    e.preventDefault();
-                    router.push(result.data.payload.payment_method.url);
+                  }else{  
+                    if(result.data.payload.payment_method){
+                      if(result.data.payload.payment_method.type !== "redirect"){
+                        console.log("Payment processed successfully");
+                        setLoading(false);
+                        setSuccess(true);
+                        showModalRef.current.click();
+                      }else{
+                        localStorage.setItem('pending_return', true);
+                        e.preventDefault();
+                        router.push(result.data.payload.payment_method.url);
+                      }
+    
+                    }else{
+                      console.log("Payment processed successfully");
+                      setLoading(false);
+                      setSuccess(true);
+                      showModalRef.current.click();
+                    }
                   }
-
                 }else{
-                  console.log("Payment processed successfully");
+                  console.log("Error");
                   setLoading(false);
-                  setSuccess(true);
-                  showModalRef.current.click();
+                  if(result.data.message){
+                    console.log("Error with message");
+                    switch(result.data.message){
+                      case "The number of retries of charge is greater than allowed":
+                        setError("El número de intentos de pago es mayor al permitido, por favor intenta de nuevo más tarde");
+                        break;
+                      case "The card was declined by the bank":
+                        setError("La tarjeta fue declinada por el banco, por favor intenta con otra tarjeta o contacta a tu banco para más información");
+                        break;
+                      //default:  setError(result.data.message);
+                      default:  setError("Se produjo un error al procesar la información de pago.");
+                      break;
+                    }
+                   
+                  }else{
+                    console.log("Error no message");
+                    setError("Se produjo un error al registar al procesar la información de pago. Error 587")
+                  }
                 }
-              }
-            }else{
-              console.log("Error");
-              setLoading(false);
-              if(result.data.message){
-                console.log("Error with message");
-                switch(result.data.message){
-                  case "The number of retries of charge is greater than allowed":
-                    setError("El número de intentos de pago es mayor al permitido, por favor intenta de nuevo más tarde");
-                    break;
-                  case "The card was declined by the bank":
-                    setError("La tarjeta fue declinada por el banco, por favor intenta con otra tarjeta o contacta a tu banco para más información");
-                    break;
-                  //default:  setError(result.data.message);
-                  default:  setError("Se produjo un error al procesar la información de pago.");
-                  break;
-                }
-               
-              }else{
-                console.log("Error no message");
-                setError("Se produjo un error al registar al procesar la información de pago. Error 587")
-              }
-            }
-          })
-          .catch((error) => {
+              })
+              .catch((error) => {
+                setLoading(false);
+                setError("Se produjo un error al registar al procesar la información de pago. Error 585")
+                console.error("Error writing document: ", error);
+              });
+    
+            })
+              .catch((error) => {
+                setLoading(false);
+                setError("Se produjo un error al registar la información de pago Error 569")
+                console.error("Error writing document: ", error);
+              });
+    
+          } else {
+            console.log("OpenPay is not loaded");
             setLoading(false);
-            setError("Se produjo un error al registar al procesar la información de pago. Error 585")
-            console.error("Error writing document: ", error);
-          });
-
-        })
-          .catch((error) => {
-            setLoading(false);
-            setError("Se produjo un error al registar la información de pago Error 569")
-            console.error("Error writing document: ", error);
-          });
-
-      } else {
-        console.log("OpenPay is not loaded");
+            setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo");
+    
+          }
+        } else {
+          console.log("Phone is null");
+          setLoading(false);
+          setError("Debes indicar un número de teléfono para continuar");
+        }
+      }catch(e){
+        console.log(e);
         setLoading(false);
         setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo");
-
       }
-    } else {
-      console.log("Phone is null");
+    }else{
+      e.preventDefault();
       setLoading(false);
-      setError("Debes indicar un número de teléfono para continuar");
+      setError("Debes aceptar los términos y condiciones para continuar");
     }
-  }catch(e){
-    console.log(e);
-    setLoading(false);
-    setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo");
-  }
   };
 
 
@@ -236,7 +300,7 @@ const StepThree = () => {
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-              <h4>Pagar con tarjeta</h4>
+              <h4>Comprar tiempo</h4>
               <div className="icon-area">
                 <Image src={support_icon} alt="icon" />
               </div>
@@ -250,7 +314,7 @@ const StepThree = () => {
                         href="/deposit-money/step-1"
                         className="single-link active"
                       >
-                        Selecciona el método de pago
+                        Selecciona qué tarjeta quieres gestionar con Settl
                       </Link>
                     </li>
                     <li>
@@ -258,7 +322,7 @@ const StepThree = () => {
                         href="/deposit-money/step-2"
                         className="single-link active"
                       >
-                        Introduce la cantidad a pagar
+                        Introduce la cantidad
                       </Link>
                     </li>
                     <li>
@@ -272,13 +336,13 @@ const StepThree = () => {
                   </ul>
                 </div>
               </div>
-              <div className="col-xl-8 col-lg-8">
+              <div className="col-xl-9 col-lg-8 col-md-7">
                 <form action="#">
                   <div className="payment-details">
                   {error && <Alert color="danger">{error}</Alert>}
 
                     <div className="top-area">
-                      <h6>Confirme la cantidad y la tarjeta a pagar</h6>
+                      <h6>Confirma la información</h6>
                       <div className="right">
                       {(!loading && !success)? <Link  href="/deposit-money/step-2">
                           <i className="icon-h-edit"></i>
@@ -294,23 +358,23 @@ const StepThree = () => {
                       <div className="col-xxl-8 col-xl-9 col-lg-12">
                         <ul className="details-list">
                           <li>
-                            <span>Banco receptor</span>
+                            <span>Banco</span>
                             <b>{currentCard.bank}</b>
                           </li>
                           <li>
-                            <span>Tarjeta de crédito</span>
-                            <b>{currentCard.cardNumber}</b>
+                            <span>No de la tarjeta de crédito</span> 
+                            <b>**** **** **** {currentCard.cardNumber !== undefined ? currentCard.cardNumber.substr(currentCard.cardNumber.length-4, currentCard.cardNumber.length):""}  </b>
                           </li>
                           <li>
-                            <span>Se pagará en la tarjeta</span>
+                            <span>Cantidad a aplazar</span>
                             <b>${currentAmount} MXN</b>
                           </li>
                           <li>
-                            <span>Comisión</span>
+                            <span>Comisión Settl<span className="small-text"> (incluye iva)</span></span>
                             <b>${currentComission} MXN</b>
                           </li>
                           <li>
-                            <span>Se enviará la copia a</span>
+                            <span>Se enviará comprobante a</span>
                             <b>{currentEmail}</b>
                           </li>
                         </ul>
@@ -318,9 +382,34 @@ const StepThree = () => {
                     </div>
                   </div>
                   <div className="checkbox-area mt-40 d-flex align-items-center justify-content-center">
-                    <input type="checkbox" id="accept" name="accept" />
+                    <input type="checkbox" id="accept" name="accept" onClick={
+                      (e) => {
+                        if(e.target.checked){
+                          setTermsAccepted(true);
+                        }else{
+                          setTermsAccepted(false);
+                        }
+                      }
+                    
+                    } />
                     <label htmlFor="accept">
-                      Al solicitar el pago acepto los <Link href="#">términos y condiciones y políticas de privacidad</Link> del servicio
+                      Al solicitar el pago acepto los <Link href="https://settl.mx/terms-and-conditions">términos y condiciones</Link> y <Link href="https://settl.mx/privacy-policy">políticas de privacidad</Link> del servicio
+                    </label>
+
+                  </div>
+                  <div className="checkbox-area mt-20 d-flex align-items-center justify-content-center">
+                    <input type="checkbox" id="accept" name="accept" onClick={
+                      (e) => {
+                        if(e.target.checked){
+                          setSignature(true);
+                        }else{
+                          setSignature(false);
+                        }
+                      }
+                    
+                    } />
+                    <label htmlFor="accept">
+                    Al aceptar el cargo estoy firmando el contrato de Settl para la correcta operativa
                     </label>
 
                   </div>
@@ -338,10 +427,23 @@ const StepThree = () => {
                       className="active"
                       data-bs-toggle="modal"
                       data-bs-target="#congratulationsMod"
+                    >  </Link>
+                         <Link
+                    style={{display: "none"}}
+                    onClick={(e)=> {
+                      e.preventDefault();
+                  
+                     }}
+                      href="#"
+                      ref={showPendingModalRef}
+                      className="active"
+                      data-bs-toggle="modal"
+                      data-bs-target="#pendingMod"
                     >
                     
+                    
                     </Link> 
-                     {success ? <button onClick={onClose} className="cmn-btn-success">Continuar</button> : !loading ? <button onClick={(e) => onSubmit(e)}className="cmn-btn">Pagar</button> : <button className="cmn-btn-dis" disabled>Procesando pago...   <div className="loader"></div></button>}
+                     {success ? <button onClick={onClose} className="cmn-btn-success">Continuar</button> : !loading ? <button onClick={(e) => onSubmit(e)}className={ signature && termsAccepted ? "cmn-btn": "cmn-btn-dis"}>Pagar</button> : <button className="cmn-btn-gray" disabled>Procesando pago...   <div className="loader"></div></button>}
 
                  
                   </div>
@@ -352,7 +454,10 @@ const StepThree = () => {
             </div>
           </div>
         </div>
+        
       </div>
+      
+      
     </section>
   );
 };
