@@ -160,8 +160,8 @@ const SecurityTab = () => {
           <Link href="#">Cerrar sesión en todos los dispositivos</Link>
         </div>
         {
-          sessions.map(session =>
-            <div className="single-setting">
+          sessions.map((session, index) =>
+            <div className="single-setting" key={index}>
             <div className="left">
               <div className="icon-area">
                 <Image src={iphone} alt="icon" />

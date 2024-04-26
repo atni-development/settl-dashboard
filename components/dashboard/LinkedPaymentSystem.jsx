@@ -39,7 +39,7 @@ const LinkedPaymentSystem = ({ data = {}, noCards = true }) => {
       </div>
       <div className="row">
         { data.length > 0 ? data.map((item, index) => (
-          <div className="col-6">
+          <div className="col-6" key={index}>
            
             <label htmlFor={item.cardNumber} key={index}>
               <div className="col-xl-12 col-lg-12 col-md-12" key={index}>

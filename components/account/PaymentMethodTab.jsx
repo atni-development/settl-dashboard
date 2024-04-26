@@ -78,7 +78,7 @@ const PaymentMethodTab = () => {
         
         <div className="card-content d-flex flex-wrap">
         { allCards.length > 0 ? allCards.map((item, index) => (
-          <div className="col-4">
+          <div className="col-4" key={index}>
            <div className="single-card">
             <div
               type="button"
