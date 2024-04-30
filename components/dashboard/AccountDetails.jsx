@@ -31,7 +31,7 @@ const AccountDetails = ({ data = {} }) => {
         <div className="left-side">
           <h4>Bienvenido {name.split(" ")[0]}</h4><br></br>
           {data.length > 0 ? <h5 className="receive">
-            El pago realizado a la tarjeta terminación <h5 className="green-text">{data[0].card.cardNumber.substring(data[0].card.cardNumber.length -4)}</h5>  por ${data[0].amount} esta <h5 className="green-text">{data[0].paymentStatus.toLowerCase() === "completed" ? "completado": "pendiente"}</h5><span></span>
+            El pago realizado a la tarjeta terminación <h5 className="green-text">{data[0].card.cardNumber.substring(data[0].card.cardNumber.length -4)}</h5>  por ${data[0].amount} esta <h5 className="green-text">{data[0].paymentStatus.toLowerCase()}</h5><span></span>
           </h5>:<h5 className="receive">No hay movimientos registrados</h5>}        
         </div>
         <div className="right-side">
