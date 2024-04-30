@@ -105,6 +105,7 @@ const DashboardMain = () => {
 
       var collectionPath = "Users/" + userId + "/payment_requests";
       const collectionArr = collection(db, collectionPath);
+      var map = new Map();
       onSnapshot(collectionArr, (querySnapshot) => {
         var series = [];
         var options = [];

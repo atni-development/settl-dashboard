@@ -48,7 +48,11 @@ const SettlProvider = ({ children }) => {
     var auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (!user) { 
-        router.push("/login");
+        if (router.pathname === "/sign-up") {
+          router.push("/sign-up");
+        } else {
+          router.push("/login");
+        }
         console.log("user is logged out")
       }
     });
