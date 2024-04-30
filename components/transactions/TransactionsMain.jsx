@@ -173,7 +173,7 @@ const TransactionsMain = () => {
           });
 
           var filtersArray = [];
-          Object.keys(filtersMap).keys().forEach((key) => {
+          Object.keys(filtersMap).forEach((key) => {
             filtersArray.push({ id: key, name: filtersMap.get(key) });
           });
           var datesArray = [];
