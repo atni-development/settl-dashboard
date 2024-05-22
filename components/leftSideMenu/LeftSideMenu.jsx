@@ -21,6 +21,8 @@ const LeftSideMenu = () => {
         localStorage.setItem('name',null);
         localStorage.setItem('userId', null);
         localStorage.setItem('created_date', null);
+        localStorage.setItem('profilePicture', null);
+
         router.push("/login");
         
       }).catch((error) => {

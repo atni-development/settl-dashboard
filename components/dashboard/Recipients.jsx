@@ -12,6 +12,7 @@ const Recipients = () => {
   const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -19,11 +20,14 @@ const Recipients = () => {
       let userId = localStorage.getItem('userId');
       let phone = localStorage.getItem('userphoneId');
       let email = localStorage.getItem('email');
+      let profilePicture = localStorage.getItem('profilePicture');
 
       setPhone(phone);
       setUserId(userId);
       setEmail(email);
       setName(name);
+      setProfilePicture(profilePicture);
+
     }
   }, []);
 
@@ -39,7 +43,7 @@ const Recipients = () => {
       <ul className="recipients-item">
         <li>
           <p className="left d-flex align-items-center">
-            <Image src={recipients_1} alt="icon" />
+          <Image src={profilePicture?profilePicture:recipients_1} alt="User" width="50" height="0"   style={{width: 50, height: 50, borderRadius: 50/ 2}}  />
             <span className="info">
               <span>{name}</span>
             </span>

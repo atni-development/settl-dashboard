@@ -12,6 +12,7 @@ const AccountTab = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [created_date, setCreated_date] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
 
   const onLogOut = event => {
     console.log("logout");
@@ -21,6 +22,8 @@ const AccountTab = () => {
       localStorage.setItem('phone',null);
       localStorage.setItem('name',null);
       localStorage.setItem('userId', null);
+      localStorage.setItem('profilePicture', null);
+
       localStorage.setItem('created_date', null);
       router.push("/login");
       
@@ -36,11 +39,14 @@ const AccountTab = () => {
       let phone = localStorage.getItem('userphoneId');
       let email = localStorage.getItem('email');
       let created_date = localStorage.getItem('created_date');
+      let profilePicture = localStorage.getItem('profilePicture');
 
       setPhone(phone);
       setUserId(userId);
       setEmail(email);
       setName(name);
+      setProfilePicture(profilePicture);
+
       setCreated_date(created_date);
     }
   }, []);
@@ -55,7 +61,8 @@ const AccountTab = () => {
       <div className="upload-avatar">
         <div className="avatar-left d-flex align-items-center">
           <div className="profile-img">
-            <Image src={owner_profile_2} alt="image" />
+          <Image src={profilePicture?profilePicture:owner_profile_2} alt="User" width="60" height="0"   style={{width: 60, height: 60, borderRadius: 60/ 2}}  />
+
           </div>
           <div className="instraction">
             <h6>Tu Avatar</h6>

@@ -13,6 +13,8 @@ import support_icon from "/public/images/icon/support-icon.png";
 import paylio_card from "/public/images/paylio-card.png";
 import paypal_card from "/public/images/paypal-card.png";
 import visa_card from "/public/images/visa-card.png";
+import master_card from "/public/images/master-card-card.png";
+
 import { Button } from "reactstrap";
 
 const StepOne = () => {
@@ -170,7 +172,7 @@ const StepOne = () => {
                         <label htmlFor={item.cardNumber}     key={index}>
                         <div className="col-xl-12 col-lg-12 col-md-12"     key={index}>
                           <span className="wrapper"></span>
-                          <Image src={visa_card} alt="image" />
+                          <Image src={item.bin.brand == "VISA" ?visa_card:master_card} alt="image" />
                           <p>Mastercard Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
                         </label>
 

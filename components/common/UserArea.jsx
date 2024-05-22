@@ -23,6 +23,7 @@ const UserArea = () => {
       localStorage.setItem('name',null);
       localStorage.setItem('userId', null);
       localStorage.setItem('created_date', null);
+      localStorage.setItem('profilePicture', null);
 
       router.push("/login");
       
@@ -35,6 +36,7 @@ const UserArea = () => {
   const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -42,11 +44,14 @@ const UserArea = () => {
       let userId = localStorage.getItem('userId');
       let phone = localStorage.getItem('userphoneId');
       let email = localStorage.getItem('email');
+      let profilePicture = localStorage.getItem('profilePicture');
 
       setPhone(phone);
       setUserId(userId);
       setEmail(email);
       setName(name);
+      setProfilePicture(profilePicture);
+
     }
   }, []);
 
@@ -56,7 +61,7 @@ const UserArea = () => {
     <div className="single-item user-area">
       <div className="profile-area d-flex align-items-center">
         <span className="user-profile">
-          <Image src={avatar} alt="User" onClick={userActiveHandler} />
+          <Image src={profilePicture?profilePicture:avatar} alt="User" onClick={userActiveHandler}   width="60" height="0"   style={{width: 60, height: 60, borderRadius: 60/ 2}}  />
         </span>
         <i className="ms-0">
           <FaSortDown />
@@ -65,7 +70,7 @@ const UserArea = () => {
       <div className={`main-area user-content ${userActive && "active"}`}>
         <div className="head-area d-flex align-items-center">
           <div className="profile-img">
-            <Image src={avatar_2} alt="User" />
+            <Image src={profilePicture?profilePicture:avatar_2} alt="User"  width="50" height="0"   style={{width: 50, height: 42, borderRadius: 50/ 2}} />
           </div>
           <div className="profile-head">
             <Link href="#">

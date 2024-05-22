@@ -17,7 +17,7 @@ const AddCardModal = () => {
   const [validTrhuyear, setValidYear] = useState("2024");
   const [cardHolderName, setCardHolderName] = useState("");
   const [closingMonth, setClosingMonth] = useState('January');
-  const [closingDay, setClosingDay] = useState(1);
+  const [closingDay, setClosingDay] = useState("");
   const [information, setInformation] = useState(null);
 
   const [postalCode, setPostalCode] = useState("");
@@ -50,6 +50,11 @@ const AddCardModal = () => {
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
     16, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
   ];
+
+  var closingDays = [
+    ["","1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+  ];
+
 
   var hathMonth = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
@@ -443,7 +448,7 @@ const AddCardModal = () => {
                             ref={nameRef}
                             type="text"
                             id="cardHolder"
-                            placeholder="María Pérez"
+                            placeholder="Nombre(s) Apllido(s)"
                             onChange={(event) => setCardHolderName(event.target.value)}
                           />
                         </div>
@@ -455,7 +460,7 @@ const AddCardModal = () => {
                             type="text"
                             ref={cardNumberRef}
                             id="cardNumber"
-                            placeholder="5890 - 6858 - 6332 - 9843"
+                            placeholder="0000 - 0000 - 0000 - 0000"
                             onChange={(event) => setCardNumber(event.target.value)}
                           />
                         </div>
@@ -515,7 +520,7 @@ const AddCardModal = () => {
                         <div className="single-input">
                           <label htmlFor="year">Día de corte</label>
                           <select ref={closingDayRef} value={closingDay} onChange={handleClosingDay} className="w-100">
-                            {availableDays.map((itm) => (
+                            {closingDays.map((itm) => (
                               <option value={itm}  key={itm}>{itm}</option>
                             ))}
                           </select>
@@ -527,7 +532,7 @@ const AddCardModal = () => {
                           <label htmlFor="postal">Dirección</label>
                           <input
                             ref={streetRef}
-                            type="text" id="street" placeholder="Calle #123"
+                            type="text" id="street" placeholder="Calle, #Ext, Colonia, Alcaldía o Municipio"
                             maxlength="500"
                             onChange={(event) => setStreet(event.target.value)} />
                         </div>
@@ -535,10 +540,10 @@ const AddCardModal = () => {
                       
                       <div className="col-md-4">
                         <div className="single-input">
-                          <label htmlFor="postal">Ciudad o colonia</label>
+                          <label htmlFor="postal">Ciudad o población</label>
                           <input
                             ref={cityRef}
-                            type="text" id="city" placeholder="Ciudad "
+                            type="text" id="city" placeholder="Ciudad o población"
                             onChange={(event) => setCity(event.target.value)} />
                         </div>
                       </div>

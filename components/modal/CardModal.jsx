@@ -3,7 +3,7 @@ import Link from "next/link";
 import { FaTimes } from "react-icons/fa";
 import limit from "/public/images/icon/limit.png";
 import remove from "/public/images/icon/remove.png";
-import visa_card_2 from "/public/images/visa-card-2.png";
+import visa_card from "/public/images/visa-card.png";
 
 const CardModal = () => {
   return (
@@ -27,7 +27,7 @@ const CardModal = () => {
                   <div className="main-content">
                     <div className="top-area mb-40 mt-40 text-center">
                       <div className="card-area mb-30">
-                        <Image src={visa_card_2} alt="image" />
+                        <Image src={visa_card} alt="image" />
                       </div>
                       <div className="text-area">
                         <h5>Payment Card </h5>

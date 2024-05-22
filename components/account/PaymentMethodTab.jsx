@@ -4,6 +4,8 @@ import blockchain_card from "/public/images/blockchain-card-large.png";
 import paylio_card from "/public/images/paylio-card.png";
 import paypal_card from "/public/images/paypal-card.png";
 import visa_card from "/public/images/visa-card.png";
+import master_card from "/public/images/master-card-large.png";
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getFirestore } from "firebase/firestore";
@@ -78,7 +80,7 @@ const PaymentMethodTab = () => {
         
         <div className="card-content d-flex flex-wrap">
         { allCards.length > 0 ? allCards.map((item, index) => (
-          <div className="col-4" key={index}>
+          <div className="col-3" key={index}>
            <div className="single-card">
             <div
               type="button"
@@ -86,7 +88,7 @@ const PaymentMethodTab = () => {
               //data-bs-toggle="modal"
               //data-bs-target="#myCardModal"
             >
-              <Image src={visa_card} alt="image" className="w-100" />
+                          <Image src={item.bin.brand == "VISA" ?visa_card:master_card} alt="image" />
             </div>
           </div>
             <label htmlFor={item.cardNumber} key={index}>

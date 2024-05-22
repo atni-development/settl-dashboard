@@ -30,7 +30,7 @@ const StepTwo = () => {
   }, []);
 
   const handleAmountChange = (e, data) => {
-    if (e.target.value > 30700) {
+    if (e.target.value > 4720) {
       setError("La cantidad máxima es de $30,700.00");
     } else {
       setError(null);
@@ -121,7 +121,7 @@ const StepTwo = () => {
                         <p>MXN</p>
                       </div>
                       <p>
-                        Comisión:<b>${comision}</b>  ·   Máximo disponible<b>$5000.00</b>
+                        Comisión:<b>${comision}</b>  ·   Monto mínimo disponible<b>$500.00</b>  ·   Máximo disponible<b>$4720.00</b>
                       </p>
                     </div>
                   </form>

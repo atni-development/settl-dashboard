@@ -13,6 +13,7 @@ const OwnerDetails = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [created_date, setCreated_date] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
 
   const onLogOut = event => {
     console.log("logout");
@@ -23,6 +24,8 @@ const OwnerDetails = () => {
       localStorage.setItem('name',null);
       localStorage.setItem('userId', null);
       localStorage.setItem('created_date', null);
+      localStorage.setItem('profilePicture', null);
+
       router.push("/login");
       
     }).catch((error) => {
@@ -37,11 +40,13 @@ const OwnerDetails = () => {
       let phone = localStorage.getItem('userphoneId');
       let email = localStorage.getItem('email');
       let created_date = localStorage.getItem('created_date');
+      let profilePicture = localStorage.getItem('profilePicture');
 
       setPhone(phone);
       setUserId(userId);
       setEmail(email);
       setName(name);
+      setProfilePicture(profilePicture);
       setCreated_date(created_date);
     }
   }, []);
@@ -50,7 +55,7 @@ const OwnerDetails = () => {
     <div className="owner-details">
       <div className="profile-area">
         <div className="profile-img">
-          <Image src={owner_profile} alt="image" />
+        <Image src={profilePicture?profilePicture:owner_profile} alt="User"  width="120" height="0"   style={{width: 120, height: 120, borderRadius: 120/ 2}}  />
         </div>
         <div className="name-area">
           <h6>{name}</h6>

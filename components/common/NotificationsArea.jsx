@@ -15,14 +15,14 @@ const NotificationsArea = () => {
 
   return (
     <div className="single-item notifications-area">
-      <div className="notifications-btn">
+      {/* <div className="notifications-btn">
         <Image
           src={bell}
           className="bell-icon"
           alt="icon"
           onClick={notificationActiveHandler}
         />
-      </div>
+      </div> */}
       <div
         className={`main-area notifications-content ${
           notificationActive && "active"
