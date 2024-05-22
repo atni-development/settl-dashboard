@@ -47,7 +47,7 @@ const LinkedPaymentSystem = ({ data = {}, noCards = true }) => {
               <div className="col-xl-12 col-lg-12 col-md-12" key={index}>
                 <span className="wrapper"></span>
                 <Image src={item.bin.brand == "VISA" ?visa_card:master_card} alt="image" />
-                <p>Mastercard Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
+                <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
             </label>
 
           </div>

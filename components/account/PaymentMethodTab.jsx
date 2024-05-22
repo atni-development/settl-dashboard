@@ -93,7 +93,7 @@ const PaymentMethodTab = () => {
           </div>
             <label htmlFor={item.cardNumber} key={index}>
             
-                <p>Mastercard Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p>
+                <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p>
             </label>
 
           </div>
