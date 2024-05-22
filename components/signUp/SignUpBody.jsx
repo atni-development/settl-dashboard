@@ -26,7 +26,9 @@ const SignUpBody = () => {
   const router = useRouter();
   const [error, setError] = useState(null);
   var validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  var validPasswordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+  //var validPasswordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+  var validPasswordRegex = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@¡?¿%#$%^&*])[a-zA-Z0-9!@¡?¿%#$%^&*]{5,20}$/
+
 
   function isNumeric(str) {
     if (typeof str != "string") return false // we only process strings!  
