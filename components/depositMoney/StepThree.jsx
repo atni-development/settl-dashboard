@@ -49,15 +49,32 @@ const StepThree = () => {
     if (typeof window !== 'undefined' && window.localStorage) {
       //setCurrentCard(card);
       setCurrentEmail(localStorage.getItem('email'));
-      var currentCard = localStorage.getItem('current_card');
-      var currentAmount = localStorage.getItem('amountToPay');
-      var currentCommision = localStorage.getItem('commisionToPay');
+      var userId = localStorage.getItem('userId').trim();
+
+      var currentCard = localStorage.getItem(userId+'current_card');
+      var currentAmount = localStorage.getItem(userId+'amountToPay');
+      var currentCommision = localStorage.getItem(userId+'commisionToPay');
+      var sessionTime = localStorage.getItem(userId+'session_date');
 
       console.log(currentCard);
-      if (currentCard !== null) {
+      if (currentCard !== null || sessionTime !== null) {
         var card = JSON.parse(currentCard);
         setCurrentCard(card);
         console.log("current card is: " + card.cardNumber);
+        var date = new Date();
+        var currentDate = parseInt(date.getTime());
+        var sessionDate = parseInt(sessionTime);
+        
+        var diff = currentDate - sessionDate;
+        var diffMinutes = Math.round(diff / 60000);
+        if(diffMinutes > 1){
+          localStorage.removeItem(userId+'session_date');
+          localStorage.removeItem(userId+'current_card');
+          localStorage.removeItem(userId+'amountToPay');
+          localStorage.removeItem(userId+'commisionToPay');
+          router.push("/deposit-money/step-1");
+        }else{
+
         if (currentAmount !== null && currentCommision !== null) {
           var amount = currentAmount;
           var search = window.location.search
@@ -132,6 +149,8 @@ const StepThree = () => {
         } else {
           router.push("/deposit-money/step-2");
         }
+      }
+        
       } else {
         router.push("/deposit-money/step-1");
       }
@@ -311,7 +330,7 @@ const StepThree = () => {
                   <ul>
                     <li>
                       <Link
-                        href="/deposit-money/step-1"
+                        href=""
                         className="single-link active"
                       >
                         Selecciona qué tarjeta quieres gestionar con Settl
@@ -319,7 +338,7 @@ const StepThree = () => {
                     </li>
                     <li>
                       <Link
-                        href="/deposit-money/step-2"
+                        href=""
                         className="single-link active"
                       >
                         Introduce la cantidad
@@ -327,7 +346,7 @@ const StepThree = () => {
                     </li>
                     <li>
                       <Link
-                        href="/deposit-money/step-3"
+                        href=""
                         className="single-link active last"
                       >
                         Confirmar

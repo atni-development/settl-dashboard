@@ -4,6 +4,7 @@ import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } fro
 import { addDoc, getDoc, getDocs, collection, doc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import axios from 'axios';
+import InputMask from 'react-input-mask';
 
 const AddCardModal = () => {
 
@@ -51,9 +52,9 @@ const AddCardModal = () => {
     16, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
   ];
 
-  var closingDays = [
+  var closingDays = 
     ["","1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
-  ];
+ 
 
 
   var hathMonth = [
@@ -177,8 +178,12 @@ const AddCardModal = () => {
       error = true;
       setError("Debes ingresar el nombre del titular de la tarjeta");
     }
+    var number = cardNumber.replaceAll("-", "").replaceAll(" ", "");
+    console.log("Number: " + number);
+    setCardNumber(number);
     if (!cardNumber.match(cardRegex)) {
       error = true;
+      console.log(cardNumber);
       setError("El número de la tarjeta introducido es inválido");
     }
    
@@ -456,13 +461,23 @@ const AddCardModal = () => {
                       <div className="col-md-6">
                         <div className="single-input">
                           <label htmlFor="cardNumber">Número de tarjeta</label>
-                          <input
+                        {/*   <input
                             type="text"
                             ref={cardNumberRef}
                             id="cardNumber"
                             placeholder="0000 - 0000 - 0000 - 0000"
                             onChange={(event) => setCardNumber(event.target.value)}
-                          />
+                          /> */}
+                          <InputMask
+                                                      id="cardNumber"
+
+                                                      ref={cardNumberRef}
+
+                    mask="9999 - 9999 - 9999 - 9999"
+                    onChange={(event) => setCardNumber(event.target.value)}
+                  >
+                    {(inputProps) => <input {...inputProps} type="text" placeholder="0000 - 0000 - 0000 - 0000" />}
+                  </InputMask>
                         </div>
                       </div>
                       <div className="col-md-4">
@@ -523,6 +538,7 @@ const AddCardModal = () => {
                             {closingDays.map((itm) => (
                               <option value={itm}  key={itm}>{itm}</option>
                             ))}
+                            
                           </select>
                         </div>
                       </div>

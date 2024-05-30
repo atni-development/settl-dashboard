@@ -31,7 +31,11 @@ const StepOne = () => {
     console.log(e);
     console.log(data);
     setCurrentCard(data.cardNumber);
-    localStorage.setItem('current_card', JSON.stringify(data));
+    var userId = localStorage.getItem('userId').trim();
+    localStorage.setItem(userId+'current_card', JSON.stringify(data));
+    localStorage.setItem(userId+'session_date', new Date().getTime());
+    console.log("session date: " + new Date().getTime());
+    console.log("Current card: " + data.cardNumber);
   };
 
   const handleContinue = (e) => {
@@ -115,20 +119,20 @@ const StepOne = () => {
                 <div className="left-area">
                   <ul>
                     <li>
-                      <Link href="#" className="single-link active">
+                      <Link href="" className="single-link active">
                         Selecciona qué tarjeta quieres gestionar con Settl
                       </Link>
                     </li>
                     <li>
                       <Link
-                        href="/deposit-money/step-2"
+                        href=""
                         className="single-link two"
                       >
                         Introduce la cantidad
                       </Link>
                     </li>
                     <li>
-                      <Link href="#" className="single-link last">
+                      <Link href="" className="single-link last">
                         Confirmar
                       </Link>
                     </li>

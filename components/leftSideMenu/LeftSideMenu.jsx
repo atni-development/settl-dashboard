@@ -16,6 +16,14 @@ const LeftSideMenu = () => {
       console.log("logout");
       const auth = getAuth();
       signOut(auth).then(() => {
+        
+      var userId = localStorage.getItem('userId').trim();
+
+      localStorage.removeItem(userId+'session_date');
+      localStorage.removeItem(userId+'current_card');
+      localStorage.removeItem(userId+'amountToPay');
+      localStorage.removeItem(userId+'commisionToPay');
+      
         localStorage.setItem('email',null);
         localStorage.setItem('phone',null);
         localStorage.setItem('name',null);
@@ -41,7 +49,7 @@ const LeftSideMenu = () => {
         </i>
       </div>
       <div className="sidebar-logo">
-        <Link href="/">
+        <Link href="https://settl.mx">
           <Image src={logo} alt="logo" />
         </Link>
       </div>

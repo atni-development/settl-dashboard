@@ -18,6 +18,14 @@ const UserArea = () => {
     console.log("logout");
     const auth = getAuth();
     signOut(auth).then(() => {
+      
+      var userId = localStorage.getItem('userId').trim();
+
+      localStorage.removeItem(userId+'session_date');
+      localStorage.removeItem(userId+'current_card');
+      localStorage.removeItem(userId+'amountToPay');
+      localStorage.removeItem(userId+'commisionToPay');
+      
       localStorage.setItem('email',null);
       localStorage.setItem('phone',null);
       localStorage.setItem('name',null);
@@ -61,7 +69,7 @@ const UserArea = () => {
     <div className="single-item user-area">
       <div className="profile-area d-flex align-items-center">
         <span className="user-profile">
-          <Image src={profilePicture?profilePicture:avatar} alt="User" onClick={userActiveHandler}   width="60" height="0"   style={{width: 60, height: 60, borderRadius: 60/ 2}}  />
+          <Image src={profilePicture?profilePicture:avatar} alt="User" onClick={userActiveHandler}   width="60" height="0"   style={{width: 60, height: "auto", borderRadius: 60/ 2}}  />
         </span>
         <i className="ms-0">
           <FaSortDown />
@@ -70,7 +78,7 @@ const UserArea = () => {
       <div className={`main-area user-content ${userActive && "active"}`}>
         <div className="head-area d-flex align-items-center">
           <div className="profile-img">
-            <Image src={profilePicture?profilePicture:avatar_2} alt="User"  width="50" height="0"   style={{width: 50, height: 42, borderRadius: 50/ 2}} />
+            <Image src={profilePicture?profilePicture:avatar_2} alt="User"  width="50" height="0"   style={{width: 60, height: "auto", borderRadius: 50/ 2}} />
           </div>
           <div className="profile-head">
             <Link href="#">

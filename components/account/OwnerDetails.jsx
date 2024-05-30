@@ -19,12 +19,22 @@ const OwnerDetails = () => {
     console.log("logout");
     const auth = getAuth();
     signOut(auth).then(() => {
+      
+      var userId = localStorage.getItem('userId').trim();
+
+      localStorage.removeItem(userId+'session_date');
+      localStorage.removeItem(userId+'current_card');
+      localStorage.removeItem(userId+'amountToPay');
+      localStorage.removeItem(userId+'commisionToPay');
+      
       localStorage.setItem('email',null);
       localStorage.setItem('phone',null);
       localStorage.setItem('name',null);
       localStorage.setItem('userId', null);
       localStorage.setItem('created_date', null);
       localStorage.setItem('profilePicture', null);
+
+
 
       router.push("/login");
       
@@ -55,18 +65,19 @@ const OwnerDetails = () => {
     <div className="owner-details">
       <div className="profile-area">
         <div className="profile-img">
-        <Image src={profilePicture?profilePicture:owner_profile} alt="User"  width="120" height="0"   style={{width: 120, height: 120, borderRadius: 120/ 2}}  />
+        <Image src={profilePicture?profilePicture:owner_profile} alt="User"  width="120" height="0"   style={{width: 120, height: "auto", borderRadius: 120/ 2}}  />
+        
         </div>
         <div className="name-area">
           <h6>{name}</h6>
-          <p className="active-status">Activo</p>
+
         </div>
       </div>
       <div className="owner-info">
         <ul>
           <li>
             <p>ID:</p>
-            <span className="mdr">{userId}</span>
+            <span className="mdr">{userId.substring(0,12)}</span>
           </li>
           <li>
             <p>Registrado el:</p>

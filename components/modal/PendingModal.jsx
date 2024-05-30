@@ -19,10 +19,13 @@ const PendingModal = () => {
 
 
   const onClose = event => {
-    console.log("ON CLOSE");;
-    localStorage.removeItem('current_card');
-    localStorage.removeItem('amountToPay');
-    localStorage.removeItem('commisionToPay');
+    console.log("ON CLOSE");
+    var userId = localStorage.getItem('userId').trim();
+
+    localStorage.removeItem(userId+'session_date');
+    localStorage.removeItem(userId+'current_card');
+    localStorage.removeItem(userId+'amountToPay');
+    localStorage.removeItem(userId+'commisionToPay');
     router.push("/");
   }
 
