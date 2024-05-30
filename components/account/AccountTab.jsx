@@ -9,7 +9,6 @@ import { getAuth, signOut } from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import { doc, setDoc, serverTimestamp, getFirestore, collection, addDoc, getDoc, updateDoc } from "firebase/firestore"; 
 import InputMask from 'react-input-mask';
-import ReactRoundedImage from "react-rounded-image"
 
 import {
   getDownloadURL,
