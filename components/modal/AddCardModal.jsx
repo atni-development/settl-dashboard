@@ -179,19 +179,22 @@ const AddCardModal = () => {
       setError("Debes ingresar el nombre del titular de la tarjeta");
     }
     var number = cardNumber.replaceAll("-", "").replaceAll(" ", "");
+    
     console.log("Number: " + number);
     setCardNumber(number);
+
     if (!cardRegex.test(number)) {
       error = true;
-      console.log(cardNumber);
+      console.log(number);
       setError("El número de la tarjeta introducido es inválido");
     }
    
     if (error == false) {
       var db = getFirestore();
 
-      var finalBin = cardNumber.substring(0, 6);
-      console.log("BIN: " + finalBin);
+      var finalBin = number.substring(0, 6);
+      
+      console.log("BIN Reg: " + finalBin);
       const docRef = doc(db, "Bins", finalBin);
       const docSnap = await getDoc(docRef);
       console.log("DOC SNAP");
@@ -222,7 +225,7 @@ const AddCardModal = () => {
                   console.log(querySnapshot);
                   querySnapshot.forEach((doc) => {
                     console.log(doc.id, ' => ', doc.data());
-                    if(doc.data().cardNumber == cardNumber){
+                    if(doc.data().cardNumber == number){
                       error = true;
                     }
                 });
@@ -234,7 +237,7 @@ const AddCardModal = () => {
                     var cardData = {
                       status: "ACTIVE",
                       bank: binData.institution,
-                      cardNumber: cardNumber,
+                      cardNumber: number,
                       cardCVV: cardCVV,
                       validTrhuMonth: validTrhuMonth,
                       validTrhuYear: validTrhuyear,
