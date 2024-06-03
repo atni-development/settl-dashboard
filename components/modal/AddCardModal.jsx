@@ -181,7 +181,7 @@ const AddCardModal = () => {
     var number = cardNumber.replaceAll("-", "").replaceAll(" ", "");
     console.log("Number: " + number);
     setCardNumber(number);
-    if (!cardNumber.match(cardRegex)) {
+    if (!cardRegex.test(number)) {
       error = true;
       console.log(cardNumber);
       setError("El número de la tarjeta introducido es inválido");
@@ -401,7 +401,7 @@ const AddCardModal = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header justify-content-between">
-                    <h6>Agregar tarjeta de crédito</h6>
+                    <h6>Agrega una tarjeta de crédito</h6>
                     <button
                       hidden
                       type="button"
