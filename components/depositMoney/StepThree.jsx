@@ -142,8 +142,9 @@ const StepThree = () => {
                     setError("Se produjo un error al procesar la información de pago. Error 698")
                   });
                 }*/
+              }
               })
-              .catch((error) => {
+  .catch((error) => {
                 setLoading(false);
                 setError("Se produjo un error al registar al procesar la información de pago. Error 585")
                 console.error("Error writing document: ", error);
