@@ -2,93 +2,84 @@ import Image from "next/image";
 import Link from "next/link";
 import support_icon from "/public/images/icon/support-icon.png";
 import { useState, useEffect } from 'react';
-import { getFirestore } from "firebase/firestore";
 import { useRouter } from 'next/router';
 
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 
 const StepTwo = () => {
-  const [amount, setAmount] = useState(0.0);
-  const [comision, setComision] = useState(0.0);
+  const [amount, setAmount] = useState("");
+  const [commission, setCommission] = useState(0.0);
   const [error, setError] = useState(null);
   const router = useRouter();
-  function parseDate(input) {
-    // Transform date from text to date
-    var parts = input.match(/(\d+)/g);
-    // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
-    return new Date(parts[0], parts[1] - 1, parts[2]); // months are 0-based
-}
+
   useEffect(() => {
     console.log("Step 2");
+
     if (typeof window !== 'undefined' && window.localStorage) {
-      //setCurrentCard(card);
-      setComision(0.0);
-      var userId = localStorage.getItem('userId').trim();
+      const userId = localStorage.getItem('userId')?.trim();
+      const currentCard = localStorage.getItem(`${userId}current_card`);
 
-      var currentCard = localStorage.getItem(userId+'current_card');
-      console.log(currentCard);
-      if (currentCard !== null) {
-        var sessionTime = localStorage.getItem(userId+'session_date');
-        if(sessionTime === null){
+      if (currentCard) {
+        const sessionTime = localStorage.getItem(`${userId}session_date`);
+        if (!sessionTime) {
           router.push("/deposit-money/step-1");
+        } else {
+          const date = new Date();
+          const currentDate = date.getTime();
+          const sessionDate = parseInt(sessionTime);
+          const diff = currentDate - sessionDate;
+          const diffMinutes = Math.round(diff / 60000);
 
-        }else{
-          var date = new Date();
-          var currentDate = parseInt(date.getTime());
-          var sessionDate = parseInt(sessionTime);
-          
-          var diff = currentDate - sessionDate;
-          var diffMinutes = Math.round(diff / 60000);
-          console.log("Diff minutes: " + diffMinutes);
-          if(diffMinutes > 1){
-            
-            localStorage.removeItem(userId+'session_date');
-            localStorage.removeItem(userId+'current_card');
-            localStorage.removeItem(userId+'amountToPay');
-            localStorage.removeItem(userId+'commisionToPay');
+          if (diffMinutes > 1) {
+            localStorage.removeItem(`${userId}session_date`);
+            localStorage.removeItem(`${userId}current_card`);
+            localStorage.removeItem(`${userId}amountToPay`);
+            localStorage.removeItem(`${userId}commissionToPay`);
 
             router.push("/deposit-money/step-1");
-          }else{
-            var card = JSON.parse(currentCard);
-
-           console.log("current card is: " + card.cardNumber);
+          } else {
+            const card = JSON.parse(currentCard);
+            console.log("current card is: " + card.cardNumber);
           }
         }
-        
       } else {
         router.push("/deposit-money/step-1");
       }
     }
-  }, []);
+  }, [router]);
 
-  const handleAmountChange = (e, data) => {
-    if (e.target.value > 4720) {
-      setError("La cantidad máxima es de $30,700.00");
+  const formatNumber = (num) => {
+    return num.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handleAmountChange = (e) => {
+    const rawValue = e.target.value.replace(/,/g, '');
+    const numValue = parseFloat(rawValue);
+
+    if (numValue > 4720) {
+      setError("La cantidad máxima es de $4720.00");
     } else {
       setError(null);
-      var commision = e.target.value * 0.05;
-      var iva = commision * 0.16;
-      var num = commision + iva;
-      var totalComision = Math.round(num * 100) / 100
-      var userId = localStorage.getItem('userId').trim();
+      const commission = numValue * 0.05;
+      const iva = commission * 0.16;
+      const totalCommission = Math.round((commission + iva) * 100) / 100;
+      const userId = localStorage.getItem('userId')?.trim();
 
-      localStorage.setItem(userId+'amountToPay', e.target.value);
-      localStorage.setItem(userId+'commisionToPay', totalComision);
+      localStorage.setItem(`${userId}amountToPay`, rawValue);
+      localStorage.setItem(`${userId}commissionToPay`, totalCommission);
 
-      setAmount(e.target.value);
-      setComision(totalComision);
+      setAmount(rawValue);
+      setCommission(totalCommission);
     }
-  }
+  };
 
-  const handleContinue = (e) => {
+  const handleContinue = () => {
     setError(null);
-    console.log(amount);
-    if (amount > 0) {
+    if (parseFloat(amount) > 0) {
       router.push("/deposit-money/step-3");
     } else {
       setError("Debes indicar el monto para continuar");
     }
-
   };
 
   return (
@@ -107,26 +98,17 @@ const StepTwo = () => {
                 <div className="left-area">
                   <ul>
                     <li>
-                      <Link
-                        href=""
-                        className="single-link active"
-                      >
+                      <Link href="" className="single-link active">
                         Selecciona qué tarjeta quieres gestionar con Settl
                       </Link>
                     </li>
                     <li>
-                      <Link
-                        href=""
-                        className="single-link active"
-                      >
+                      <Link href="" className="single-link active">
                         Introduce la cantidad
                       </Link>
                     </li>
                     <li>
-                      <Link
-                        href=""
-                        className="single-link last"
-                      >
+                      <Link href="" className="single-link last">
                         Confirmar
                       </Link>
                     </li>
@@ -144,24 +126,25 @@ const StepTwo = () => {
                       <div className="input-area">
                         <p><b>$</b></p>
                         <input
-                          onChange={(e) => handleAmountChange(e, "amount")}
+                          onChange={handleAmountChange}
                           className="xxlr"
                           min="0"
                           maxLength={4}
-                          placeholder=" Ejemplo 1000.00"
-                          type="number"
+                          placeholder="Ejemplo 1,000.00"
+                          type="text"
+                          value={formatNumber(amount)}
                         />
                         <p>MXN</p>
                       </div>
                       <p>
-                        Comisión:<b>${comision}</b>  ·   Monto mínimo disponible<b>$500.00</b>  ·   Máximo disponible<b>$4720.00</b>
+                        Comisión: <b>${commission}</b>  ·   Monto mínimo disponible <b>$500.00</b>  ·   Máximo disponible <b>$4720.00</b>
                       </p>
                     </div>
                   </form>
                 </div>
                 <div className="footer-area mt-40">
                   <Link href="/deposit-money/step-1">Regresar</Link>
-                  <Button className="cmn-btn" onClick={(e) => handleContinue(e)}>
+                  <Button className="cmn-btn" onClick={handleContinue}>
                     Siguiente
                   </Button>
                 </div>

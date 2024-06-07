@@ -81,7 +81,7 @@ const LeftSideMenu = () => {
           </Link>
         </li>
       </ul>
-      <p id="version">Versión 1.2.1</p>
+      <p id="version">Versión 1.2.2</p>
      {/*  <div className="pt-120">
         <div className="invite-now">
           <div className="img-area">
