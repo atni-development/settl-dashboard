@@ -44,6 +44,7 @@ const StepThree = () => {
     return objURL;
 };
 
+
   
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -103,8 +104,11 @@ const StepThree = () => {
                   //setLoading(false);
                   //setSuccess(true);
                   //showModalRef.current.click();
-                  
-                  const createWebhook = httpsCallable(functions, 'createPaymentWebhook');
+                  setLoading(false);
+                  setSuccess(true);
+                  showModalRef.current.click();
+
+                  /*const createWebhook = httpsCallable(functions, 'createPaymentWebhook');
                   createWebhook({ paymentId: params['settlPaymentId'], userEmail: currentEmail})
                   .then((result) => {
                     console.log("webhook created ");
@@ -117,9 +121,13 @@ const StepThree = () => {
                     console.log("Error creating webhook");
                     setLoading(false);
                     setError("Se produjo un error al procesar la información de pago. Error 698")
-                  });
+                  });*/
                 }else{
-                  const createWebhook = httpsCallable(functions, 'createPaymentWebhook');
+                  setLoading(false);
+                  setSuccess(true);
+                  showPendingModalRef.current.click();
+
+                  /*const createWebhook = httpsCallable(functions, 'createPaymentWebhook');
                   createWebhook({ paymentId: params['settlPaymentId'], userEmail: currentEmail})
                   .then((result) => {
                     console.log("webhook created ");
@@ -133,7 +141,7 @@ const StepThree = () => {
                     setLoading(false);
                     setError("Se produjo un error al procesar la información de pago. Error 698")
                   });
-                }
+                }*/
               })
               .catch((error) => {
                 setLoading(false);

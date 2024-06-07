@@ -17,6 +17,7 @@
   transition: 0.3s;
 }
 
+
 html {
   scroll-behavior: smooth;
 }
@@ -190,6 +191,11 @@ span {
   border: none !important;
 }
 
+#version{
+  position:absolute;
+  bottom: 2px;
+  font-size: 15px;
+}
 .ovf-unset {
   overflow-x: unset !important;
 }

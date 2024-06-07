@@ -111,7 +111,8 @@ const StepOne = () => {
             <div className="head-area d-flex align-items-center justify-content-between">
               <h4>Comprar tiempo</h4>
               <div className="icon-area">
-                <Image src={support_icon} alt="icon" />
+              
+              {/*   <Image src={support_icon} alt="icon" /> */}
               </div>
             </div>
             <div className="row justify-content-between pb-120">
