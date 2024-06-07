@@ -164,6 +164,14 @@ const TransactionsMain = () => {
             if (transaction.chargeStatus.toLowerCase() == "error") {
               transaction.chargeStatusText = "Cargo declinado";
               transaction.chargeClassColor = "cancelled";
+              transaction.paymentStatus = "Cancelado";
+              transaction.classColor = "cancelled";
+            }
+            if (transaction.chargeStatus.toLowerCase() == "failed") {
+              transaction.chargeStatusText = "Cargo declinado";
+              transaction.chargeClassColor = "cancelled";
+              transaction.paymentStatus = "Cancelado";
+              transaction.classColor = "cancelled";
             }
             if (transaction.chargeStatus.toLowerCase() == "completed") {
               transaction.chargeStatusText = "Completado";
