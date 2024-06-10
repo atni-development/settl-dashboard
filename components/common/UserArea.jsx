@@ -37,6 +37,7 @@ const UserArea = () => {
       
     }).catch((error) => {
       // An error happened.
+      console.log(error);
     });
   };
 
