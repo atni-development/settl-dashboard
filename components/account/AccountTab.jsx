@@ -119,25 +119,26 @@ const AccountTab = () => {
     signOut(auth).then(() => {
       
       var userId = localStorage.getItem('userId').trim();
-
-      localStorage.removeItem(userId+'session_date');
-      localStorage.removeItem(userId+'current_card');
-      localStorage.removeItem(userId+'amountToPay');
-      localStorage.removeItem(userId+'commisionToPay');
-      
       localStorage.setItem('email',null);
       localStorage.setItem('phone',null);
       localStorage.setItem('name',null);
       localStorage.setItem('userId', null);
       localStorage.setItem('profilePicture', null);
-
-
-
       localStorage.setItem('created_date', null);
+      localStorage.removeItem(userId+'session_date');
+      localStorage.removeItem(userId+'current_card');
+      localStorage.removeItem(userId+'amountToPay');
+      localStorage.removeItem(userId+'commisionToPay');
+      
+      
+
+
+
       router.push("/login");
       
     }).catch((error) => {
       console.log(error);
+      router.push("/login");
     });
   };
 

@@ -489,7 +489,7 @@ console.log(dataToInsert);
                 <h5 className="sub-title">Inicio de sesión</h5>
                 <h2 className="title">Inicia sesion para continuar</h2>
                 <p className="dont-acc">
-                  ¿No tienes una cuenta? <Link href="/sign-up">Regístrate</Link>
+                  ¿No tienes una cuenta? <Link className="green_link" href="/sign-up">Regístrate</Link>
                 </p>
                 <div className="reg-google">
                 <Link  href ="" onClick={signupWithGoogle}>

@@ -12,31 +12,33 @@ const LeftSideMenu = () => {
   const { activeLefMenu, setActiveLefMenu, getPath } =
     useContext(SettlContext);
 
-    const onLogOut = event => {
-      console.log("logout");
-      const auth = getAuth();
-      signOut(auth).then(() => {
-        
+  const onLogOut = event => {
+    console.log("logout");
+    const auth = getAuth();
+    signOut(auth).then(() => {
+
       var userId = localStorage.getItem('userId').trim();
 
-      localStorage.removeItem(userId+'session_date');
-      localStorage.removeItem(userId+'current_card');
-      localStorage.removeItem(userId+'amountToPay');
-      localStorage.removeItem(userId+'commisionToPay');
-      
-        localStorage.setItem('email',null);
-        localStorage.setItem('phone',null);
-        localStorage.setItem('name',null);
-        localStorage.setItem('userId', null);
-        localStorage.setItem('created_date', null);
-        localStorage.setItem('profilePicture', null);
+      localStorage.setItem('email', null);
+      localStorage.setItem('phone', null);
+      localStorage.setItem('name', null);
+      localStorage.setItem('userId', null);
+      localStorage.setItem('created_date', null);
+      localStorage.setItem('profilePicture', null);
 
-        router.push("/login");
-        
-      }).catch((error) => {
-        console.log(error);
-      });
-    };
+      localStorage.removeItem(userId + 'session_date');
+      localStorage.removeItem(userId + 'current_card');
+      localStorage.removeItem(userId + 'amountToPay');
+      localStorage.removeItem(userId + 'commisionToPay');
+
+      router.push("/login");
+
+    }).catch((error) => {
+      router.push("/login");
+
+      console.log(error);
+    });
+  };
 
   return (
     <div className={`sidebar-wrapper ${!activeLefMenu && "active"}`}>
@@ -82,7 +84,7 @@ const LeftSideMenu = () => {
         </li>
       </ul>
       <p id="version">Versión 1.2.2</p>
-     {/*  <div className="pt-120">
+      {/*  <div className="pt-120">
         <div className="invite-now">
           <div className="img-area">
             <Image src={invite_now_illus} alt="Image" />
@@ -93,7 +95,7 @@ const LeftSideMenu = () => {
           </Link>
         </div>
       </div> */}
-                
+
 
     </div>
   );
