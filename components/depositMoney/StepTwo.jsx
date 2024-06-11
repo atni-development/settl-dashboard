@@ -17,10 +17,10 @@ const StepTwo = () => {
 
     if (typeof window !== 'undefined' && window.localStorage) {
       const userId = localStorage.getItem('userId')?.trim();
-      const currentCard = localStorage.getItem(`${userId}current_card`);
+      const currentCard = localStorage.getItem(userId+'current_card');
 
       if (currentCard) {
-        const sessionTime = localStorage.getItem(`${userId}session_date`);
+        const sessionTime = localStorage.getItem(userId+'session_date');
         if (!sessionTime) {
           router.push("/deposit-money/step-1");
         } else {
@@ -32,9 +32,9 @@ const StepTwo = () => {
 
           if (diffMinutes > 1) {
             localStorage.removeItem(userId+'session_date');
-            localStorage.removeItem(`${userId}current_card`);
-            localStorage.removeItem(`${userId}amountToPay`);
-            localStorage.removeItem(`${userId}commissionToPay`);
+            localStorage.removeItem(userId+'current_card');
+            localStorage.removeItem(userId+'amountToPay');
+            localStorage.removeItem(userId+'commissionToPay');
 
             router.push("/deposit-money/step-1");
           } else {

@@ -68,7 +68,7 @@ const StepThree = () => {
 
         var diff = currentDate - sessionDate;
         var diffMinutes = Math.round(diff / 60000);
-        if (diffMinutes > 10) {
+        if (diffMinutes > 15) {
           localStorage.removeItem(userId + 'session_date');
           localStorage.removeItem(userId + 'current_card');
           localStorage.removeItem(userId + 'amountToPay');
