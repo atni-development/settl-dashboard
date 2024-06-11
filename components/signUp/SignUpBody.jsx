@@ -27,7 +27,8 @@ const SignUpBody = () => {
   const [error, setError] = useState(null);
   var validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   //var validPasswordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-  var validPasswordRegex = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*¡!¿_-])[a-zA-Z0-9!@#$%^&*¡!¿_-]{5,20}$/
+ // var validPasswordRegex = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*¡!¿_-])[a-zA-Z0-9!@#$%^&*¡!¿_-]{5,20}$/
+ var validEmailRegex = /^(?=.*\d)[a-zA-Z0-9]{6,20}$/;
 
 
 
@@ -152,9 +153,6 @@ if (docSnap.exists()) {
     addDoc(q, paymentData).then((docRef) => {
       router.push("/");
     }).catch((error) => { });
-
-
-
   } else {
     setError("Se produjo un error al obtener el perfil del usuario. Error 201")
     console.error("Error reading document: ", error);
@@ -298,7 +296,7 @@ console.log(dataToInsert);
       currentError = "La contraseña es requerida"
     } else {
       if (!passwordOne.match(validPasswordRegex)) {
-        currentError = "La contraseña debe tener al menos 6 caracteres, un número y un caracter especial"
+        currentError = "La contraseña debe tener al menos 6 caracteres, un número"
       }
     }
     if (passwordOne !== passwordTwo) {

@@ -34,7 +34,7 @@ const LeftSideMenu = () => {
       router.push("/login");
 
     }).catch((error) => {
-      router.push("/login");
+    // router.push("/login");
 
       console.log(error);
     });

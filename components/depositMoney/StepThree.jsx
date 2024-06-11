@@ -150,17 +150,13 @@ const StepThree = () => {
                       console.error("Error writing document: ", error);
                     });
 
-
                 }, 3000);
             }
-
-
           } else {
             console.log("Amount is null");
             //router.push("/deposit-money/step-2");
           }
         }
-
       } else {
         router.push("/deposit-money/step-1");
       }
