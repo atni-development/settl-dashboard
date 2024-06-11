@@ -56,7 +56,7 @@ const StepTwo = () => {
     const rawValue = e.target.value.replace(/,/g, '');
     const numValue = parseFloat(rawValue);
 
-    if (numValue > 4720) {
+    if (numValue >= 4720) {
       setError("La cantidad máxima es de $4720.00");
     } else {
       setError(null);
@@ -64,9 +64,13 @@ const StepTwo = () => {
       const iva = commission * 0.16;
       const totalCommission = Math.round((commission + iva) * 100) / 100;
       const userId = localStorage.getItem('userId')?.trim();
+      console.log("userId: " + userId);
+      console.log("rawValue: " + rawValue);
+      console.log("totalCommission: " + totalCommission);
+      
 
-      localStorage.setItem(`${userId}amountToPay`, rawValue);
-      localStorage.setItem(`${userId}commissionToPay`, totalCommission);
+      localStorage.setItem(userId + 'amountToPay', rawValue);
+      localStorage.setItem(userId + 'commisionToPay', totalCommission);
 
       setAmount(rawValue);
       setCommission(totalCommission);
