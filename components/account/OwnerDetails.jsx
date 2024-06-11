@@ -31,11 +31,7 @@ const OwnerDetails = () => {
       localStorage.removeItem(userId+'current_card');
       localStorage.removeItem(userId+'amountToPay');
       localStorage.removeItem(userId+'commisionToPay');
-      
-
-
-
-
+  
       router.push("/login");
       
     }).catch((error) => {
