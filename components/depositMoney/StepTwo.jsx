@@ -31,7 +31,7 @@ const StepTwo = () => {
           const diffMinutes = Math.round(diff / 60000);
 
           if (diffMinutes > 1) {
-            localStorage.removeItem(`${userId}session_date`);
+            localStorage.removeItem(userId+'session_date');
             localStorage.removeItem(`${userId}current_card`);
             localStorage.removeItem(`${userId}amountToPay`);
             localStorage.removeItem(`${userId}commissionToPay`);
