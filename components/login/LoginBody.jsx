@@ -30,7 +30,7 @@ const LoginBody = () => {
   const [information, setInformation] = useState(null);
 
   var validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  var validPasswordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+  var validPasswordRegex =  /^(?=.*\d)[a-zA-Z0-9]{6,20}$/;
   const signupWithGoogle = event => {
     event.preventDefault();
     var auth = getAuth();
@@ -324,7 +324,7 @@ console.log(dataToInsert);
       currentError = "La contraseña es requerida"
     } else {
       if (!passwordOne.match(validPasswordRegex)) {
-        currentError = "La contraseña debe tener al menos 6 caracteres, un número y un caracter especial"
+        currentError = "La contraseña debe tener al menos 6 caracteres con un número y una letra"
       }
     }
 
