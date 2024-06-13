@@ -26,6 +26,8 @@ const SignUpBody = () => {
   const router = useRouter();
   const [error, setError] = useState(null);
   var validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  var validPasswordRegex = /^(?=.*[0-9])(?=.*[A-Za-z])[A-Za-z0-9]+$/;
+
   //var validPasswordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
  // var validPasswordRegex = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*¡!¿_-])[a-zA-Z0-9!@#$%^&*¡!¿_-]{5,20}$/
  var validEmailRegex = /^(?=.*[a-zA-Z])(?=(?:.*\d){5})[a-zA-Z0-9]*$/;
@@ -295,8 +297,22 @@ console.log(dataToInsert);
     if (passwordOne === "") {
       currentError = "La contraseña es requerida"
     } else {
-      if (!validPasswordRegex.test(passwordOne)) {
+     /* if (!validPasswordRegex.test(passwordOne)) {
         currentError = "La contraseña debe tener al menos 6 caracteres, un número"
+      }*/
+        var str = passwordOne;
+        if (str.length < 6) {
+          currentError = "la contraseña debe contener al menos 6 caracteres.";
+      } else if (str.length > 25) {
+        currentError = "la contraseña debe contener menos de 25 caracteres.";
+      } else if (str.search(/\d/) == -1) {
+        currentError = "la contraseña debe contener al menos un número.";
+  
+      } else if (str.search(/[a-zA-Z]/) == -1) {
+        currentError = "la contraseña debe contener al menos una letra.";
+  
+      } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) != -1) {
+        currentError = "la contraseña contiene un caractér inválido.";
       }
     }
     if (passwordOne !== passwordTwo) {

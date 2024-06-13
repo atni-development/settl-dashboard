@@ -30,7 +30,7 @@ const LoginBody = () => {
   const [information, setInformation] = useState(null);
 
   var validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  var validPasswordRegex =  /^(?=.*[a-zA-Z])(?=(?:.*\d){5})[a-zA-Z0-9]*$/;
+  var validPasswordRegex =  /^(?=.*[0-9])(?=.*[A-Za-z])[A-Za-z0-9]+$/;
   const signupWithGoogle = event => {
     event.preventDefault();
     var auth = getAuth();
@@ -323,9 +323,28 @@ console.log(dataToInsert);
     if (passwordOne === "") {
       currentError = "La contraseña es requerida"
     } else {
-      if (!validPasswordRegex.test(passwordOne)) {
+      /*var test = "^[A-Za-z0-9]+$".test(passwordOne);
+      console.log("Test: " + passwordOne.match("^[A-Za-z0-9]+$"));
+      console.log("Password)ne: " + passwordOne)
+      if (!passwordOne.match("^[A-Za-z0-9]+$") || passwordOne.length < 6) {
         currentError = "La contraseña debe tener al menos 6 caracteres con un número y una letra."
-      }
+      }else{
+
+      }*/
+     var str = passwordOne;
+      if (str.length < 6) {
+        currentError = "la contraseña debe contener al menos 6 caracteres.";
+    } else if (str.length > 25) {
+      currentError = "la contraseña debe contener menos de 25 caracteres.";
+    } else if (str.search(/\d/) == -1) {
+      currentError = "la contraseña debe contener al menos un número.";
+
+    } else if (str.search(/[a-zA-Z]/) == -1) {
+      currentError = "la contraseña debe contener al menos una letra.";
+
+    } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) != -1) {
+      currentError = "la contraseña contiene un caractér inválido.";
+    }
     }
 
     if (email === "") {
