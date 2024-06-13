@@ -323,8 +323,8 @@ console.log(dataToInsert);
     if (passwordOne === "") {
       currentError = "La contraseña es requerida"
     } else {
-      if (!passwordOne.match(validPasswordRegex)) {
-        currentError = "La contraseña debe tener al menos 6 caracteres con un número y una letra"
+      if (!validPasswordRegex.test(passwordOne)) {
+        currentError = "La contraseña debe tener al menos 6 caracteres con un número y una letra."
       }
     }
 
