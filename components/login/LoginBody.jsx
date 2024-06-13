@@ -30,7 +30,7 @@ const LoginBody = () => {
   const [information, setInformation] = useState(null);
 
   var validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  var validPasswordRegex =  /^(?=.*\d)[a-zA-Z0-9]{6,20}$/;
+  var validPasswordRegex =  /^(?=.*[a-zA-Z])(?=(?:.*\d){5})[a-zA-Z0-9]*$/;
   const signupWithGoogle = event => {
     event.preventDefault();
     var auth = getAuth();
