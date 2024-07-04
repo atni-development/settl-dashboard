@@ -191,6 +191,8 @@ const StepThree = () => {
             //OpenPay.setId('mdjfxaujamxkjpeernxz');
             //OpenPay.setApiKey('pk_db2479b316df4f4db0c85a09c3b833c5');
             //OpenPay.setSandboxMode(true);
+            console.log("OpenPay is loaded")
+            console.log(OpenPay)
             OpenPay.setId('metmqgrlkjtzv38toph7');
             OpenPay.setApiKey('pk_0e254f67b6934dc190aee7e0f023ab7f');
             OpenPay.setSandboxMode(false);
