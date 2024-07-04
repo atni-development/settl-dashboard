@@ -3,6 +3,7 @@ import Link from "next/link";
 import support_icon from "/public/images/icon/support-icon.png";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from "next/head";
 
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 
@@ -88,6 +89,10 @@ const StepTwo = () => {
 
   return (
     <section className="dashboard-section body-collapse pay step crypto deposit-money">
+          <Head>
+        <script type="text/javascript" async="false" defer="false" src="https://resources.openpay.mx/lib/openpay-js/1.2.38/openpay.v1.min.js"></script>
+        <script type="text/javascript" async="false" defer="false" src="https://resources.openpay.mx/lib/openpay-data-js/1.2.38/openpay-data.v1.min.js"></script>
+      </Head>
       <div className="overlay pt-120">
         <div className="container-fruid">
           <div className="main-content">
