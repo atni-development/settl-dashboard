@@ -299,7 +299,7 @@ const StepThree = () => {
           } else {
             console.log("OpenPay is not loaded");
             setLoading(false);
-            setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo");
+            setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo. Error 909");
 
           }
         } else {
@@ -310,7 +310,7 @@ const StepThree = () => {
       } catch (e) {
         console.log(e);
         setLoading(false);
-        setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo");
+        setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo. Error 910");
       }
     } else {
       e.preventDefault();
@@ -328,8 +328,8 @@ const StepThree = () => {
   return (
     <section className="dashboard-section body-collapse pay step step-3 crypto deposit-money">
       <Head>
-        <script type="text/javascript" src="https://resources.openpay.mx/lib/openpay-js/1.2.38/openpay.v1.min.js"></script>
-        <script type="text/javascript" src="https://resources.openpay.mx/lib/openpay-data-js/1.2.38/openpay-data.v1.min.js"></script>
+        <script type="text/javascript" async="false" defer="false" src="https://resources.openpay.mx/lib/openpay-js/1.2.38/openpay.v1.min.js"></script>
+        <script type="text/javascript" async="false" defer="false" src="https://resources.openpay.mx/lib/openpay-data-js/1.2.38/openpay-data.v1.min.js"></script>
       </Head>
       <div className="overlay pt-120">
         <div className="container-fruid">
