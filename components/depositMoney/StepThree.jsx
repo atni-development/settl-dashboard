@@ -16,6 +16,8 @@ import axios from 'axios';
 const StepThree = () => {
   const [error, setError] = useState(null);
   const [phone, setPhone] = useState("");
+  const [cvv, setCVV] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const showModalRef = useRef()
@@ -44,6 +46,7 @@ const StepThree = () => {
     return objURL;
   };
 
+ 
 
 
   useEffect(() => {
@@ -68,7 +71,7 @@ const StepThree = () => {
 
         var diff = currentDate - sessionDate;
         var diffMinutes = Math.round(diff / 60000);
-        if (diffMinutes > 15) {
+        if (diffMinutes > 30) {
           localStorage.removeItem(userId + 'session_date');
           localStorage.removeItem(userId + 'current_card');
           localStorage.removeItem(userId + 'amountToPay');
@@ -178,7 +181,9 @@ const StepThree = () => {
     setError(null);
     setLoading(true);
     console.log("OpenPay is loaded")
-    if (termsAccepted && signature) {
+    if (termsAccepted && signature ){
+      if (cvv !== "" && cvv.length === 3) {
+
       try {
         var phone = localStorage.getItem('phone');
         if (phone !== null) {
@@ -227,7 +232,7 @@ const StepThree = () => {
               console.log("Document written with ID: ", docRef.id);
               const functions = getFunctions();
               const processsPayment = httpsCallable(functions, 'processNewPayment');
-              processsPayment({ paymentId: docRef.id, deviceId: deviceDataId, phoneNumber: phone })
+              processsPayment({ paymentId: docRef.id, deviceId: deviceDataId, phoneNumber: phone, cardCVV: cvv})
                 .then((result) => {
                   console.log("Server responded");
                   console.log(result);
@@ -310,6 +315,11 @@ const StepThree = () => {
     } else {
       e.preventDefault();
       setLoading(false);
+      setError("Debes especificar el CVV de la tarjeta, que son los 3 dígitos al reverso de la tarjeta");
+    }
+    } else {
+      e.preventDefault();
+      setLoading(false);
       setError("Debes aceptar los términos y condiciones para continuar");
     }
   };
@@ -389,6 +399,15 @@ const StepThree = () => {
                           <li>
                             <span>No de la tarjeta de crédito</span>
                             <b>**** **** **** {currentCard.cardNumber !== undefined ? currentCard.cardNumber.substr(currentCard.cardNumber.length - 4, currentCard.cardNumber.length) : ""}  </b>
+                          </li>
+                          <li>
+                        <span>CVV de la tarjeta</span>
+
+                          <input
+                          className="cvvinput"
+                            type="number" id="cvv" placeholder="***"
+                            maxlength="3"
+                            onChange={(event) => setCVV(event.target.value)} />
                           </li>
                           <li>
                             <span>Cantidad a aplazar</span>

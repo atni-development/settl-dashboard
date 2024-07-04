@@ -133,7 +133,11 @@ textarea {
   border: 1px solid #eeecf7;
   border-radius: 10px;
 }
+.cvvinput{
+  border: 1px solid #5B2EDF !important;
+  width: 100px !important;
 
+}
 ::placeholder {
   color: rgba(12, 38, 110, 0.502);
   opacity: 1;

@@ -13,7 +13,6 @@ const AddCardModal = () => {
   const [success, setSuccess] = useState(false);
   const [bank, setBank] = useState("");
   const [cardNumber, setCardNumber] = useState("");
-  const [cardCVV, setCardCvv] = useState("");
   const [validTrhuMonth, setValidTrhuMonth] = useState('01');
   const [validTrhuyear, setValidYear] = useState("2024");
   const [cardHolderName, setCardHolderName] = useState("");
@@ -169,11 +168,7 @@ const AddCardModal = () => {
       error = true;
       setError("Debes ingresar el número de tarjeta");
     }
-    if (cardCVV === "") {
-      error = true;
-      setError("Debes ingresar el CVV de la tarjeta");
-    }
-
+   
     if (cardHolderName === "") {
       error = true;
       setError("Debes ingresar el nombre del titular de la tarjeta");
@@ -238,7 +233,6 @@ const AddCardModal = () => {
                       status: "ACTIVE",
                       bank: binData.institution,
                       cardNumber: number,
-                      cardCVV: cardCVV,
                       validTrhuMonth: validTrhuMonth,
                       validTrhuYear: validTrhuyear,
                       cardHolderName: cardHolderName,
@@ -299,7 +293,7 @@ const AddCardModal = () => {
     setSuccess(true);
   }
 
-  const setCVV = event => {
+  /*const setCVV = event => {
     console.log("CVV: " + event.length);
     if (isNaN(event)) {
       cvvRef.current.value = "";
@@ -316,7 +310,7 @@ const AddCardModal = () => {
         }
       }
     }
-  }
+  }*/
 
   const setPostal = event => {
     if (isNaN(event)) {
@@ -344,7 +338,6 @@ const AddCardModal = () => {
     setLoading(false);
     setError(null);
     setSuccess(false);
-    setCardCvv("");
     setCardNumber("");
     setClosingMonth("January");
     setClosingDay(1);
@@ -360,7 +353,6 @@ const AddCardModal = () => {
     nameRef.current.value = "";
     monthRef.current.value = "";
     yearRef.current.value = "";
-    cvvRef.current.value = "";
     closingMonthRef.current.value = "January";
     closingDayRef.current.value = 1;
     if (bankRef && bankRef.current) {
@@ -503,16 +495,7 @@ const AddCardModal = () => {
                           </select>
                         </div>
                       </div>
-                      <div className="col-md-2">
-                        <div className="single-input">
-                          <label htmlFor="year">CVV</label>
-                          <input
-                            ref={cvvRef}
-                            type="number" id="cvv" placeholder="***"
-                            maxlength="3"
-                            onChange={(event) => setCVV(event.target.value)} />
-                        </div>
-                      </div>
+                    
                     
 
                       {/*<div className="col-md-4">
@@ -534,9 +517,9 @@ const AddCardModal = () => {
                           </select>
                         </div>
                             </div>*/}
-                      <div className="col-md-2">
+                      <div className="col-md-4">
                         <div className="single-input">
-                          <label htmlFor="year">Día de corte</label>
+                          <label htmlFor="year">Día de corte (opcional)</label>
                           <select ref={closingDayRef} value={closingDay} onChange={handleClosingDay} className="w-100">
                             {closingDays.map((itm) => (
                               <option value={itm}  key={itm}>{itm}</option>
