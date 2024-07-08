@@ -60,6 +60,9 @@ const StepTwo = () => {
     if (numValue >= 4720) {
       setError("La cantidad máxima es de $4720.00");
     } else {
+     if(numValue < 500){
+      setError("La cantidad mínima es de $500.00");
+     }else{
       setError(null);
       const commission = numValue * 0.05;
       const iva = commission * 0.16;
@@ -75,6 +78,7 @@ const StepTwo = () => {
 
       setAmount(rawValue);
       setCommission(totalCommission);
+     }
     }
   };
 
