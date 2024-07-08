@@ -582,7 +582,7 @@ console.log(dataToInsert);
                             value={passwordTwo}
                             onChange={(event) => setPasswordTwo(event.target.value)}
                             id="signUpPassword2"
-                            placeholder="Confirma tu contraseña" />
+                            placeholder="Confirma tu Contraseña" />
                         </Col>
                       </FormGroup>
                       <FormGroup row>
