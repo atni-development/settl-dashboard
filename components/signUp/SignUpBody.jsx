@@ -595,9 +595,13 @@ console.log(dataToInsert);
                 </Row>
               </Container>
             </div>
+
           </div>
+
         </div>
       </div>
+      <span className="version-code">1.3.6</span>
+
     </section>
   );
 };

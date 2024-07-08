@@ -569,8 +569,12 @@ console.log(dataToInsert);
               </div>
             </div>
           </div>
+          <span className="version-code">1.3.6</span>
+
         </div>
+
       </div>
+
     </section>
   );
 };
