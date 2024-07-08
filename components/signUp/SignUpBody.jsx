@@ -30,7 +30,7 @@ const SignUpBody = () => {
 
   //var validPasswordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
  // var validPasswordRegex = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*¡!¿_-])[a-zA-Z0-9!@#$%^&*¡!¿_-]{5,20}$/
- var validEmailRegex = /^(?=.*[a-zA-Z])(?=(?:.*\d){5})[a-zA-Z0-9]*$/;
+ //var validEmailRegex = /^(?=.*[a-zA-Z])(?=(?:.*\d){5})[a-zA-Z0-9]*$/;
 
 
 
