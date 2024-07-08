@@ -346,9 +346,9 @@ const StepThree = () => {
   return (
     <section className="dashboard-section body-collapse pay step step-3 crypto deposit-money">
       <Head>
+      <script type='text/javascript' async="false" defer="false" src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
 
         <script type="text/javascript" async="false" defer="false" src="https://resources.openpay.mx/lib/openpay-js/1.2.38/openpay.v1.min.js"></script>
-        <script type='text/javascript' async="false" defer="false" src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
 
 
 
