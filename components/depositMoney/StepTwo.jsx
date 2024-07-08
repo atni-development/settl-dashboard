@@ -90,8 +90,9 @@ const StepTwo = () => {
   return (
     <section className="dashboard-section body-collapse pay step crypto deposit-money">
           <Head>
-          <script type="text/javascript" async="false" defer="false" src="https://resources.openpay.mx/lib/openpay-js/1.2.38/openpay.v1.min.js"></script>
-          <script type='text/javascript' src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
+          <script type="text/javascript" async="false" defer="false" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+   <script type="text/javascript" async="false" defer="false" src="https://js.openpay.mx/openpay.v1.min.js"></script>
+    <script type='text/javascript' async="false" defer="false" src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
           </Head>
       <div className="overlay pt-120">
         <div className="container-fruid">
