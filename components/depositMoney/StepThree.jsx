@@ -4,7 +4,7 @@ import support_icon from "/public/images/icon/support-icon.png";
 import { useState, useEffect, useRef } from 'react';
 import { getFunctions, httpsCallable } from "firebase/functions";
 
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, getDoc } from "firebase/firestore";
 import Head from "next/head";
 import { Alert } from 'reactstrap';
 import { useSearchParams } from 'next/navigation'
@@ -22,6 +22,8 @@ const StepThree = () => {
   const [success, setSuccess] = useState(false);
   const showModalRef = useRef()
   const showPendingModalRef = useRef()
+  const termsCheck = useRef()
+  const operationsCheck = useRef()
 
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [signature, setSignature] = useState(false);
@@ -46,7 +48,7 @@ const StepThree = () => {
     return objURL;
   };
 
- 
+
 
 
   useEffect(() => {
@@ -55,113 +57,125 @@ const StepThree = () => {
       setCurrentEmail(localStorage.getItem('email'));
       var userId = localStorage.getItem('userId').trim();
 
-      var currentCard = localStorage.getItem(userId + 'current_card');
-      var currentAmount = localStorage.getItem(userId + 'amountToPay');
-      var currentCommision = localStorage.getItem(userId + 'commisionToPay');
-      var sessionTime = localStorage.getItem(userId + 'session_date');
+      var params = parseQueryString();
+      console.log(params);
+      if (params['settlPaymentId']) {
 
-      console.log(currentCard);
-      if (currentCard !== null || sessionTime !== null) {
-        var card = JSON.parse(currentCard);
-        setCurrentCard(card);
-        console.log("current card is: " + card.cardNumber);
-        var date = new Date();
-        var currentDate = parseInt(date.getTime());
-        var sessionDate = parseInt(sessionTime);
+        setTermsAccepted(true);
+        setSignature(true);
+        setLoading(true);
+        termsCheck.current.checked = true;
+        operationsCheck.current.checked = true;
+        const docRef = doc(getFirestore(), "/Users/" + userId + "/payment_requests", params['settlPaymentId']);
+        getDoc(docRef).then((doc) => {
+   
+          if (doc.exists) {
+            console.log("Document data:", doc.data());
+            var data = doc.data();
+            setCurrentCard(data.card);
+            setCurrentAmout(data.amount);
+            setCurrentCommision(data.comission);
+            setTimeout(
+              function () {
+                const functions = getFunctions();
 
-        var diff = currentDate - sessionDate;
-        var diffMinutes = Math.round(diff / 60000);
-        if (diffMinutes > 30) {
-          localStorage.removeItem(userId + 'session_date');
-          localStorage.removeItem(userId + 'current_card');
-          localStorage.removeItem(userId + 'amountToPay');
-          localStorage.removeItem(userId + 'commisionToPay');
-          router.push("/deposit-money/step-1");
-        } else {
+                const checkPayment = httpsCallable(functions, 'getPaymentInfo');
+                checkPayment({ paymentId: params['settlPaymentId'], })
+                  .then((result) => {
+                    console.log("Server responded");
+                    console.log(result);
+                    if (result.data.payload.status === "completed") {
+                      setLoading(false);
+                      setSuccess(true);
+                      setTermsAccepted(true);
+                      setSignature(true);
+                      showModalRef.current.click();
 
-          if (currentAmount !== null && currentCommision !== null) {
-            var amount = currentAmount;
-            var search = window.location.search
-            console.log("Search: " + search);
-            setCurrentAmout(amount);
-            setCurrentCommision(currentCommision);
-            console.log("currents amount is: " + amount);
-           
-            var params = parseQueryString();
-            console.log(params);
-            if (params['settlPaymentId']) {
-              setTermsAccepted(true);
-              setSignature(true);
-              setLoading(true);
-              setTimeout(
-                function () {
-                  const functions = getFunctions();
-
-                  const checkPayment = httpsCallable(functions, 'getPaymentInfo');
-                  checkPayment({ paymentId: params['settlPaymentId'], })
-                    .then((result) => {
-                      console.log("Server responded");
-                      console.log(result);
-                      if (result.data.payload.status === "completed") {
-                        //console.log("Payment processed successfully");
-                        //setLoading(false);
-                        //setSuccess(true);
-                        //showModalRef.current.click();
+                    } else {
+                      if (result.data.payload.status === "failed") {
                         setLoading(false);
-                        setSuccess(true);
-                        showModalRef.current.click();
-
-                        /*const createWebhook = httpsCallable(functions, 'createPaymentWebhook');
-                        createWebhook({ paymentId: params['settlPaymentId'], userEmail: currentEmail})
-                        .then((result) => {
-                          console.log("webhook created ");
-                          console.log(result);
-                        console.log("Payment processed nut pending");
-                        setLoading(false);
-                        setSuccess(true);
-                        showModalRef.current.click();
-                        }).catch((error) => {
-                          console.log("Error creating webhook");
-                          setLoading(false);
-                          setError("Se produjo un error al procesar la información de pago. Error 698")
-                        });*/
+                        setError("El cargo ha sido declinado, por favor verifique el estado de su tarjeta o comuníquese con el banco emisor. Error 699")
                       } else {
                         setLoading(false);
                         setSuccess(true);
                         showPendingModalRef.current.click();
-
-                        /*const createWebhook = httpsCallable(functions, 'createPaymentWebhook');
-                        createWebhook({ paymentId: params['settlPaymentId'], userEmail: currentEmail})
-                        .then((result) => {
-                          console.log("webhook created ");
-                          console.log(result);
-                        console.log("Payment processed nut pending");
-                        setLoading(false);
-                        setSuccess(true);
-                        showPendingModalRef.current.click();
-                        }).catch((error) => {
-                          console.log("Error creating webhook");
-                          setLoading(false);
-                          setError("Se produjo un error al procesar la información de pago. Error 698")
-                        });
-                      }*/
                       }
-                    })
-                    .catch((error) => {
-                      setLoading(false);
-                      setError("Se produjo un error al registar al procesar la información de pago. Error 585")
-                      console.error("Error writing document: ", error);
-                    });
 
-                }, 3000);
-            }
-          } else {
-            console.log("Amount is null");
-            //router.push("/deposit-money/step-2");
+                      /*const createWebhook = httpsCallable(functions, 'createPaymentWebhook');
+                      createWebhook({ paymentId: params['settlPaymentId'], userEmail: currentEmail})
+                      .then((result) => {
+                        console.log("webhook created ");
+                        console.log(result);
+                      console.log("Payment processed nut pending");
+                      setLoading(false);
+                      setSuccess(true);
+                      showPendingModalRef.current.click();
+                      }).catch((error) => {
+                        console.log("Error creating webhook");
+                        setLoading(false);
+                        setError("Se produjo un error al procesar la información de pago. Error 698")
+                      });
+                    }*/
+                    }
+                  })
+                  .catch((error) => {
+                    setLoading(false);
+                    setError("Se produjo un error al registar al procesar la información de pago. Error 899")
+                    console.error("Error writing document: ", error);
+                  });
+
+              }, 100);
           }
-        }
+
+        }).catch((error) => {
+          console.log("Error getting document:", error);
+          setError("Se produjo un error al procesar la información de pago. Error 699")
+
+        });
       } else {
-        router.push("/deposit-money/step-1");
+        var currentCard = localStorage.getItem(userId + 'current_card');
+        var currentAmount = localStorage.getItem(userId + 'amountToPay');
+        var currentCommision = localStorage.getItem(userId + 'commisionToPay');
+        var sessionTime = localStorage.getItem(userId + 'session_date');
+
+        console.log(currentCard);
+        if (currentCard !== null || sessionTime !== null) {
+          var card = JSON.parse(currentCard);
+          setCurrentCard(card);
+          console.log("current card is: " + card.cardNumber);
+          var date = new Date();
+          var currentDate = parseInt(date.getTime());
+          var sessionDate = parseInt(sessionTime);
+
+          var diff = currentDate - sessionDate;
+          var diffMinutes = Math.round(diff / 60000);
+          if (diffMinutes > 20) {
+            localStorage.removeItem(userId + 'session_date');
+            localStorage.removeItem(userId + 'current_card');
+            localStorage.removeItem(userId + 'amountToPay');
+            localStorage.removeItem(userId + 'commisionToPay');
+            router.push("/deposit-money/step-1");
+          } else {
+
+            if (currentAmount !== null && currentCommision !== null) {
+              var amount = currentAmount;
+              var search = window.location.search
+              console.log("Search: " + search);
+              setCurrentAmout(amount);
+              setCurrentCommision(currentCommision);
+              console.log("currents amount is: " + amount);
+
+              var params = parseQueryString();
+              console.log(params);
+
+            } else {
+              console.log("Amount is null");
+              //router.push("/deposit-money/step-2");
+            }
+          }
+        } else {
+          router.push("/deposit-money/step-1");
+        }
       }
     }
   }, []);
@@ -169,9 +183,11 @@ const StepThree = () => {
   const onClose = event => {
     event.preventDefault();
     console.log("ON CLOSE");
-    localStorage.removeItem('current_card');
-    localStorage.removeItem('amountToPay');
-    localStorage.removeItem('commisionToPay');
+    var userId = localStorage.getItem('userId').trim();
+    localStorage.removeItem(userId + 'session_date');
+    localStorage.removeItem(userId + 'current_card');
+    localStorage.removeItem(userId + 'amountToPay');
+    localStorage.removeItem(userId + 'commisionToPay');
     router.push("/");
   }
 
@@ -181,144 +197,144 @@ const StepThree = () => {
     setError(null);
     setLoading(true);
     console.log("OpenPay is loaded")
-    if (termsAccepted && signature ){
+    if (termsAccepted && signature) {
       if (cvv !== "" && cvv.length === 3) {
 
-      try {
-        var phone = localStorage.getItem('phone');
-        if (phone !== null) {
-          if (typeof OpenPay !== 'undefined') {
-            //OpenPay.setId('mdjfxaujamxkjpeernxz');
-            //OpenPay.setApiKey('pk_db2479b316df4f4db0c85a09c3b833c5');
-            //OpenPay.setSandboxMode(true);
-            console.log("OpenPay is loaded")
-            console.log(OpenPay)
-            OpenPay.setId('metmqgrlkjtzv38toph7');
-            OpenPay.setApiKey('pk_0e254f67b6934dc190aee7e0f023ab7f');
-            OpenPay.setSandboxMode(false);
-            var deviceDataId = OpenPay.deviceData.setup("formId");
-            console.log("Device Data ID: " + deviceDataId);
-            var db = getFirestore();
-            var currentUserData = {
-              email: localStorage.getItem('email'),
-              uid: localStorage.getItem('userId'),
-              name: localStorage.getItem('name'),
-              phone: phone
-            };
+        try {
+          var phone = localStorage.getItem('phone');
+          if (phone !== null) {
+            if (typeof OpenPay !== 'undefined') {
+              //OpenPay.setId('mdjfxaujamxkjpeernxz');
+              //OpenPay.setApiKey('pk_db2479b316df4f4db0c85a09c3b833c5');
+              //OpenPay.setSandboxMode(true);
+              console.log("OpenPay is loaded")
+              console.log(OpenPay)
+              OpenPay.setId('metmqgrlkjtzv38toph7');
+              OpenPay.setApiKey('pk_0e254f67b6934dc190aee7e0f023ab7f');
+              OpenPay.setSandboxMode(false);
+              var deviceDataId = OpenPay.deviceData.setup("formId");
+              console.log("Device Data ID: " + deviceDataId);
+              var db = getFirestore();
+              var currentUserData = {
+                email: localStorage.getItem('email'),
+                uid: localStorage.getItem('userId'),
+                name: localStorage.getItem('name'),
+                phone: phone
+              };
 
-            /*const response = await axios.get('https://ipinfo.io/?token=6d105865cbf95e', {
-              'Access-Control-Allow-Origin': true,
-            });*/
-
-
-            //var userData = response.data;
-            //console.log(userData);
-            var paymentData = {
-              paymentStatus: "Pending",
-              chargeStatus: "Pending",
-              method: "credit_card",
-              card: currentCard,
-              amount: currentAmount,
-              comission: currentComission,
-              requested_date: new Date(),
-              device_session_id: deviceDataId,
-              // client_info:userData,
-              userData: currentUserData
-            };
+              /*const response = await axios.get('https://ipinfo.io/?token=6d105865cbf95e', {
+                'Access-Control-Allow-Origin': true,
+              });*/
 
 
-            let userId = localStorage.getItem('userId').trim();
-            var collectionPath = "Users/" + userId + "/payment_requests";
-            const q = collection(db, collectionPath);
-            addDoc(q, paymentData).then((docRef) => {
-              console.log("Document written with ID: ", docRef.id);
-              const functions = getFunctions();
-              const processsPayment = httpsCallable(functions, 'processNewPayment');
-              processsPayment({ paymentId: docRef.id, deviceId: deviceDataId, phoneNumber: phone, cardCVV: cvv})
-                .then((result) => {
-                  console.log("Server responded");
-                  console.log(result);
-                  if (result.data.status === "Success") {
-                    if (result.data.payload.error_message !== null) {
-                      setError(result.data.payload.error);
-                      setLoading(false);
-                    } else {
-                      if (result.data.payload.payment_method) {
-                        if (result.data.payload.payment_method.type !== "redirect") {
+              //var userData = response.data;
+              //console.log(userData);
+              var paymentData = {
+                paymentStatus: "Pending",
+                chargeStatus: "Pending",
+                method: "credit_card",
+                card: currentCard,
+                amount: currentAmount,
+                comission: currentComission,
+                requested_date: new Date(),
+                device_session_id: deviceDataId,
+                // client_info:userData,
+                userData: currentUserData
+              };
+
+
+              let userId = localStorage.getItem('userId').trim();
+              var collectionPath = "Users/" + userId + "/payment_requests";
+              const q = collection(db, collectionPath);
+              addDoc(q, paymentData).then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+                const functions = getFunctions();
+                const processsPayment = httpsCallable(functions, 'processNewPayment');
+                processsPayment({ paymentId: docRef.id, deviceId: deviceDataId, phoneNumber: phone, cardCVV: cvv })
+                  .then((result) => {
+                    console.log("Server responded");
+                    console.log(result);
+                    if (result.data.status === "Success") {
+                      if (result.data.payload.error_message !== null) {
+                        setError(result.data.payload.error);
+                        setLoading(false);
+                      } else {
+                        if (result.data.payload.payment_method) {
+                          if (result.data.payload.payment_method.type !== "redirect") {
+                            console.log("Payment processed successfully");
+                            setLoading(false);
+                            setSuccess(true);
+                            showModalRef.current.click();
+                          } else {
+                            localStorage.setItem('pending_return', true);
+                            e.preventDefault();
+                            router.push(result.data.payload.payment_method.url);
+                          }
+
+                        } else {
                           console.log("Payment processed successfully");
                           setLoading(false);
                           setSuccess(true);
                           showModalRef.current.click();
-                        } else {
-                          localStorage.setItem('pending_return', true);
-                          e.preventDefault();
-                          router.push(result.data.payload.payment_method.url);
+                        }
+                      }
+                    } else {
+                      console.log("Error");
+                      setLoading(false);
+                      if (result.data.message) {
+                        console.log("Error with message");
+                        switch (result.data.message) {
+                          case "The number of retries of charge is greater than allowed":
+                            setError("El número de intentos de pago es mayor al permitido, por favor intenta de nuevo más tarde");
+                            break;
+                          case "The card was declined by the bank":
+                            setError("La tarjeta fue declinada por el banco, por favor intenta con otra tarjeta o contacta a tu banco para más información");
+                            break;
+                          //default:  setError(result.data.message);
+                          default: setError("Se produjo un error al procesar la información de pago.");
+                            break;
                         }
 
                       } else {
-                        console.log("Payment processed successfully");
-                        setLoading(false);
-                        setSuccess(true);
-                        showModalRef.current.click();
+                        console.log("Error no message");
+                        setError("Se produjo un error al registar al procesar la información de pago. Error 587")
                       }
                     }
-                  } else {
-                    console.log("Error");
+                  })
+                  .catch((error) => {
                     setLoading(false);
-                    if (result.data.message) {
-                      console.log("Error with message");
-                      switch (result.data.message) {
-                        case "The number of retries of charge is greater than allowed":
-                          setError("El número de intentos de pago es mayor al permitido, por favor intenta de nuevo más tarde");
-                          break;
-                        case "The card was declined by the bank":
-                          setError("La tarjeta fue declinada por el banco, por favor intenta con otra tarjeta o contacta a tu banco para más información");
-                          break;
-                        //default:  setError(result.data.message);
-                        default: setError("Se produjo un error al procesar la información de pago.");
-                          break;
-                      }
+                    setError("Se produjo un error al registar al procesar la información de pago. Error 585")
+                    console.error("Error writing document: ", error);
+                  });
 
-                    } else {
-                      console.log("Error no message");
-                      setError("Se produjo un error al registar al procesar la información de pago. Error 587")
-                    }
-                  }
-                })
+              })
                 .catch((error) => {
                   setLoading(false);
-                  setError("Se produjo un error al registar al procesar la información de pago. Error 585")
+                  setError("Se produjo un error al registar la información de pago Error 569")
                   console.error("Error writing document: ", error);
                 });
 
-            })
-              .catch((error) => {
-                setLoading(false);
-                setError("Se produjo un error al registar la información de pago Error 569")
-                console.error("Error writing document: ", error);
-              });
+            } else {
+              console.log("OpenPay is not loaded");
+              setLoading(false);
+              setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo. Error 909");
 
+            }
           } else {
-            console.log("OpenPay is not loaded");
+            console.log("Phone is null");
             setLoading(false);
-            setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo. Error 909");
-
+            setError("Debes indicar un número de teléfono para continuar");
           }
-        } else {
-          console.log("Phone is null");
+        } catch (e) {
+          console.log(e);
           setLoading(false);
-          setError("Debes indicar un número de teléfono para continuar");
+          setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo. Error 910");
         }
-      } catch (e) {
-        console.log(e);
+      } else {
+        e.preventDefault();
         setLoading(false);
-        setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo. Error 910");
+        setError("Debes especificar el CVV de la tarjeta, que son los 3 dígitos al reverso de la tarjeta");
       }
-    } else {
-      e.preventDefault();
-      setLoading(false);
-      setError("Debes especificar el CVV de la tarjeta, que son los 3 dígitos al reverso de la tarjeta");
-    }
     } else {
       e.preventDefault();
       setLoading(false);
@@ -332,7 +348,7 @@ const StepThree = () => {
       <Head>
 
         <script type="text/javascript" async="false" defer="false" src="https://resources.openpay.mx/lib/openpay-js/1.2.38/openpay.v1.min.js"></script>
-                                    <script type='text/javascript' src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
+        <script type='text/javascript' src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
 
 
 
@@ -407,13 +423,13 @@ const StepThree = () => {
                             <b>**** **** **** {currentCard.cardNumber !== undefined ? currentCard.cardNumber.substr(currentCard.cardNumber.length - 4, currentCard.cardNumber.length) : ""}  </b>
                           </li>
                           <li>
-                        <span>CVV de la tarjeta</span>
+                            <span>CVV de la tarjeta</span>
 
-                          <input
-                          className="cvvinput"
-                            type="number" id="cvv" placeholder="***"
-                            maxlength="3"
-                            onChange={(event) => setCVV(event.target.value)} />
+                            <input
+                              className="cvvinput"
+                              type="number" id="cvv" placeholder="***"
+                              maxlength="3"
+                              onChange={(event) => setCVV(event.target.value)} />
                           </li>
                           <li>
                             <span>Cantidad a aplazar</span>
@@ -432,7 +448,7 @@ const StepThree = () => {
                     </div>
                   </div>
                   <div className="checkbox-area mt-40 d-flex align-items-center justify-content-center">
-                    <input type="checkbox" id="accept" name="accept" onClick={
+                    <input ref={termsCheck} type="checkbox" id="accept" name="accept" onClick={
                       (e) => {
                         if (e.target.checked) {
                           setTermsAccepted(true);
@@ -448,7 +464,7 @@ const StepThree = () => {
 
                   </div>
                   <div className="checkbox-area mt-20 d-flex align-items-center justify-content-center">
-                    <input type="checkbox" id="accept" name="accept" onClick={
+                    <input ref={operationsCheck} type="checkbox" id="accept" name="accept" onClick={
                       (e) => {
                         if (e.target.checked) {
                           setSignature(true);
