@@ -350,7 +350,7 @@ console.log(dataToInsert);
     if (email === "") {
       currentError = "El correo electrónico es requerido"
     } else {
-      if (!email.match(validEmailRegex)) {
+      if (!validEmailRegex.test(email)) {
         currentError = "El correo electrónico es inválido"
       }
     }
