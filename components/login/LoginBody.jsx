@@ -290,7 +290,7 @@ console.log(dataToInsert);
     if (email === "") {
       currentError = "El correo electrónico es necesario para recuperar la contraseña"
     } else {
-      if (!email.match(validEmailRegex)) {
+      if (!validEmailRegex.test(email)) {
         currentError = "El correo electrónico es inválido"
       }
     }
