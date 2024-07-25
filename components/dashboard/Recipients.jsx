@@ -27,6 +27,10 @@ const Recipients = () => {
       setEmail(email);
       setName(name);
       setProfilePicture(profilePicture);
+      console.log("pics")
+      console.log("profilePicture",profilePicture);
+      console.log(profilePicture);
+
 
     }
   }, []);
