@@ -43,7 +43,7 @@ const Recipients = () => {
       <ul className="recipients-item">
         <li>
           <p className="left d-flex align-items-center">
-          <Image src={profilePicture?profilePicture:recipients_1} alt="User" width="50" height="0"   style={{width: 50, height: 50, borderRadius: 50/ 2}}  />
+          <Image src={profilePicture?profilePicture:"https://firebasestorage.googleapis.com/v0/b/settl-project.appspot.com/o/owner-profile.png?alt=media&token=49f92549-3821-4964-a3a4-bc88312836d2"} alt="User" width="50" height="0"   style={{width: 50, height: 50, borderRadius: 50/ 2}}  />
             <span className="info">
               <span>{name}</span>
             </span>
