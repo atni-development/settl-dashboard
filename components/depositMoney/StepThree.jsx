@@ -66,7 +66,10 @@ const StepThree = () => {
         setLoading(true);
         termsCheck.current.checked = true;
         operationsCheck.current.checked = true;
-        const docRef = doc(getFirestore(), "/Users/" + userId + "/payment_requests/", params['settlPaymentId']);
+        var docuLocation = "/Users/" + userId + "/payment_requests/"+ params['settlPaymentId']
+        console.log("Document location: ");
+        console.log(docuLocation);
+        const docRef = doc(getFirestore(), docuLocation);
         getDoc(docRef).then((doc) => {
    
           if (doc.exists) {
