@@ -26,7 +26,11 @@ const Recipients = () => {
       setUserId(userId);
       setEmail(email);
       setName(name);
-      setProfilePicture(profilePicture);
+      if(profilePicture !== null && profilePicture !== undefined && profilePicture !== ""){
+        setProfilePicture(profilePicture);
+      }else{
+        setProfilePicture("https://firebasestorage.googleapis.com/v0/b/settl-project.appspot.com/o/owner-profile.png?alt=media&token=49f92549-3821-4964-a3a4-bc88312836d2");
+      }
       console.log("pics")
       console.log("profilePicture",profilePicture);
       console.log(profilePicture);
