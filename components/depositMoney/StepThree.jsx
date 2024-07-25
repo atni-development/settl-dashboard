@@ -436,11 +436,11 @@ const StepThree = () => {
                           </li>
                           <li>
                             <span>Cantidad a aplazar</span>
-                            <b>${currentAmount} MXN</b>
+                            <b>${currentAmount!=0? currentAmount:""} MXN</b>
                           </li>
                           <li>
                             <span>Comisión Settl<span className="small-text"> (incluye iva)⠀</span></span>
-                            <b>${currentComission} MXN</b>
+                            <b>${currentComission != 0 ?currentComission:""} MXN</b>
                           </li>
                           <li>
                             <span>Se enviará comprobante a⠀</span>
