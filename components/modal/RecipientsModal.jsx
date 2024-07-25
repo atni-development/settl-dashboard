@@ -2,7 +2,7 @@ import Image from "next/image";
 import { FaTimes } from "react-icons/fa";
 import company_icon from "/public/images/icon/company-icon.png";
 import individual_icon from "/public/images/icon/individual-icon.png";
-import user_profile from "/public/images/user-profile.png";
+import user_profile from "/public/images/avatar.png";
 
 const RecipientsModal = () => {
   return (
@@ -68,7 +68,7 @@ const RecipientsModal = () => {
                       aria-labelledby="company-tab1"
                     >
                       <div className="image-area mt-30 text-center">
-                        <Image src={user_profile} alt="icon" />
+                        {/* <Image src={user_profile} alt="icon" /> */}
                       </div>
                       <form action="#">
                         <div className="row justify-content-center">
@@ -146,7 +146,7 @@ const RecipientsModal = () => {
                       aria-labelledby="individual-tab1"
                     >
                       <div className="image-area mt-30 text-center">
-                        <Image src={user_profile} alt="icon" />
+                        {/* <Image src={user_profile} alt="icon" /> */}
                       </div>
                       <form action="#">
                         <div className="row justify-content-center">

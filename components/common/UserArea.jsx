@@ -55,12 +55,15 @@ const UserArea = () => {
       let phone = localStorage.getItem('userphoneId');
       let email = localStorage.getItem('email');
       let profilePicture = localStorage.getItem('profilePicture');
+      if(profilePicture !== null && profilePicture !== undefined && profilePicture !== ""){
+        setProfilePicture(profilePicture);
+
+      }
 
       setPhone(phone);
       setUserId(userId);
       setEmail(email);
       setName(name);
-      setProfilePicture(profilePicture);
 
     }
   }, []);
