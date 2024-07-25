@@ -37,7 +37,7 @@ const SiteNavBar = () => {
         <div className="container">
           <div className="row d-flex header-area">
             <nav className="navbar navbar-expand-lg navbar-light">
-              <Link className="navbar-brand" href="/" onClick={hidenMenu}>
+              <Link className="navbar-brand" href="https://settl.mx" onClick={hidenMenu}>
                 <Image src={logo} className="logo" alt="logo" />
               </Link>
               <button

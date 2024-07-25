@@ -57,7 +57,7 @@ const StepTwo = () => {
     const rawValue = e.target.value.replace(/,/g, '');
     const numValue = parseFloat(rawValue);
 
-    if (numValue >= 4720) {
+    if (numValue >= 4721) {
       setError("La cantidad máxima es de $4720.00");
     } else {
  

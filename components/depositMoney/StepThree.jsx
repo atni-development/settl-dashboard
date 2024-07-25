@@ -66,7 +66,7 @@ const StepThree = () => {
         setLoading(true);
         termsCheck.current.checked = true;
         operationsCheck.current.checked = true;
-        const docRef = doc(getFirestore(), "/Users/" + userId + "/payment_requests", params['settlPaymentId']);
+        const docRef = doc(getFirestore(), "/Users/" + userId + "/payment_requests/", params['settlPaymentId']);
         getDoc(docRef).then((doc) => {
    
           if (doc.exists) {
@@ -412,14 +412,14 @@ const StepThree = () => {
 
                     </div>
                     <div className="row">
-                      <div className="col-xxl-8 col-xl-9 col-lg-12">
+                      <div className="col-xxl-8 col-xl-9 col-lg-11">
                         <ul className="details-list">
                           <li>
                             <span>Banco</span>
                             <b>{currentCard.bank}</b>
                           </li>
                           <li>
-                            <span>No de la tarjeta de crédito</span>
+                            <span>No de la tarjeta de crédito⠀</span>
                             <b>**** **** **** {currentCard.cardNumber !== undefined ? currentCard.cardNumber.substr(currentCard.cardNumber.length - 4, currentCard.cardNumber.length) : ""}  </b>
                           </li>
                           <li>
@@ -436,11 +436,11 @@ const StepThree = () => {
                             <b>${currentAmount} MXN</b>
                           </li>
                           <li>
-                            <span>Comisión Settl<span className="small-text"> (incluye iva)</span></span>
+                            <span>Comisión Settl<span className="small-text"> (incluye iva)⠀</span></span>
                             <b>${currentComission} MXN</b>
                           </li>
                           <li>
-                            <span>Se enviará comprobante a</span>
+                            <span>Se enviará comprobante a⠀</span>
                             <b>{currentEmail}</b>
                           </li>
                         </ul>
