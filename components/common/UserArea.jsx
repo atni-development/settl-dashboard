@@ -74,7 +74,8 @@ const UserArea = () => {
     <div className="single-item user-area">
       <div className="profile-area d-flex align-items-center">
         <span className="user-profile">
-          <Image src={profilePicture?profilePicture:avatar} alt="User" onClick={userActiveHandler}   width="60" height="0"   style={{width: 60, height: "auto", borderRadius: 60/ 2}}  />
+          {(profilePicture !== null && profilePicture !== undefined && profilePicture !== "")? <Image src={profilePicture} alt="User" onClick={userActiveHandler}   width="60" height="0"   style={{width: 60, height: "auto", borderRadius: 60/ 2}}  />:
+          <Image src={avatar} alt="User" onClick={userActiveHandler}   width="60" height="0"   style={{width: 60, height: "auto", borderRadius: 60/ 2}}  />}
         </span>
         <i className="ms-0">
           <FaSortDown />
