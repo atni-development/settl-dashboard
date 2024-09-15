@@ -87,7 +87,7 @@ const AccountTab = () => {
             var dataToInsert = {
               profilePicture: url,
             };
-            setDoc(doc(db, "Users", userId), dataToInsert).then(() => {
+            updateDoc(doc(db, "Users", userId), dataToInsert).then(() => {
             console.log("File available at", url);
             setProfilePicture(url);
             localStorage.setItem('profilePicture', url);
@@ -188,7 +188,7 @@ const AccountTab = () => {
           </div>
           <div className="instraction">
             <h6>Tu Avatar</h6>
-            <p>Tamaño máximo: 2MB</p>
+            <p>La imagen debe ser de máximo: 2MB</p>
           </div>
         </div>
         <div className="avatar-right">
