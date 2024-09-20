@@ -54,7 +54,7 @@ const CongratulationsModal = () => {
                     <Image className="mb-60" src={success} alt="icon" />
                     <h4 className="mb-30">Pago aprobado</h4>
                     <p>
-                    En las próximas 24 horas hábiles recibirás un correo confirmando que tu "Compra de Tiempo" con Settl ha sido aplicada con éxito.
+                    En las próximas 24 horas hábiles recibirás un correo confirmando que tu ``Compra de Tiempo`` con Settl ha sido aplicada con éxito.
                     </p>
                   
                     <Link
