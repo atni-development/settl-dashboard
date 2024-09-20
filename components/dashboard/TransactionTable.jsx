@@ -48,8 +48,8 @@ const TransactionTable = ({ data = {} }) => {
                 <tr>
                   <th scope="col">Tarjeta</th>
                   <th scope="col">Fecha</th>
-                  <th scope="col">Estado del cargo</th>
-                  <th scope="col">Estado del pago</th>
+                  <th scope="col">Edo. de retención</th>
+                  <th scope="col">Edo. del pago</th>
                   <th scope="col">Cantidad</th>
                 </tr>
               </thead>

@@ -374,7 +374,7 @@ const StepThree = () => {
                         href=""
                         className="single-link active"
                       >
-                        Selecciona qué tarjeta quieres gestionar con Settl
+                        Selecciona a qué tarjeta quieres comprarle tiempo
                       </Link>
                     </li>
                     <li>
@@ -478,7 +478,7 @@ const StepThree = () => {
 
                     } />
                     <label htmlFor="accept">
-                      Al aceptar el cargo estoy firmando el contrato de Settl para la correcta operativa
+                      Al aceptar el cargo estoy firmando el <Link href="https://settl.mx/contract">contrato de Settl</Link>  para la correcta operativa
                     </label>
 
                   </div>

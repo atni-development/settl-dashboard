@@ -60,7 +60,7 @@ const AccountMain = () => {
                         Métodos de pago
                       </button>
                     </li>
-                    <li className="nav-item" role="presentation">
+                    {/* <li className="nav-item" role="presentation">
                       <button
                         className="nav-link"
                         id="notification-tab"
@@ -73,7 +73,7 @@ const AccountMain = () => {
                       >
                         Notificaciones
                       </button>
-                    </li>
+                    </li> */}
                   </ul>
                   <div className="tab-content mt-40">
                     {/* Account Tab */}

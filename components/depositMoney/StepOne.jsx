@@ -127,7 +127,7 @@ const StepOne = () => {
                   <ul>
                     <li>
                       <Link href="" className="single-link active">
-                        Selecciona qué tarjeta quieres gestionar con Settl
+                      Selecciona a qué tarjeta quieres comprarle tiempo
                       </Link>
                     </li>
                     <li>
@@ -149,8 +149,8 @@ const StepOne = () => {
               <div className="col-xl-9 col-lg-8 col-md-7">
                 <div className="table-area">
                   <div className="head-area">
-                    <h4>Tarjetas de crédito asociadas</h4>
-                    {noCards ? <p>Debes registrar una tarjeta para continuar.</p> : <p>Selecciona una tarjeta para pagar</p>}
+                    <h4>Mis tarjetas de crédito</h4>
+                    {noCards ? <p>Debes registrar una tarjeta para continuar.</p> : <p></p>}
                   </div>
                   {error && <Alert color="danger">{error}</Alert>}
                   <div className="card-area d-flex flex-wrap">

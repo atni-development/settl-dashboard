@@ -21,9 +21,9 @@ const TransactionsMain = () => {
   const balance = [
     { id: "all", name: "Todas las operaciones" },
     { id: "Pendiente", name: "Pendientes" },
-    { id: "Completada", name: "Canceladas" },
+    { id: "Completada", name: "Cancelados" },
     { id: "En progreso", name: "En progreso" },
-    { id: "Completada", name: "Completada" },
+    { id: "Completada", name: "Completado" },
   ];
 
   /*const filters = [
@@ -145,11 +145,11 @@ const TransactionsMain = () => {
               transaction.classColor = "inprogress";
             }
             if (transaction.paymentStatus.toLowerCase() == "completed") {
-              transaction.paymentStatus = "Completada";
+              transaction.paymentStatus = "Completado";
               transaction.classColor = "completed";
             }
             if (transaction.paymentStatus.toLowerCase() == "cancelled") {
-              transaction.paymentStatus = "Cancelada";
+              transaction.paymentStatus = "Cancelado";
               transaction.classColor = "cancelled";
             }
             if (transaction.paymentStatus.toLowerCase() == "in_progress") {
@@ -157,7 +157,7 @@ const TransactionsMain = () => {
               transaction.classColor = "normal";
             }
             if (transaction.chargeStatus.toLowerCase() == "success") {
-              transaction.chargeStatusText = "Completado";
+              transaction.chargeStatusText = "Completo";
   
               transaction.chargeClassColor = "completed";
             }
@@ -174,7 +174,7 @@ const TransactionsMain = () => {
               transaction.classColor = "cancelled";
             }
             if (transaction.chargeStatus.toLowerCase() == "completed") {
-              transaction.chargeStatusText = "Completado";
+              transaction.chargeStatusText = "Completo";
   
               transaction.chargeClassColor = "completed";
             }
@@ -265,8 +265,8 @@ const TransactionsMain = () => {
                     <tr>
                       <th scope="col">Nombre</th>
                       <th scope="col">Fecha</th>
-                      <th scope="col">Estado del cargo</th>
-                      <th scope="col">Estado del pago</th>
+                      <th scope="col">Edo. de retención</th>
+                      <th scope="col">Edo. del pago</th>
 
                       <th scope="col">Cantidad</th>
                     </tr>

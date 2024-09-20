@@ -76,7 +76,7 @@ const PaymentMethodTab = () => {
       aria-labelledby="payment-tab"
     >
       <div className="card-area">
-        <h6>Tarjetas de crédito asociadas</h6>
+        <h6>Mis tarjetas de crédito</h6>
         
         <div className="card-content d-flex flex-wrap">
         { allCards.length > 0 ? allCards.map((item, index) => (

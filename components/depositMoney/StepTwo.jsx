@@ -111,7 +111,7 @@ const StepTwo = () => {
                   <ul>
                     <li>
                       <Link href="" className="single-link active">
-                        Selecciona qué tarjeta quieres gestionar con Settl
+                      Selecciona a qué tarjeta quieres comprarle tiempo
                       </Link>
                     </li>
                     <li>
@@ -133,7 +133,7 @@ const StepTwo = () => {
                     <div className="send-banance">
                       {error && <Alert color="danger">{error}</Alert>}
 
-                      <p>Escribe la cantidad a gestionar con Settl</p>
+                      <p>Escribe la cantidad a aplazar con Settl</p>
 
                       <div className="input-area">
                         <p><b>$</b></p>
@@ -149,7 +149,7 @@ const StepTwo = () => {
                         <p>MXN</p>
                       </div>
                       <p>
-                        Comisión: <b>${commission}</b>  ·   Monto mínimo disponible <b>$500.00</b>  ·   Máximo disponible <b>$4720.00</b>
+                        Comisión: <b>${commission}</b>  ·   Mínimo a aplazar <b>$500.00</b>  ·   Máximo a aplazar <b>$4,720.00</b>
                       </p>
                     </div>
                   </form>

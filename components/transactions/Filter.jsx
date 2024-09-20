@@ -11,7 +11,7 @@ const balance = [
   { id: 2, name: "Pendientes" },
   { id: 3, name: "Canceladas" },
   { id: 4, name: "En progreso" },
-  { id: 5, name: "Completadas" },
+  { id: 5, name: "Completados" },
 
 ];
 
