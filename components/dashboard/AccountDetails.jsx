@@ -49,7 +49,7 @@ const AccountDetails = ({ data = [], onPlayVideo }) => {
           </Link>
           {/* Video Trigger Button */}
           <button className="cmn-btn" onClick={onPlayVideo}>
-            Ver Video
+            ¿Cómo funciona?
           </button>
         </div>
       </div>
