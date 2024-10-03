@@ -528,8 +528,17 @@ const AddCardModal = () => {
                           </select>
                         </div>
                       </div>
-
-                      <div className="col-md-12">
+                      <div className="col-md-4">
+                        <div className="single-input">
+                          <label htmlFor="postal">Código postal</label>
+                          <input
+                            ref={postalRef}
+                            type="number" id="postal" placeholder="01000"
+                            maxlength="5"
+                            onChange={(event) => setPostal(event.target.value)} />
+                        </div>
+                      </div>
+                      <div className="col-md-8">
                         <div className="single-input">
                           <label htmlFor="postal">Dirección</label>
                           <input
@@ -540,7 +549,7 @@ const AddCardModal = () => {
                         </div>
                       </div>
                       
-                      <div className="col-md-4">
+                      <div className="col-md-6">
                         <div className="single-input">
                           <label htmlFor="postal">Ciudad o población</label>
                           <input
@@ -549,7 +558,7 @@ const AddCardModal = () => {
                             onChange={(event) => setCity(event.target.value)} />
                         </div>
                       </div>
-                      <div className="col-md-4">
+                      <div className="col-md-6">
                         <div className="single-input">
                           <label htmlFor="postal">Estado</label>
                           <select ref={stateRef} value={stateCity} onChange={handleStateChange} className="w-100">
@@ -569,17 +578,8 @@ const AddCardModal = () => {
                           </select>
                         </div>
                             </div>*/}
-                             <div className="col-md-4">
-                        <div className="single-input">
-                          <label htmlFor="postal">Código postal</label>
-                          <input
-                            ref={postalRef}
-                            type="number" id="postal" placeholder="01000"
-                            maxlength="5"
-                            onChange={(event) => setPostal(event.target.value)} />
-                        </div>
-                      </div>
-                      <img src="/images/cards_accepted.png" alt="icon" />
+                       
+                      <img className="openPayImage" src="/images/cards_accepted.png" alt="icon" />
 
                       <div className="col-12">
                         <div className="btn-border w-100">

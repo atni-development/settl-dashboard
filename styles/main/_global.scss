@@ -182,6 +182,7 @@ textarea {
   resize: none;
 }
 
+
 span {
   display: inline-block;
 }
@@ -445,7 +446,10 @@ label {
 *::-webkit-scrollbar-thumb {
   background-color: #545454;
 }
-
+.openPayImage{
+  width: 50%;
+  border-radius: 50%;
+}
 .scrollToTop {
   position: fixed;
   bottom: 0;
