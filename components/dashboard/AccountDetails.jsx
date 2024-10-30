@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import play_icon from "/public/images/play_icon.png";
+import Image from "next/image";
 
 const AccountDetails = ({ data = [], onPlayVideo }) => {
   const [phone, setPhone] = useState("");
@@ -50,6 +52,7 @@ const AccountDetails = ({ data = [], onPlayVideo }) => {
           {/* Video Trigger Button */}
           <button className="cmn-btn" onClick={onPlayVideo}>
             ¿Cómo funciona?
+            <Image src={play_icon} alt="Play Icon" />
           </button>
         </div>
       </div>
