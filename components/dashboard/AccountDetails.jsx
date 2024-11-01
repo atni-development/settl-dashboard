@@ -52,7 +52,7 @@ const AccountDetails = ({ data = [], onPlayVideo }) => {
           {/* Video Trigger Button */}
           <button className="cmn-btn" onClick={onPlayVideo}>
             ¿Cómo funciona?
-            <Image src={play_icon} alt="Play Icon" />
+            <Image className="play-icon" src={play_icon} alt="Play Icon" />
           </button>
         </div>
       </div>

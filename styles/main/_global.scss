@@ -92,7 +92,10 @@ width: auto;
 height: auto;
   max-width: 100%;
 }
-
+.play-icon{
+  width: 30px;
+  hwight: 30px;
+}
 .max-un {
   max-width: unset;
 }
@@ -334,6 +337,7 @@ label {
   line-height: 36px;
   margin-top: -7px;
 }
+
 .xlr {
   font-size: 24px;
   line-height: 36px;
