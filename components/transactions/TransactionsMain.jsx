@@ -145,7 +145,7 @@ const TransactionsMain = () => {
               transaction.classColor = "inprogress";
             }
             if (transaction.paymentStatus.toLowerCase() == "completed") {
-              transaction.paymentStatus = "Completado";
+              transaction.paymentStatus = "Completo";
               transaction.classColor = "completed";
             }
             if (transaction.paymentStatus.toLowerCase() == "cancelled") {
@@ -263,7 +263,7 @@ const TransactionsMain = () => {
                 {filteredTransactions.length > 0 ? <div className="table-responsive"> <table className="table">
                   <thead>
                     <tr>
-                      <th scope="col">Nombre</th>
+                      <th scope="col">Tarjeta</th>
                       <th scope="col">Fecha</th>
                       <th scope="col">Edo. de retención</th>
                       <th scope="col">Edo. del pago</th>

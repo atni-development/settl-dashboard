@@ -94,11 +94,88 @@ const DashboardMain = () => {
         transactions.forEach((transaction) => {
           total += 1;
           var k = transaction.card.cardNumber.substring(transaction.card.cardNumber.length - 4);
+     
+            var filtersMap = new Map();
+            filtersMap.set('all', "Todas las tarjetas");
+            var datesMap = new Map();
+            datesMap.set('all', "Todos los meses");
+            transactions.forEach((transaction) => {
+  
+              var date = transaction.requested_date.toDate().toLocaleDateString()
+              var readableFilter = transaction.requested_date.toDate().toLocaleDateString("es-MX", { year: "numeric", month:"long"})
+  
+              var splitdate = date.split("/");
+              var month = splitdate[0];
+              var year = splitdate[2];
+              var datekey = month + "-" + year;
+              if (!datesMap.has(datekey)) {
+                datesMap.set(datekey, readableFilter);
+              }
+  
+              var last4digits = transaction.card.cardNumber.substr(transaction.card.cardNumber.length - 4);
+              if (!filtersMap.has(transaction.card.cardNumber)) {
+                filtersMap.set(transaction.card.cardNumber, "Tarjeta ****" + last4digits);
+              }
+  
+              if (transaction.paymentStatus.toLowerCase() == "pending") {
+                transaction.paymentStatus = "Pendiente";
+                transaction.classColor = "inprogress";
+              }
+              if (transaction.paymentStatus.toLowerCase() == "completed") {
+                transaction.paymentStatus = "Completo";
+                transaction.classColor = "completed";
+              }
+              if (transaction.paymentStatus.toLowerCase() == "cancelled") {
+                transaction.paymentStatus = "Cancelado";
+                transaction.classColor = "cancelled";
+              }
+              if (transaction.paymentStatus.toLowerCase() == "in_progress") {
+                transaction.paymentStatus = "En progreso";
+                transaction.classColor = "normal";
+              }
+              if (transaction.chargeStatus.toLowerCase() == "success") {
+                transaction.chargeStatusText = "Completo";
+    
+                transaction.chargeClassColor = "completed";
+              }
+              if (transaction.chargeStatus.toLowerCase() == "error") {
+                transaction.chargeStatusText = "Cargo declinado";
+                transaction.chargeClassColor = "cancelled";
+                transaction.paymentStatus = "Cancelado";
+                transaction.classColor = "cancelled";
+              }
+              if (transaction.chargeStatus.toLowerCase() == "failed") {
+                transaction.chargeStatusText = "Cargo declinado";
+                transaction.chargeClassColor = "cancelled";
+                transaction.paymentStatus = "Cancelado";
+                transaction.classColor = "cancelled";
+              }
+              if (transaction.chargeStatus.toLowerCase() == "completed") {
+                transaction.chargeStatusText = "Completo";
+    
+                transaction.chargeClassColor = "completed";
+              }
+            });
+  
+            var filtersArray = [];
+            Object.keys(filtersMap).forEach((key) => {
+              filtersArray.push({ id: key, name: filtersMap.get(key) });
+            });
+            var datesArray = [];
+  
+            Object.keys(datesMap).forEach((key) => {
+              datesArray.push({ id: key, name: datesMap.get(key) });
+            });
+            
+           
+        
           if (map.has(k)) {
             map.set(k, map.get(k) + 1);
           } else {
             map.set(k, 1);
           }
+          
+
         });
         map.forEach((value, key) => {
           series.push(

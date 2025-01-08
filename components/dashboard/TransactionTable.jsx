@@ -103,7 +103,7 @@ const TransactionTable = ({ data = {} }) => {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">Nombre</th>
+                  <th scope="col">Tarjeta</th>
                   <th scope="col">Fecha</th>
                   <th scope="col">Estado</th>
                   <th scope="col">Cantidad</th>
