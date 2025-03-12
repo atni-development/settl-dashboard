@@ -600,7 +600,7 @@ console.log(dataToInsert);
 
         </div>
       </div>
-      <span className="version-code">1.3.6</span>
+      <span className="version-code">1.3.7</span>
 
     </section>
   );
