@@ -49,7 +49,7 @@ const AccountDetails = ({ data = [], onPlayVideo }) => {
           <Link href="/deposit-money/step-1" className="cmn-btn">
             Comprar tiempo
           </Link>
-          <Link href="/deposit-money/step-1" className="cmn-btn">
+          <Link href="/between-cards/step-1" className="cmn-btn">
             Entre tarjetas
           </Link>
           {/* Video Trigger Button */}
