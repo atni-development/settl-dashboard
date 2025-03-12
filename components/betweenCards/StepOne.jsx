@@ -5,6 +5,8 @@ import { getFirestore } from "firebase/firestore";
 import { Alert } from 'reactstrap';
 import Head from "next/head";
 import play_icon from "/public/images/play_icon.png";
+import TransactionModal from "../modal/TransactionModal";
+import cards_match from "/public/images/first_card.png";
 
 import { doc, getDoc, getDocs, collection, query, where, onSnapshot } from "firebase/firestore";
 import { useRouter } from 'next/router';
@@ -27,19 +29,18 @@ const StepOne = () => {
   const [loadingCards, setLoadingCards] = useState(false);
   const router = useRouter();
   const [error, setError] = useState(null);
+
   const [showVideoModal, setShowVideoModal] = useState(false);
   const videoUrl = "https://firebasestorage.googleapis.com/v0/b/settl-project.appspot.com/o/video2.mp4?alt=media&token=a702907a-c6bb-49b6-ac47-016e9426d98a"; // Replace with the actual video URL
 
+
   const handleChecked = (e, data) => {
     setError(null);
-    console.log(e);
-    console.log(data);
+  
     setCurrentCard(data.cardNumber);
     var userId = localStorage.getItem('userId').trim();
-    localStorage.setItem(userId+'current_card', JSON.stringify(data));
-    localStorage.setItem(userId+'session_date', new Date().getTime());
-    console.log("session date: " + new Date().getTime());
-    console.log("Current card: " + data.cardNumber);
+    localStorage.setItem(userId+'bc_current_card', JSON.stringify(data));
+    localStorage.setItem(userId+'bc_session_date', new Date().getTime());
   };
 
   const handleContinue = (e) => {
@@ -48,7 +49,7 @@ const StepOne = () => {
     if(currentCard === "") {
       setError("Debes seleccionar una tarjeta para continuar");
     }else{
-      router.push("/deposit-money/step-2");
+      router.push("/between-cards/step-2");
     }
     console.log("Continue");
   };
@@ -118,8 +119,9 @@ const StepOne = () => {
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-              <h4>Comprar tiempo</h4>
-              <div className="icon-area">
+            <h4>Entre tarjetas (Paga una tarjeta de crédito con otra)</h4>
+
+            <div className="icon-area">
               
               {/*   <Image src={support_icon} alt="icon" /> */}
               </div>
@@ -130,7 +132,12 @@ const StepOne = () => {
                   <ul>
                     <li>
                       <Link href="" className="single-link active">
-                      Selecciona a qué tarjeta quieres comprarle tiempo
+                      Selecciona la tarjeta que recibirá los fondos
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="" className="single-link">
+                      Selecciona la tarjeta con la que pagarás
                       </Link>
                     </li>
                     <li>
@@ -155,27 +162,25 @@ const StepOne = () => {
               </div>
               <div className="col-xl-9 col-lg-8 col-md-7">
                 <div className="table-area">
-                  <div className="head-area">
+                  <div className="head-area"   style={{ display: "flex", alignItems: "center" }}                  >
                     <h4>Mis tarjetas de crédito</h4>
+                    <div style={{ flexGrow: 0.05 }} /> {/* Flexible empty space */}
+
                     {noCards ? <p>Debes registrar una tarjeta para continuar.</p> : <p></p>}
+                    <Image
+    src={cards_match}
+    alt="image"
+    width={100}
+    height={100}
+    style={{ marginLeft: "auto !important" }}
+  />
+
+
                   </div>
+                  
                   {error && <Alert color="danger">{error}</Alert>}
                   <div className="card-area d-flex flex-wrap">
-                    {/* <div className="single-card">
-                      <input
-                        type="radio"
-                        checked={checked === "visa" && true}
-                        name="visa"
-                        id="visa"
-                        onChange={(e) => handleChecked(e)}
-                      />
-                      <label htmlFor="visa">
-                        <span className="wrapper"></span>
-                        <Image src={visa_card} alt="image" />
-                      </label>
-                      
-                    </div>
-                    */}
+                  
                     {allCards.map((item, index) => (
                       <div className="single-card"     key={index}>
                         <input
@@ -264,10 +269,13 @@ const StepOne = () => {
               </div>
             </div>
           </div>
+          
         </div>
+ 
+
       </div>
-         {/* Video Modal */}
-         {showVideoModal && (
+       {/* Video Modal */}
+       {showVideoModal && (
         <div className="modal-overlay">
           <div className="modal-content">
             <button className="close-btn" onClick={() => setShowVideoModal(false)}>

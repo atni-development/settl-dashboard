@@ -49,11 +49,11 @@ const AccountDetails = ({ data = [], onPlayVideo }) => {
           <Link href="/deposit-money/step-1" className="cmn-btn">
             Comprar tiempo
           </Link>
+          <Link href="/deposit-money/step-1" className="cmn-btn">
+            Entre tarjetas
+          </Link>
           {/* Video Trigger Button */}
-          <button className="cmn-btn" onClick={onPlayVideo}>
-            ¿Cómo funciona?
-            <Image className="play-icon" src={play_icon} alt="Play Icon" />
-          </button>
+         
         </div>
       </div>
     </>

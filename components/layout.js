@@ -1,6 +1,7 @@
 import AddCardModal from "./modal/AddCardModal";
 import AddRecipientsModal from "./modal/AddRecipientsModal";
 import CardModal from "./modal/CardModal";
+import CardsCongratulationsModal from "./modal/CardsCongratulationsModal";
 import CongratulationsModal from "./modal/CongratulationsModal";
 import PendingModal from "./modal/PendingModal";
 import PurchasedModal from "./modal/PurchasedModal";
@@ -28,6 +29,8 @@ const Layout = ({ children }) => {
       {/* Congratulations Modal */}
       <CongratulationsModal />
 
+      <CardsCongratulationsModal />
+      
       <PendingModal />
 
       {/* Add Card Modal */}

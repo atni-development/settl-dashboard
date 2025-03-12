@@ -10,7 +10,7 @@ const leftSideMenuData = [
     id: 2,
     icon: <i className="icon-transaction"></i>,
     path: "transactions",
-    name: "Historia",
+    name: "Historial",
     url: "/transactions",
   },
   /*{
@@ -54,6 +54,13 @@ const leftSideMenuData = [
     path: "deposit-money",
     name: "Comprar tiempo",
     url: "/deposit-money/step-1",
+  },
+  {
+    id: 3,
+    icon: <i class="icon-withdraw"></i>,
+    path: "between-cards",
+    name: "Entre tarjetas",
+    url: "/between-cards/step-1",
   },
   /*{
     id: 9,

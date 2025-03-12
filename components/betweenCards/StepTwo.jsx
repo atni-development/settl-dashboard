@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { getFirestore } from "firebase/firestore";
 import { Alert } from 'reactstrap';
 import Head from "next/head";
-import play_icon from "/public/images/play_icon.png";
+import cards_match from "/public/images/second_card.png";
 
 import { doc, getDoc, getDocs, collection, query, where, onSnapshot } from "firebase/firestore";
 import { useRouter } from 'next/router';
@@ -27,19 +27,13 @@ const StepOne = () => {
   const [loadingCards, setLoadingCards] = useState(false);
   const router = useRouter();
   const [error, setError] = useState(null);
-  const [showVideoModal, setShowVideoModal] = useState(false);
-  const videoUrl = "https://firebasestorage.googleapis.com/v0/b/settl-project.appspot.com/o/video2.mp4?alt=media&token=a702907a-c6bb-49b6-ac47-016e9426d98a"; // Replace with the actual video URL
 
   const handleChecked = (e, data) => {
     setError(null);
-    console.log(e);
-    console.log(data);
+  
     setCurrentCard(data.cardNumber);
     var userId = localStorage.getItem('userId').trim();
-    localStorage.setItem(userId+'current_card', JSON.stringify(data));
-    localStorage.setItem(userId+'session_date', new Date().getTime());
-    console.log("session date: " + new Date().getTime());
-    console.log("Current card: " + data.cardNumber);
+    localStorage.setItem(userId+'bc_paying_card', JSON.stringify(data));
   };
 
   const handleContinue = (e) => {
@@ -48,62 +42,59 @@ const StepOne = () => {
     if(currentCard === "") {
       setError("Debes seleccionar una tarjeta para continuar");
     }else{
-      router.push("/deposit-money/step-2");
+      router.push("/between-cards/step-3");
     }
     console.log("Continue");
   };
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
+      const userId = localStorage.getItem('userId')?.trim();
+      const currentCard = localStorage.getItem(userId+'bc_current_card');
+      if(!currentCard){
+        router.push("/between-cards/step-1");
+      }else{
+        console.log("Current card: " + currentCard);
+      
+      var currentCardInfo = JSON.parse(currentCard);
+
+
       //setCurrentCard(card);
       var db = getFirestore();
-      let userId = localStorage.getItem('userId').trim();
       var collectionPath = "Users/" + userId + "/cards";
       const q = collection(db, collectionPath);
       onSnapshot(q, (querySnapshot) => {
         console.log("Current cards: ");
         var cards = [];
         querySnapshot.forEach((doc) => {
-          cards.push(doc.data());
+          if(currentCardInfo.cardNumber !== doc.data().cardNumber){
+            console.log("Adding card: " + doc.data().cardNumber);
+            cards.push(doc.data());
+          }else{
+            console.log("Skipping card: " + doc.data().cardNumber);
+          }
         });
         if (cards.length > 0) {
           console.log("Setting all cards")
           setAllCards(cards);
           //setCurrentCard(cards[0]);
         } else {
-          console.log("No cards registered");
+          console.log("No alternative cards registered");
           setNoCards(true);
         }
         querySnapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
-            cards.find((card) => card.cardNumber === change.doc.data().cardNumber) ? null : cards.push(change.doc.data());
-            setAllCards(cards);
-            setNoCards(false);
-          }
-          /*if (change.type === "modified") {
-            change.newIndex
-            cards[cards.indexOf(change.doc.data())] = change.doc.data();
-            setAllCards(cards);
-            setNoCards(false);
-          }
-          if (change.type === "removed") {
-            cards.splice(cards.indexOf(change.doc.data()), 1);
-            setAllCards(cards);
-            if (cards.length == 0) {
-              setNoCards(true);
+            console.log("added new card "+change.doc.data().cardNumber);
+            if(change.doc.data().cardNumber !== currentCardInfo.cardNumber){
+              cards.find((card) => card.cardNumber === change.doc.data().cardNumber) ? null : cards.push(change.doc.data());
+              console.log("Cards: " + cards); 
+              setAllCards(cards);
+              setNoCards(false);
             }
-          }*/
+          }
         });
-
-        /* if (cards.length > 0) {
-           console.log("Setting all cards")
-           setAllCards(cards);
-           setCurrentCard(cards[0]);
-         } else {
-           console.log("No cards registered");
-           setNoCards(true);
-         }*/
       })
+    }
     }
   }, []);
 
@@ -118,8 +109,8 @@ const StepOne = () => {
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-              <h4>Comprar tiempo</h4>
-              <div className="icon-area">
+            <h4>Entre tarjetas (Paga una tarjeta de crédito con otra)</h4>
+            <div className="icon-area">
               
               {/*   <Image src={support_icon} alt="icon" /> */}
               </div>
@@ -129,8 +120,13 @@ const StepOne = () => {
                 <div className="left-area">
                   <ul>
                     <li>
+                      <Link href="" className="single-link">
+                      Selecciona la tarjeta que recibirá los fondos
+                      </Link>
+                    </li>
+                    <li>
                       <Link href="" className="single-link active">
-                      Selecciona a qué tarjeta quieres comprarle tiempo
+                      Selecciona la tarjeta con la que pagarás
                       </Link>
                     </li>
                     <li>
@@ -147,17 +143,22 @@ const StepOne = () => {
                       </Link>
                     </li>
                   </ul>
-                  <button className="cmn-btn" onClick={() => setShowVideoModal(true)}>
-            ¿Cómo funciona?
-            <Image className="play-icon" src={play_icon} alt="Play Icon" />
-          </button>
                 </div>
               </div>
               <div className="col-xl-9 col-lg-8 col-md-7">
                 <div className="table-area">
-                  <div className="head-area">
+                  <div className="head-area"   style={{ display: "flex", alignItems: "center" }}                  >
                     <h4>Mis tarjetas de crédito</h4>
+                    <div style={{ flexGrow: 0.05 }} /> {/* Flexible empty space */}
+
                     {noCards ? <p>Debes registrar una tarjeta para continuar.</p> : <p></p>}
+                    <Image
+    src={cards_match}
+    alt="image"
+    width={100}
+    height={100}
+    style={{ marginLeft: "auto !important" }}
+  />
                   </div>
                   {error && <Alert color="danger">{error}</Alert>}
                   <div className="card-area d-flex flex-wrap">
@@ -254,9 +255,8 @@ const StepOne = () => {
                 </div>
              
                 <div className="footer-area mt-40">
-                  <Link href="#" className="d-none">
-                    Regresar
-                  </Link>
+                <Link href="/between-cards/step-1">Regresar</Link>
+
                   <Button  className="cmn-btn" onClick={(e) => handleContinue(e)}>
                     Siguiente
                   </Button>
@@ -266,60 +266,6 @@ const StepOne = () => {
           </div>
         </div>
       </div>
-         {/* Video Modal */}
-         {showVideoModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="close-btn" onClick={() => setShowVideoModal(false)}>
-              X
-            </button>
-            <iframe
-              src={videoUrl}
-              title="Video Tutorial"
-              width="100%"
-              height="400px"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        </div>
-      )}
-
-      <style jsx>{`
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.7);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-        }
-
-        .modal-content {
-          background: white;
-          padding: 00px;
-          border-radius: 20px;
-          max-width: 700px;
-          width: 110%;
-          position: relative;
-        }
-
-        .close-btn {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background: transparent;
-          border: none;
-          font-size: 24px;
-          color: white;
-          cursor: pointer;
-        }
-      `}</style>
     </section>
   );
 };
