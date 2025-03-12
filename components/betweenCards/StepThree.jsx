@@ -88,11 +88,12 @@ const StepTwo = () => {
   const handleContinue = () => {
     setError(null);
     if (parseFloat(amount) > 0) {
-      if(parseFloat(amount) >= 500){
+      router.push("/between-cards/step-4");
+      /*if(parseFloat(amount) >= 500){
         router.push("/between-cards/step-4");
       }else{
         setError("El monto mínimo a pagar es de $500.00");
-      }
+      }*/
     } else {
       setError("Debes indicar el monto para continuar");
     }

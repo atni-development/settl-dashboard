@@ -57,7 +57,7 @@ const leftSideMenuData = [
   },
   {
     id: 3,
-    icon: <i class="icon-withdraw"></i>,
+    icon: <i class="icon-pay"></i>,
     path: "between-cards",
     name: "Entre tarjetas",
     url: "/between-cards/step-1",
