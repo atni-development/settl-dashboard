@@ -20,11 +20,17 @@ const CardsCongratulationsModal = () => {
 
   const onClose = event => {
     console.log("ON CLOSE");;
-    localStorage.removeItem(userId + 'bc_session_date');
-    localStorage.removeItem(userId + 'bc_current_card');
-    localStorage.removeItem(userId + 'bc_amountToPay');
-    localStorage.removeItem(userId + 'bc_commisionToPay');
-    localStorage.removeItem(userId + 'bc_paying_card');
+    try{
+      var userId = localStorage.getItem('userId').trim();
+
+      localStorage.removeItem(userId + 'bc_session_date');
+      localStorage.removeItem(userId + 'bc_current_card');
+      localStorage.removeItem(userId + 'bc_amountToPay');
+      localStorage.removeItem(userId + 'bc_commisionToPay');
+      localStorage.removeItem(userId + 'bc_paying_card');
+    }catch(e){
+      console.log(e);
+    }
     router.push("/");
   }
 
