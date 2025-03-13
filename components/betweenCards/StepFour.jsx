@@ -349,7 +349,7 @@ const StepThree = () => {
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-              <h4>Comprar tiempo</h4>
+              <h4>Entre tarjetas</h4>
               <div className="icon-area">
                 <Image src={support_icon} alt="icon" />
               </div>
@@ -396,7 +396,7 @@ const StepThree = () => {
                     {error && <Alert color="danger">{error}</Alert>}
 
                     <div className="head-area"   style={{ display: "flex", alignItems: "center" }}                  >
-                    <h4>Confirma la inforación</h4>
+                    <h4>Confirma la información</h4>
                     <div style={{ flexGrow: 0.05 }} /> 
 
                     <Image

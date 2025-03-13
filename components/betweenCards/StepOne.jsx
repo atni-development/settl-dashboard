@@ -164,7 +164,7 @@ const StepOne = () => {
                 <div className="table-area">
                   <div className="head-area"   style={{ display: "flex", alignItems: "center" }}                  >
                     <h4>Mis tarjetas de crédito</h4>
-                    <div style={{ flexGrow: 0.05 }} /> {/* Flexible empty space */}
+                    <div style={{ flexGrow: 0.05 }} /> 
 
                     {noCards ? <p>Debes registrar una tarjeta para continuar.</p> : <p></p>}
                     <Image
