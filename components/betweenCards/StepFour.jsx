@@ -448,13 +448,14 @@ const StepThree = () => {
                             <span>Comisión Settl<span className="small-text"> (incluye iva)⠀</span></span>
                             <b>${currentComission != 0 ?currentComission:""} MXN</b>
                           </li>
-                          <li>
-                            <span>Informativo: No. de la tarjeta que recibirá el pago </span>
-                            <b>**** **** **** {currentCard.cardNumber !== undefined ? currentCard.cardNumber.substr(currentCard.cardNumber.length - 4, currentCard.cardNumber.length) : ""}  </b>
-                          </li>
+                        
                           <li>
                             <span>Se enviará comprobante a⠀</span>
                             <b>{currentEmail}</b>
+                          </li>
+                          <li>
+                            <span>Informativo: No. de la tarjeta que recibirá el pago </span>
+                            <b>**** **** **** {currentCard.cardNumber !== undefined ? currentCard.cardNumber.substr(currentCard.cardNumber.length - 4, currentCard.cardNumber.length) : ""}  </b>
                           </li>
                         </ul>
                       </div>
