@@ -121,7 +121,7 @@ const StepTwo = () => {
                   <ul>
                     <li>
                       <Link href="" className="single-link active">
-                      Selecciona la tarjeta que recibirá los fondos
+                      Selecciona la tarjeta que recibirá el pago
                       </Link>
                     </li>
                     <li>
