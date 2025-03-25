@@ -86,12 +86,12 @@ export const navData = [
       {
         id: "du@02001s",
         dp_itm: " Nuestra empresa",
-        url: "/about-us",
+        url: "https://settl.mx/about-us",
       },
       {
         id: "du@013s",
         dp_itm: "Nuestra seguridad",
-        url: "/security",
+        url: "https://settl.mx/security",
       },
       /*{
         id: "du@02002s",
@@ -134,12 +134,12 @@ export const navData = [
       {
         id: "du@020001s",
         dp_itm: "Centro de ayuda",
-        url: "/help-center",
+        url: "https://settl.mx/help-center",
       },
       {
         id: "du@02002s",
         dp_itm: "Ayuda por categoría",
-        url: "/help-center-category",
+        url: "https://settl.mx/help-center-category",
       },
     ],
   },
