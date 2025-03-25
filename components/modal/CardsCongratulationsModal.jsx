@@ -62,7 +62,7 @@ const CardsCongratulationsModal = () => {
                     <Image className="mb-60" src={success} alt="icon" />
                     <h4 className="mb-30">Pago aprobado</h4>
                     <p>
-                    En las próximas 24 horas hábiles recibirás un correo confirmando que tu pago ``Entre Tarjetas`` con Settl ha sido aplicada con éxito.
+                    En las próximas 24 horas hábiles recibirás un correo confirmando que tu pago “Entre Tarjetas” con Settl ha sido aplicado con éxito.
                     </p>
                   
                     <Link

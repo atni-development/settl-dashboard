@@ -22,6 +22,9 @@ import { Button } from "reactstrap";
 const StepOne = () => {
   const [checked, setChecked] = useState(null);
   const [currentCard, setCurrentCard] = useState("");
+
+  const [preSelectedCards, setPreSelectedCards] = useState([]);
+
   const [allCards, setAllCards] = useState([]);
   const [noCards, setNoCards] = useState(false);
   const [loadingCards, setLoadingCards] = useState(false);
@@ -30,18 +33,18 @@ const StepOne = () => {
 
   const handleChecked = (e, data) => {
     setError(null);
-  
+
     setCurrentCard(data.cardNumber);
     var userId = localStorage.getItem('userId').trim();
-    localStorage.setItem(userId+'bc_paying_card', JSON.stringify(data));
+    localStorage.setItem(userId + 'bc_paying_card', JSON.stringify(data));
   };
 
   const handleContinue = (e) => {
     setError(null);
     console.log(currentCard);
-    if(currentCard === "") {
+    if (currentCard === "") {
       setError("Debes seleccionar una tarjeta para continuar");
-    }else{
+    } else {
       router.push("/between-cards/step-3");
     }
     console.log("Continue");
@@ -50,89 +53,89 @@ const StepOne = () => {
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
       const userId = localStorage.getItem('userId')?.trim();
-      const currentCard = localStorage.getItem(userId+'bc_current_card');
-      if(!currentCard){
+      const currentCard = localStorage.getItem(userId + 'bc_current_card');
+      if (!currentCard) {
         router.push("/between-cards/step-1");
-      }else{
+      } else {
         console.log("Current card: " + currentCard);
-      
-      var currentCardInfo = JSON.parse(currentCard);
+
+        var currentCardInfo = JSON.parse(currentCard);
+        setPreSelectedCards([currentCardInfo]);
 
 
-      //setCurrentCard(card);
-      var db = getFirestore();
-      var collectionPath = "Users/" + userId + "/cards";
-      const q = collection(db, collectionPath);
-      onSnapshot(q, (querySnapshot) => {
-        console.log("Current cards: ");
-        var cards = [];
-        querySnapshot.forEach((doc) => {
-          if(currentCardInfo.cardNumber !== doc.data().cardNumber){
-            console.log("Adding card: " + doc.data().cardNumber);
-            cards.push(doc.data());
-          }else{
-            console.log("Skipping card: " + doc.data().cardNumber);
-          }
-        });
-        if (cards.length > 0) {
-          console.log("Setting all cards")
-          setAllCards(cards);
-          //setCurrentCard(cards[0]);
-        } else {
-          console.log("No alternative cards registered");
-          setNoCards(true);
-        }
-        querySnapshot.docChanges().forEach((change) => {
-          if (change.type === "added") {
-            console.log("added new card "+change.doc.data().cardNumber);
-            if(change.doc.data().cardNumber !== currentCardInfo.cardNumber){
-              cards.find((card) => card.cardNumber === change.doc.data().cardNumber) ? null : cards.push(change.doc.data());
-              console.log("Cards: " + cards); 
-              setAllCards(cards);
-              setNoCards(false);
+        //setCurrentCard(card);
+        var db = getFirestore();
+        var collectionPath = "Users/" + userId + "/cards";
+        const q = collection(db, collectionPath);
+        onSnapshot(q, (querySnapshot) => {
+          console.log("Current cards: ");
+          var cards = [];
+          querySnapshot.forEach((doc) => {
+            if (currentCardInfo.cardNumber !== doc.data().cardNumber) {
+              console.log("Adding card: " + doc.data().cardNumber);
+              cards.push(doc.data());
+            } else {
+              console.log("Skipping card: " + doc.data().cardNumber);
             }
+          });
+          if (cards.length > 0) {
+            console.log("Setting all cards")
+            setAllCards(cards);
+
+          } else {
+            setError("Debes registrar una tarjeta para continuar");
+
+            console.log("No alternative cards registered");
+            setNoCards(true);
           }
-        });
-      })
-    }
+          querySnapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              console.log("added new card " + change.doc.data().cardNumber);
+              if (change.doc.data().cardNumber !== currentCardInfo.cardNumber) {
+                cards.find((card) => card.cardNumber === change.doc.data().cardNumber) ? null : cards.push(change.doc.data());
+                console.log("Cards: " + cards);
+                setAllCards(cards);
+                setNoCards(false);
+              }
+            }
+          });
+        })
+      }
     }
   }, []);
 
   return (
     <section className="dashboard-section body-collapse pay step crypto deposit-money">
-          <Head>
-          <script type="text/javascript" async="false" defer="false" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-   <script type="text/javascript" async="false" defer="false" src="https://js.openpay.mx/openpay.v1.min.js"></script>
-    <script type='text/javascript' async="false" defer="false" src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
-          </Head>
+      <Head>
+        <script type="text/javascript" async="false" defer="false" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script type="text/javascript" async="false" defer="false" src="https://js.openpay.mx/openpay.v1.min.js"></script>
+        <script type='text/javascript' async="false" defer="false" src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
+      </Head>
       <div className="overlay pt-120">
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-            <h4>Entre tarjetas (Paga una tarjeta de crédito con otra)</h4>
-            <div className="icon-area">
-              
-              {/*   <Image src={support_icon} alt="icon" /> */}
-              </div>
+              <h4>Entre tarjetas <span>(Paga una tarjeta de crédito con otra)</span></h4>
+            
             </div>
             <div className="row justify-content-between pb-120">
               <div className="col-xl-3 col-lg-4 col-md-5">
                 <div className="left-area">
                   <ul>
                     <li>
-                      <Link href="" className="single-link">
-                      Selecciona la tarjeta que recibirá el pago
+                      <Link href="" className="single-link active">
+                        Selecciona la tarjeta que recibirá el pago
                       </Link>
                     </li>
                     <li>
                       <Link href="" className="single-link active">
-                      Selecciona la tarjeta con la que pagarás
+                        Selecciona la tarjeta con la que pagarás
                       </Link>
                     </li>
                     <li>
                       <Link
                         href=""
-                        className="single-link two"
+                        className="single-link three"
                       >
                         Introduce la cantidad
                       </Link>
@@ -147,18 +150,17 @@ const StepOne = () => {
               </div>
               <div className="col-xl-9 col-lg-8 col-md-7">
                 <div className="table-area">
-                  <div className="head-area"   style={{ display: "flex", alignItems: "center" }}                  >
+                  <div className="head-area" style={{ display: "flex", alignItems: "center" }}                  >
                     <h4>Mis tarjetas de crédito</h4>
-                    <div style={{ flexGrow: 0.05 }} /> {/* Flexible empty space */}
 
-                    {noCards ? <p>Debes registrar una tarjeta para continuar.</p> : <p></p>}
+
                     <Image
-    src={cards_match}
-    alt="image"
-    width={100}
-    height={100}
-    style={{ marginLeft: "auto !important" }}
-  />
+                      src={cards_match}
+                      alt="image"
+                      width={100}
+                      height={100}
+                      style={{ marginLeft: "auto !important" }}
+                    />
                   </div>
                   {error && <Alert color="danger">{error}</Alert>}
                   <div className="card-area d-flex flex-wrap">
@@ -178,7 +180,7 @@ const StepOne = () => {
                     </div>
                     */}
                     {allCards.map((item, index) => (
-                      <div className="single-card"     key={index}>
+                      <div className="single-card" key={index}>
                         <input
                           type="radio"
                           key={index}
@@ -188,11 +190,30 @@ const StepOne = () => {
                           value={item.cardNumber}
                           onClick={(e) => handleChecked(e, item)}
                         />
-                        <label htmlFor={item.cardNumber}     key={index}>
-                        <div className="col-xl-12 col-lg-12 col-md-12"     key={index}>
-                          <span className="wrapper"></span>
-                          <Image src={item.bin.brand == "VISA" ?visa_card:master_card} alt="image" />
-                          <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
+                        <label htmlFor={item.cardNumber} key={index}>
+                          <div className="col-xl-12 col-lg-12 col-md-12" key={index}>
+                            <span className="wrapper"></span>
+                            <Image src={item.bin.brand == "VISA" ? visa_card : master_card} alt="image" />
+                            <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
+                        </label>
+
+                      </div>
+                    ))}
+                       {preSelectedCards.map((item, index) => (
+                      <div className="single-card" key={index}>
+                        <input
+                          type="radio"
+                          key={index}
+                          checked={true}
+                          name="preselected"
+                          id={item.cardNumber}
+                          value={item.cardNumber}
+                        />
+                        <label htmlFor={item.cardNumber} key={index}>
+                          <div className="col-xl-12 col-lg-12 col-md-12" key={index}>
+                            <span className="wrapper"></span>
+                            <Image src={item.bin.brand == "VISA" ? visa_card : master_card} alt="image" />
+                            <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
                         </label>
 
                       </div>
@@ -244,20 +265,20 @@ const StepOne = () => {
                         data-backdrop="static" data-keyboard="false"
                         data-bs-target="#addcardMod"
                       >
-                            <div className="col-xl-12 col-lg-12 col-md-12">          
-                              <Image src={add_card} alt="image" className="w-100" />
-                            </div>
-              
+                        <div className="col-xl-12 col-lg-12 col-md-12">
+                          <Image src={add_card} alt="image" className="w-100" />
+                        </div>
+
                       </div>
                     </div>
                   </div>
 
                 </div>
-             
-                <div className="footer-area mt-40">
-                <Link href="/between-cards/step-1">Regresar</Link>
 
-                  <Button  className="cmn-btn" onClick={(e) => handleContinue(e)}>
+                <div className="footer-area mt-40">
+                  <Link href="/between-cards/step-1">Regresar</Link>
+
+                  <Button className="cmn-btn" onClick={(e) => handleContinue(e)}>
                     Siguiente
                   </Button>
                 </div>

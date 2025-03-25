@@ -68,12 +68,12 @@ const StepThree = () => {
         setLoading(true);
         termsCheck.current.checked = true;
         operationsCheck.current.checked = true;
-        var docuLocation = "/Users/" + userId + "/payment_requests/"+ params['settlPaymentId']
+        var docuLocation = "/Users/" + userId + "/payment_requests/" + params['settlPaymentId']
         console.log("Document location: ");
         console.log(docuLocation);
         const docRef = doc(getFirestore(), docuLocation);
         getDoc(docRef).then((doc) => {
-   
+
           if (doc.exists) {
             console.log("Document data:", doc.data());
             var data = doc.data();
@@ -107,7 +107,7 @@ const StepThree = () => {
                         showPendingModalRef.current.click();
                       }
 
-                
+
                     }
                   })
                   .catch((error) => {
@@ -152,7 +152,7 @@ const StepThree = () => {
             router.push("/between-cards/step-1");
           } else {
 
-            if (currentAmount !== null && currentCommision !== null) {  
+            if (currentAmount !== null && currentCommision !== null) {
               setCurrentAmout(currentAmount);
               setCurrentCommision(currentCommision);
               //var params = parseQueryString();
@@ -215,7 +215,7 @@ const StepThree = () => {
               };
 
               //const response = await axios.get('https://ipinfo.io/?token=6d105865cbf95e', {
-               // 'Access-Control-Allow-Origin': true,
+              // 'Access-Control-Allow-Origin': true,
               //});
 
 
@@ -338,9 +338,9 @@ const StepThree = () => {
   return (
     <section className="dashboard-section body-collapse pay step step-3 crypto deposit-money">
       <Head>
-      <script type="text/javascript" async="false" defer="false" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-   <script type="text/javascript" async="false" defer="false" src="https://js.openpay.mx/openpay.v1.min.js"></script>
-    <script type='text/javascript' async="false" defer="false" src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
+        <script type="text/javascript" async="false" defer="false" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script type="text/javascript" async="false" defer="false" src="https://js.openpay.mx/openpay.v1.min.js"></script>
+        <script type='text/javascript' async="false" defer="false" src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
 
 
 
@@ -350,9 +350,7 @@ const StepThree = () => {
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
               <h4>Entre tarjetas</h4>
-              <div className="icon-area">
-                <Image src={support_icon} alt="icon" />
-              </div>
+
             </div>
             <div className="row justify-content-between pb-120">
               <div className="col-xl-3 col-lg-4">
@@ -363,12 +361,12 @@ const StepThree = () => {
                         href=""
                         className="single-link active"
                       >
-                      Selecciona la tarjeta que recibirá el pago
+                        Selecciona la tarjeta que recibirá el pago
                       </Link>
                     </li>
                     <li>
                       <Link href="" className="single-link active">
-                      Selecciona la tarjeta con la que pagarás
+                        Selecciona la tarjeta con la que pagarás
                       </Link>
                     </li>
                     <li>
@@ -395,71 +393,141 @@ const StepThree = () => {
                   <div className="payment-details">
                     {error && <Alert color="danger">{error}</Alert>}
 
-                    <div className="head-area"   style={{ display: "flex", alignItems: "center" }}                  >
-                    <h4>Confirma la información</h4>
-                    <div style={{ flexGrow: 0.05 }} /> 
+                    <div className="head-area" style={{ display: "flex", alignItems: "center" }}                  >
+                      <h4>Confirma la información</h4>
+                      <div style={{ flexGrow: 0.05 }} />
 
-                    <Image
-    src={cards_match}
-    alt="image"
-    width={100}
-    height={100}
-    style={{ marginLeft: "auto !important" }}
-  />
-                      <div style={{ flexGrow: 1 }} /> 
+                      <Image
+                        src={cards_match}
+                        alt="image"
+                        width={100}
+                        height={100}
+                        style={{ marginLeft: "auto !important" }}
+                      />
+                      <div style={{ flexGrow: 1 }} />
 
-                      <div className="right">
-                        {(!loading && !success) ? <Link href="/between-cards/step-2">
-                          <i className="icon-h-edit"></i>
-                          Editar
-                        </Link> : <Link href="/">
-                          <i className="icon-h-edit"></i>
-                          Continuar
-                        </Link>}
-                      </div>
+
 
                     </div>
                     <div className="row">
-                      <div className="col-xxl-8 col-xl-9 col-lg-11">
-                        <ul className="details-list">
-                          <li>
+                      <div className="col-xxl-12 col-xl-10 col-lg-11 details-list">
+                        <div className="row">
+                          <div className="col-6">
                             <span>Banco</span>
+                          </div>
+                          <div className="col-6">
                             <b>{payingCard.bank}</b>
-                          </li>
-                        
-                          <li>
-                            <span>No de la tarjeta que pagará</span>
-                            <b>**** **** **** {payingCard.cardNumber !== undefined ? payingCard.cardNumber.substr(payingCard.cardNumber.length - 4, payingCard.cardNumber.length) : ""}  </b>
-                          </li>
-                          <li>
-                            <span>CVV de la tarjeta que pagará</span>
-
+                          </div>
+                        </div>
+                        <br></br>
+                        <div className="row">
+                          <div className="col-6">
+                            <span>
+                              No de la tarjeta que pagará⠀
+                            </span>
+                          </div>
+                          <div className="col-6">
+                            <b>
+                              **** **** ****{" "}
+                              {payingCard.cardNumber !== undefined
+                                ? payingCard.cardNumber.substr(
+                                  payingCard.cardNumber.length - 4,
+                                  payingCard.cardNumber.length
+                                )
+                                : ""}
+                            </b>
+                          </div>
+                        </div>
+                        <br></br>
+                        <div className="row">
+                          <div className="col-6">
+                            <span>
+                              No de la tarjeta que pagará⠀
+                            </span>
+                          </div>
+                          <div className="col-6">
+                            <b>
+                              **** **** ****{" "}
+                              {payingCard.cardNumber !== undefined
+                                ? payingCard.cardNumber.substr(
+                                  payingCard.cardNumber.length - 4,
+                                  payingCard.cardNumber.length
+                                )
+                                : ""}
+                            </b>
+                          </div>
+                        </div>
+                        <br></br>
+                        <div className="row">
+                          <div className="col-6">
+                            <span>
+                              CVV de la tarjeta que pagará ⠀
+                            </span>
+                          </div>
+                          <div className="col-6">
                             <input
                               className="cvvinput"
-                              type="number" id="cvv" placeholder="***"
-                              maxlength="3"
-                              onChange={(event) => setCVV(event.target.value)} />
-                          </li>
-                          <li>
+                              type="number"
+                              id="cvv"
+                              placeholder="***"
+                              maxLength="3"
+                              onWheel={() => document.activeElement.blur()}
+                              onChange={(event) => setCVV(event.target.value)}
+                            />
+                          </div>
+                        </div>
+                        <br></br>
+                        <div className="row">
+                          <div className="col-6">
                             <span>Cantidad a aplazar</span>
-                            <b>${currentAmount!=0? currentAmount:""} MXN</b>
-                          </li>
-                          <li>
-                            <span>Comisión Settl<span className="small-text"> (incluye iva)⠀</span></span>
-                            <b>${currentComission != 0 ?currentComission:""} MXN</b>
-                          </li>
-                        
-                          <li>
+                          </div>
+                          <div className="col-6">
+                            <b>${currentAmount !== 0 ? currentAmount : ""} MXN</b>
+                          </div>
+                        </div>
+                        <br></br>
+                        <div className="row">
+                          <div className="col-6">
+                            <span>
+                              Comisión Settl<span className="small-text"> (incluye iva)⠀</span>
+                            </span>
+                          </div>
+                          <div className="col-6">
+                            <b>${currentComission !== 0 ? currentComission : ""} MXN</b>
+                          </div>
+                        </div>
+                        <br></br>
+                        <div className="row">
+                          <div className="col-6">
                             <span>Se enviará comprobante a⠀</span>
+                          </div>
+                          <div className="col-6">
                             <b>{currentEmail}</b>
-                          </li>
-                          <li>
-                            <span>Informativo: No. de la tarjeta que recibirá el pago </span>
-                            <b>**** **** **** {currentCard.cardNumber !== undefined ? currentCard.cardNumber.substr(currentCard.cardNumber.length - 4, currentCard.cardNumber.length) : ""}  </b>
-                          </li>
-                        </ul>
+                          </div>
+                        </div>
+                        <br></br>
+                        <div className="row">
+                          <div className="col-6">
+                            <span>
+                              Informativo: No. de la tarjeta que recibirá el pago
+                            </span>
+                          </div>
+                          <div className="col-6">
+                            <b>
+                              **** **** ****{" "}
+                              {currentCard.cardNumber !== undefined
+                                ? currentCard.cardNumber.substr(
+                                  currentCard.cardNumber.length - 4,
+                                  currentCard.cardNumber.length
+                                )
+                                : ""}
+                            </b>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
+
                   </div>
                   <div className="checkbox-area mt-40 d-flex align-items-center justify-content-center">
                     <input ref={termsCheck} type="checkbox" id="accept" name="accept" onClick={
@@ -489,13 +557,13 @@ const StepThree = () => {
 
                     } />
                     <label htmlFor="accept">
-                      Al aceptar el cargo estoy firmando el <Link href="https://settl.mx/contract">contrato de Settl</Link>  para la correcta operativa
+                      Al aceptar el cargo estoy firmando el <Link href="https://settl.mx/cards-contract">contrato de Settl</Link>  para la correcta operativa
                     </label>
 
                   </div>
                   <div className="footer-area mt-40">
 
-                    {(!loading && !success) ? <Link href="/between-cards/step-2">Regresar</Link> : <p></p>}
+                    {(!loading && !success) ? <Link href="/between-cards/step-3">Regresar</Link> : <p></p>}
                     <Link
                       style={{ display: "none" }}
                       onClick={(e) => {

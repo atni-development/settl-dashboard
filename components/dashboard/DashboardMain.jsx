@@ -93,7 +93,13 @@ const DashboardMain = () => {
         var total = 0;
         transactions.forEach((transaction) => {
           total += 1;
-          var k = transaction.card.cardNumber.substring(transaction.card.cardNumber.length - 4);
+          var transCard = transaction.card;
+          if(!transCard){
+            transCard = transaction.payingCard;
+            transaction.card = transCard;
+          }
+
+          var k = transCard.cardNumber.substring(transCard.cardNumber.length - 4);
      
             var filtersMap = new Map();
             filtersMap.set('all', "Todas las tarjetas");
@@ -112,9 +118,9 @@ const DashboardMain = () => {
                 datesMap.set(datekey, readableFilter);
               }
   
-              var last4digits = transaction.card.cardNumber.substr(transaction.card.cardNumber.length - 4);
-              if (!filtersMap.has(transaction.card.cardNumber)) {
-                filtersMap.set(transaction.card.cardNumber, "Tarjeta ****" + last4digits);
+              var last4digits = transCard.cardNumber.substr(transCard.cardNumber.length - 4);
+              if (!filtersMap.has(transCard.cardNumber)) {
+                filtersMap.set(transCard.cardNumber, "Tarjeta ****" + last4digits);
               }
   
               if (transaction.paymentStatus.toLowerCase() == "pending") {

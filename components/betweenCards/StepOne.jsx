@@ -31,7 +31,7 @@ const StepOne = () => {
   const [error, setError] = useState(null);
 
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const videoUrl = "https://firebasestorage.googleapis.com/v0/b/settl-project.appspot.com/o/video2.mp4?alt=media&token=a702907a-c6bb-49b6-ac47-016e9426d98a"; // Replace with the actual video URL
+  const videoUrl = "https://firebasestorage.googleapis.com/v0/b/settl-project.appspot.com/o/video_entre_tarjetas.mp4?alt=media&token=0d84a07d-a6ef-4bba-946e-650aa961f7ad"; // Replace with the actual video URL
 
 
   const handleChecked = (e, data) => {
@@ -119,12 +119,8 @@ const StepOne = () => {
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-            <h4>Entre tarjetas (Paga una tarjeta de crédito con otra)</h4>
+            <h4>Entre tarjetas <span>(Paga una tarjeta de crédito con otra)</span></h4>
 
-            <div className="icon-area">
-              
-              {/*   <Image src={support_icon} alt="icon" /> */}
-              </div>
             </div>
             <div className="row justify-content-between pb-120">
               <div className="col-xl-3 col-lg-4 col-md-5">
@@ -136,14 +132,14 @@ const StepOne = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link href="" className="single-link">
+                      <Link href="" className="single-link two">
                       Selecciona la tarjeta con la que pagarás
                       </Link>
                     </li>
                     <li>
                       <Link
                         href=""
-                        className="single-link two"
+                        className="single-link three"
                       >
                         Introduce la cantidad
                       </Link>

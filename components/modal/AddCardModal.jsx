@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import { addDoc, getDoc, getDocs, collection, doc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
-import axios from 'axios';
 import InputMask from 'react-input-mask';
 
 const AddCardModal = () => {
@@ -131,11 +130,7 @@ const AddCardModal = () => {
     setError(null)
     setInformation(null);
     var error = false;
-    /*if (bank == "") {
-      error = true;
-      //closeRef.current.click()
-      setError("Debes ingresar el banco receptor");
-    }*/
+ 
     if(postalCode === ""){
       error = true;
       setError("Debes ingresar el código postal de la dirección de facturación");
@@ -160,10 +155,7 @@ const AddCardModal = () => {
       error = true;
       setError("El mes de vencimiento de la tarjeta no puede ser menor al mes actual");
     }
-    /*if(closingMonth === "February" && closingDay > 28){
-      error = true;
-      setError("El día de corte no puede ser mayor a 28 para el mes de Febrero");
-    }*/
+    
     if (cardNumber === "") {
       error = true;
       setError("Debes ingresar el número de tarjeta");
@@ -201,7 +193,6 @@ const AddCardModal = () => {
           var binData = docSnap.data();
           console.log("BIN DATA");
           console.log(binData);
-         // binData = binData.data();
           console.log("BIN RESPONSE");
           if (binData.brand === "VISA" || binData.brand === "MASTER CARD") {
             console.log("Tarjeta válida");
@@ -211,6 +202,38 @@ const AddCardModal = () => {
             } else {
              
                 let userId = localStorage.getItem('userId').trim();
+
+                const userDocRef = doc(db, "Users", userId);
+                const userDocSnap = await getDoc(userDocRef);
+                
+                if (userDocSnap.exists()) {
+                  const userData = userDocSnap.data();
+                  const userName = userData.name || "";
+                  
+                  // Split the user's name into components
+                  const userNameParts = userName.toLowerCase().split(' ');
+                  const cardHolderNameParts = cardHolderName.toLowerCase().split(' ');
+                  
+                  // Check if all parts of the user's name appear in the cardholder name
+                  const allPartsIncluded = userNameParts.every(part => 
+                    part.length > 0 && cardHolderNameParts.includes(part)
+                  );
+                  
+                  if (!allPartsIncluded) {
+                    error = true;
+                    setError("El nombre del titular de la tarjeta no coincide con el nombre registrado en tu cuenta");
+                    return;
+                  }
+                  
+                  // Continue with adding the card if validation passes
+                  var collectionRoute = "Users/" + userId + "/cards";
+                  console.log("Collection route: " + collectionRoute);
+                } else {
+                  error = true;
+                  setError("No se pudo encontrar tu perfil de usuario. Error 202");
+                  return;
+                }
+
                 var collectionRoute = "Users/" + userId + "/cards";
                 console.log("Collection route: " + collectionRoute)
                 const q = collection(db, collectionRoute);

@@ -432,6 +432,8 @@ const StepThree = () => {
                               className="cvvinput"
                               type="number" id="cvv" placeholder="***"
                               maxlength="3"
+                              onWheel={() => document.activeElement.blur()}
+
                               onChange={(event) => setCVV(event.target.value)} />
                           </li>
                           <li>

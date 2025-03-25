@@ -940,15 +940,22 @@
           }
         }
         .details-list {
+          span{
+            color: #23262f;
+          }
+          b{
+            color: #0B266C;
+          }
           li {
             display: flex;
             align-items: start;
             margin-top: 20px;
+            width: 100%;
             span {
               display: block;
               text-align: start;
               align-items: start;
-              max-width: 50%;
+              max-width: 100%;
               min-width: 42%;
             }
           }
@@ -1261,9 +1268,10 @@
                 content: "3";
               }
             }
+      
             &.last {
               &::before {
-                content: "3";
+                content: "4";
               }
               &::after {
                 display: none;

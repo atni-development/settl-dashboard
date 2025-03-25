@@ -110,10 +110,8 @@ const StepTwo = () => {
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-              <h4>Entre tarjetas (Paga una tarjeta de crédito con otra)</h4>
-              <div className="icon-area">
-                <Image src={support_icon} alt="icon" />
-              </div>
+            <h4>Entre tarjetas <span>(Paga una tarjeta de crédito con otra)</span></h4>
+            
             </div>
             <div className="row justify-content-between pb-120">
               <div className="col-xl-3 col-lg-4 col-md-5">
@@ -171,6 +169,8 @@ const StepTwo = () => {
                           className="xxlr"
                           min="0"
                           maxLength={4}
+                          onWheel={() => document.activeElement.blur()}
+
                           placeholder="Ejemplo 1,000.00"
                           type="text"
                           value={formatNumber(amount)}

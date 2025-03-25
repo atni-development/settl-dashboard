@@ -146,6 +146,8 @@ const StepTwo = () => {
                           className="xxlr"
                           min="0"
                           maxLength={4}
+                          onWheel={() => document.activeElement.blur()}
+
                           placeholder="Ejemplo 1,000.00"
                           type="text"
                           value={formatNumber(amount)}
