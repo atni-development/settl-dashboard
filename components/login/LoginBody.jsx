@@ -516,7 +516,7 @@ console.log(dataToInsert);
                     Inicia sesión con Google
                   </Link>
                 </div>
-                <span className="or">o continua con</span>
+                <span className="or">o continúa con</span>
               </div>
 
               <Container className="text-center custom-container">

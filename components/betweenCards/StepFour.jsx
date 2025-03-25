@@ -420,25 +420,7 @@ const StepThree = () => {
                           </div>
                         </div>
                         <br></br>
-                        <div className="row">
-                          <div className="col-6">
-                            <span>
-                              No de la tarjeta que pagará⠀
-                            </span>
-                          </div>
-                          <div className="col-6">
-                            <b>
-                              **** **** ****{" "}
-                              {payingCard.cardNumber !== undefined
-                                ? payingCard.cardNumber.substr(
-                                  payingCard.cardNumber.length - 4,
-                                  payingCard.cardNumber.length
-                                )
-                                : ""}
-                            </b>
-                          </div>
-                        </div>
-                        <br></br>
+                      
                         <div className="row">
                           <div className="col-6">
                             <span>
