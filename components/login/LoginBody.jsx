@@ -506,7 +506,7 @@ console.log(dataToInsert);
             <div className="col-xl-5">
               <div className="section-text text-center">
                 <h5 className="sub-title">Inicio de sesión</h5>
-                <h2 className="title">Inicia sesion para continuar</h2>
+                <h2 className="title">Inicia sesión para continuar</h2>
                 <p className="dont-acc">
                   ¿No tienes una cuenta? <Link className="green_link" href="/sign-up">Regístrate</Link>
                 </p>
@@ -516,7 +516,7 @@ console.log(dataToInsert);
                     Inicia sesión con Google
                   </Link>
                 </div>
-                <span className="or">o conitnua con</span>
+                <span className="or">o continua con</span>
               </div>
 
               <Container className="text-center custom-container">
