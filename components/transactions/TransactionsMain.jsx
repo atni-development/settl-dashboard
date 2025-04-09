@@ -123,7 +123,11 @@ const TransactionsMain = () => {
           var datesMap = new Map();
           datesMap.set('all', "Todos los meses");
           transactions.forEach((transaction) => {
-
+            var transCard = transaction.card;
+            if(!transCard){
+              transCard = transaction.payingCard;
+              transaction.card = transCard;
+            }
             var date = transaction.requested_date.toDate().toLocaleDateString()
             var readableFilter = transaction.requested_date.toDate().toLocaleDateString("es-MX", { year: "numeric", month:"long"})
 
@@ -135,9 +139,9 @@ const TransactionsMain = () => {
               datesMap.set(datekey, readableFilter);
             }
 
-            var last4digits = transaction.card.cardNumber.substr(transaction.card.cardNumber.length - 4);
-            if (!filtersMap.has(transaction.card.cardNumber)) {
-              filtersMap.set(transaction.card.cardNumber, "Tarjeta ****" + last4digits);
+            var last4digits = transCard.cardNumber.substr(transCard.cardNumber.length - 4);
+            if (!filtersMap.has(transCard.cardNumber)) {
+              filtersMap.set(transCard.cardNumber, "Tarjeta ****" + last4digits);
             }
 
             if (transaction.paymentStatus.toLowerCase() == "pending") {
