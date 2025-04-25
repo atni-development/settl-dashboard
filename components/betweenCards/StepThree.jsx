@@ -181,7 +181,6 @@ const StepTwo = () => {
                         Comisión: <b>${commission}</b>  ·   Mínimo<b>$500.00</b>  ·   Máximo<b>$4,720.00</b>
                       </p>
                     </div>
-                    <p><br></br><b>Importante:</b><br></br>Tu tarjeta deberá tener como <b>saldo disponible</b> la cantidad a aplazar con Settl + la comisión por el servicio.</p>
                   </form>
                 </div>
                 <div className="footer-area mt-40">
