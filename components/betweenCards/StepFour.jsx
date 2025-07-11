@@ -60,7 +60,6 @@ const StepThree = () => {
       var userId = localStorage.getItem('userId').trim();
 
       var params = parseQueryString();
-      console.log(params);
       if (params['settlPaymentId']) {
 
         setTermsAccepted(true);
@@ -69,13 +68,11 @@ const StepThree = () => {
         termsCheck.current.checked = true;
         operationsCheck.current.checked = true;
         var docuLocation = "/Users/" + userId + "/payment_requests/" + params['settlPaymentId']
-        console.log("Document location: ");
-        console.log(docuLocation);
+  
         const docRef = doc(getFirestore(), docuLocation);
         getDoc(docRef).then((doc) => {
 
           if (doc.exists) {
-            console.log("Document data:", doc.data());
             var data = doc.data();
             setCurrentCard(data.cardToPay);
             setPayingCard(data.payingCard);
@@ -88,8 +85,7 @@ const StepThree = () => {
                 const checkPayment = httpsCallable(functions, 'getPaymentInfo');
                 checkPayment({ paymentId: params['settlPaymentId'], })
                   .then((result) => {
-                    console.log("Server responded");
-                    console.log(result);
+          
                     if (result.data.payload.status === "completed") {
                       setLoading(false);
                       setSuccess(true);
@@ -120,7 +116,6 @@ const StepThree = () => {
           }
 
         }).catch((error) => {
-          console.log("Error getting document:", error);
           setError("Se produjo un error al procesar la información de pago. Error 699")
 
         });
@@ -155,11 +150,7 @@ const StepThree = () => {
             if (currentAmount !== null && currentCommision !== null) {
               setCurrentAmout(currentAmount);
               setCurrentCommision(currentCommision);
-              //var params = parseQueryString();
-              //console.log(params);
-
             } else {
-              console.log("Amount is null");
               router.push("/between-cards/step-3");
             }
           }
@@ -172,7 +163,6 @@ const StepThree = () => {
 
   const onClose = event => {
     event.preventDefault();
-    console.log("ON CLOSE");
     var userId = localStorage.getItem('userId').trim();
     localStorage.removeItem(userId + 'bc_session_date');
     localStorage.removeItem(userId + 'bc_current_card');
@@ -188,7 +178,6 @@ const StepThree = () => {
 
     setError(null);
     setLoading(true);
-    console.log("OpenPay is loaded")
     if (termsAccepted && signature) {
       if (cvv !== "" && cvv.length === 3) {
 
@@ -199,13 +188,7 @@ const StepThree = () => {
               OpenPay.setId('mdjfxaujamxkjpeernxz');
               OpenPay.setApiKey('pk_db2479b316df4f4db0c85a09c3b833c5');
               OpenPay.setSandboxMode(true);
-              console.log("OpenPay is loaded")
-              console.log(OpenPay)
-              //OpenPay.setId('metmqgrlkjtzv38toph7');
-              //OpenPay.setApiKey('pk_0e254f67b6934dc190aee7e0f023ab7f');
-              //OpenPay.setSandboxMode(false);
               var deviceDataId = OpenPay.deviceData.setup("formId");
-              console.log("Device Data ID: " + deviceDataId);
               var db = getFirestore();
               var currentUserData = {
                 email: localStorage.getItem('email'),
@@ -213,14 +196,6 @@ const StepThree = () => {
                 name: localStorage.getItem('name'),
                 phone: phone
               };
-
-              //const response = await axios.get('https://ipinfo.io/?token=6d105865cbf95e', {
-              // 'Access-Control-Allow-Origin': true,
-              //});
-
-
-              //var userData = response.data;
-              //console.log(userData);
               var paymentData = {
                 paymentStatus: "Pending",
                 chargeStatus: "Pending",
@@ -239,13 +214,10 @@ const StepThree = () => {
               var collectionPath = "Users/" + userId + "/payment_requests";
               const q = collection(db, collectionPath);
               addDoc(q, paymentData).then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
                 const functions = getFunctions();
                 const processsPayment = httpsCallable(functions, 'processNewCardToCardPayment');
                 processsPayment({ paymentId: docRef.id, deviceId: deviceDataId, phoneNumber: phone, cardCVV: cvv })
                   .then((result) => {
-                    console.log("Server responded");
-                    console.log(result);
                     if (result.data.status === "Success") {
                       if (result.data.payload.error_message !== null) {
                         setError(result.data.payload.error);
@@ -253,7 +225,6 @@ const StepThree = () => {
                       } else {
                         if (result.data.payload.payment_method) {
                           if (result.data.payload.payment_method.type !== "redirect") {
-                            console.log("Payment processed successfully");
                             setLoading(false);
                             setSuccess(true);
                             showModalRef.current.click();
@@ -264,17 +235,14 @@ const StepThree = () => {
                           }
 
                         } else {
-                          console.log("Payment processed successfully");
                           setLoading(false);
                           setSuccess(true);
                           showModalRef.current.click();
                         }
                       }
                     } else {
-                      console.log("Error");
                       setLoading(false);
                       if (result.data.message) {
-                        console.log("Error with message");
                         switch (result.data.message) {
                           case "The number of retries of charge is greater than allowed":
                             setError("El número de intentos de pago es mayor al permitido, por favor intenta de nuevo más tarde");
@@ -288,7 +256,6 @@ const StepThree = () => {
                         }
 
                       } else {
-                        console.log("Error no message");
                         setError("Se produjo un error al registar al procesar la información de pago. Error 587")
                       }
                     }
@@ -307,18 +274,15 @@ const StepThree = () => {
                 });
 
             } else {
-              console.log("OpenPay is not loaded");
               setLoading(false);
               setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo. Error 909");
 
             }
           } else {
-            console.log("Phone is null");
             setLoading(false);
             setError("Debes indicar un número de teléfono para continuar");
           }
         } catch (e) {
-          console.log(e);
           setLoading(false);
           setError("Se ha producido un error al cargar el servicio de pagos, por favor intenta de nuevo. Error 910");
         }
@@ -341,8 +305,6 @@ const StepThree = () => {
         <script type="text/javascript" async="false" defer="false" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script type="text/javascript" async="false" defer="false" src="https://js.openpay.mx/openpay.v1.min.js"></script>
         <script type='text/javascript' async="false" defer="false" src="https://js.openpay.mx/openpay-data.v1.min.js"></script>
-
-
 
       </Head>
       <div className="overlay pt-120">

@@ -41,13 +41,22 @@ const StepOne = () => {
 
   const handleContinue = (e) => {
     setError(null);
-    console.log(currentCard);
     if (currentCard === "") {
       setError("Debes seleccionar una tarjeta para continuar");
     } else {
       router.push("/between-cards/step-3");
     }
-    console.log("Continue");
+  };
+
+  // Combine and sort all cards (preselected + all cards)
+  const getAllCombinedCards = () => {
+    const combined = [...preSelectedCards, ...allCards];
+    return combined.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber));
+  };
+
+  // Check if a card is preselected
+  const isPreselected = (cardNumber) => {
+    return preSelectedCards.some(card => card.cardNumber === cardNumber);
   };
 
   useEffect(() => {
@@ -57,43 +66,36 @@ const StepOne = () => {
       if (!currentCard) {
         router.push("/between-cards/step-1");
       } else {
-        console.log("Current card: " + currentCard);
 
         var currentCardInfo = JSON.parse(currentCard);
         setPreSelectedCards([currentCardInfo]);
-
+        // Don't set the preselected card as current - this step is for selecting a different card
 
         //setCurrentCard(card);
         var db = getFirestore();
         var collectionPath = "Users/" + userId + "/cards";
         const q = collection(db, collectionPath);
         onSnapshot(q, (querySnapshot) => {
-          console.log("Current cards: ");
           var cards = [];
           querySnapshot.forEach((doc) => {
             if (currentCardInfo.cardNumber !== doc.data().cardNumber) {
-              console.log("Adding card: " + doc.data().cardNumber);
               cards.push(doc.data());
-            } else {
-              console.log("Skipping card: " + doc.data().cardNumber);
-            }
+            } 
           });
           if (cards.length > 0) {
-            console.log("Setting all cards")
+            cards = cards.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber));
+
             setAllCards(cards);
 
           } else {
             setError("Debes registrar una tarjeta para continuar");
 
-            console.log("No alternative cards registered");
             setNoCards(true);
           }
           querySnapshot.docChanges().forEach((change) => {
             if (change.type === "added") {
-              console.log("added new card " + change.doc.data().cardNumber);
               if (change.doc.data().cardNumber !== currentCardInfo.cardNumber) {
                 cards.find((card) => card.cardNumber === change.doc.data().cardNumber) ? null : cards.push(change.doc.data());
-                console.log("Cards: " + cards);
                 setAllCards(cards);
                 setNoCards(false);
               }
@@ -103,6 +105,8 @@ const StepOne = () => {
       }
     }
   }, []);
+
+  const combinedCards = getAllCombinedCards();
 
   return (
     <section className="dashboard-section body-collapse pay step crypto deposit-money">
@@ -164,99 +168,51 @@ const StepOne = () => {
                   </div>
                   {error && <Alert color="danger">{error}</Alert>}
                   <div className="card-area d-flex flex-wrap">
-                    {/* <div className="single-card">
-                      <input
-                        type="radio"
-                        checked={checked === "visa" && true}
-                        name="visa"
-                        id="visa"
-                        onChange={(e) => handleChecked(e)}
-                      />
-                      <label htmlFor="visa">
-                        <span className="wrapper"></span>
-                        <Image src={visa_card} alt="image" />
-                      </label>
-                      
-                    </div>
-                    */}
-                    {allCards.map((item, index) => (
-                      <div className="single-card" key={index}>
-                        <input
-                          type="radio"
-                          key={index}
-                          checked={currentCard === item.cardNumber}
-                          name="test"
-                          id={item.cardNumber}
-                          value={item.cardNumber}
-                          onClick={(e) => handleChecked(e, item)}
-                        />
-                        <label htmlFor={item.cardNumber} key={index}>
-                          <div className="col-xl-12 col-lg-12 col-md-12" key={index}>
-                            <span className="wrapper"></span>
-                            <Image src={item.bin.brand == "VISA" ? visa_card : master_card} alt="image" />
-                            <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
-                        </label>
-
+                    {/* Combined cards display - sorted alphabetically */}
+                    {combinedCards.map((item, index) => (
+                      <div className="single-card" key={`combined-${item.cardNumber}-${index}`}>
+                        {isPreselected(item.cardNumber) ? (
+                          // Preselected card - show as selected but not selectable
+                          <>
+                            <input
+                              type="radio"
+                              checked={true}
+                              name="preselectedCard"
+                              id={`preselected-${item.cardNumber}`}
+                              value={item.cardNumber}
+                              disabled
+                            />
+                            <label htmlFor={`preselected-${item.cardNumber}`} className="preselected-card">
+                              <div className="col-xl-12 col-lg-12 col-md-12">
+                                <span className="wrapper"></span>
+                                <Image src={item.bin.brand == "VISA" ? visa_card : master_card} alt="image" />
+                                <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)} (Seleccionada)</p>
+                              </div>
+                            </label>
+                          </>
+                        ) : (
+                          // Regular selectable card
+                          <>
+                            <input
+                              type="radio"
+                              checked={currentCard === item.cardNumber}
+                              name="cardSelection"
+                              id={item.cardNumber}
+                              value={item.cardNumber}
+                              onClick={(e) => handleChecked(e, item)}
+                            />
+                            <label htmlFor={item.cardNumber}>
+                              <div className="col-xl-12 col-lg-12 col-md-12">
+                                <span className="wrapper"></span>
+                                <Image src={item.bin.brand == "VISA" ? visa_card : master_card} alt="image" />
+                                <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p>
+                              </div>
+                            </label>
+                          </>
+                        )}
                       </div>
                     ))}
-                       {preSelectedCards.map((item, index) => (
-                      <div className="single-card" key={index}>
-                        <input
-                          type="radio"
-                          key={index}
-                          checked={true}
-                          name="preselected"
-                          id={item.cardNumber}
-                          value={item.cardNumber}
-                        />
-                        <label htmlFor={item.cardNumber} key={index}>
-                          <div className="col-xl-12 col-lg-12 col-md-12" key={index}>
-                            <span className="wrapper"></span>
-                            <Image src={item.bin.brand == "VISA" ? visa_card : master_card} alt="image" />
-                            <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
-                        </label>
-
-                      </div>
-                    ))}
-                    {/*  <div className="single-card">
-                      <input
-                        type="radio"
-                        name="paypal"
-                        id="paypal"
-                        checked={checked === "paypal" && true}
-                        onChange={(e) => handleChecked(e)}
-                      />
-                      <label htmlFor="paypal">
-                        <span className="wrapper"></span>
-                        <Image src={paypal_card} alt="image" />
-                      </label>
-                    </div>
-                    <div className="single-card">
-                      <input
-                        type="radio"
-                        name="paylio"
-                        id="paylio"
-                        checked={checked === "paylio" && true}
-                        onChange={(e) => handleChecked(e)}
-                      />
-                      <label htmlFor="paylio">
-                        <span className="wrapper"></span>
-                        <Image src={paylio_card} alt="image" />
-                      </label>
-                    </div>
-                    <div className="single-card">
-                      <input
-                        type="radio"
-                        name="blockchain"
-                        id="blockchain"
-                        checked={checked === "blockchain" && true}
-                        onChange={(e) => handleChecked(e)}
-                      />
-                      <label htmlFor="blockchain">
-                        <span className="wrapper"></span>
-                        <Image src={blockchain_card} alt="image" />
-                      </label>
-                    </div> */}
+                    
                     <div className="single-card">
                       <div
                         type="button"

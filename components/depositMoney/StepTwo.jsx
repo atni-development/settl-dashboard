@@ -14,7 +14,6 @@ const StepTwo = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("Step 2");
 
     if (typeof window !== 'undefined' && window.localStorage) {
       const userId = localStorage.getItem('userId')?.trim();
@@ -40,7 +39,6 @@ const StepTwo = () => {
             router.push("/deposit-money/step-1");
           } else {
             const card = JSON.parse(currentCard);
-            console.log("current card is: " + card.cardNumber);
           }
         }
       } else {
@@ -66,9 +64,7 @@ const StepTwo = () => {
       const iva = commission * 0.16;
       const totalCommission = Math.round((commission + iva) * 100) / 100;
       const userId = localStorage.getItem('userId')?.trim();
-      console.log("userId: " + userId);
-      console.log("rawValue: " + rawValue);
-      console.log("totalCommission: " + totalCommission);
+  
       
 
       localStorage.setItem(userId + 'amountToPay', rawValue);

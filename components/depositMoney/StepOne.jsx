@@ -67,6 +67,7 @@ const StepOne = () => {
           cards.push(doc.data());
         });
         if (cards.length > 0) {
+          cards = cards.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber));
           console.log("Setting all cards")
           setAllCards(cards);
           //setCurrentCard(cards[0]);
