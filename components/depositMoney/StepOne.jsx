@@ -32,25 +32,21 @@ const StepOne = () => {
 
   const handleChecked = (e, data) => {
     setError(null);
-    console.log(e);
-    console.log(data);
+
     setCurrentCard(data.cardNumber);
     var userId = localStorage.getItem('userId').trim();
     localStorage.setItem(userId+'current_card', JSON.stringify(data));
     localStorage.setItem(userId+'session_date', new Date().getTime());
-    console.log("session date: " + new Date().getTime());
-    console.log("Current card: " + data.cardNumber);
+
   };
 
   const handleContinue = (e) => {
     setError(null);
-    console.log(currentCard);
     if(currentCard === "") {
       setError("Debes seleccionar una tarjeta para continuar");
     }else{
       router.push("/deposit-money/step-2");
     }
-    console.log("Continue");
   };
 
   useEffect(() => {
@@ -61,18 +57,15 @@ const StepOne = () => {
       var collectionPath = "Users/" + userId + "/cards";
       const q = collection(db, collectionPath);
       onSnapshot(q, (querySnapshot) => {
-        console.log("Current cards: ");
         var cards = [];
         querySnapshot.forEach((doc) => {
           cards.push(doc.data());
         });
         if (cards.length > 0) {
           cards = cards.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber));
-          console.log("Setting all cards")
           setAllCards(cards);
           //setCurrentCard(cards[0]);
         } else {
-          console.log("No cards registered");
           setNoCards(true);
         }
         querySnapshot.docChanges().forEach((change) => {
@@ -81,29 +74,7 @@ const StepOne = () => {
             setAllCards(cards);
             setNoCards(false);
           }
-          /*if (change.type === "modified") {
-            change.newIndex
-            cards[cards.indexOf(change.doc.data())] = change.doc.data();
-            setAllCards(cards);
-            setNoCards(false);
-          }
-          if (change.type === "removed") {
-            cards.splice(cards.indexOf(change.doc.data()), 1);
-            setAllCards(cards);
-            if (cards.length == 0) {
-              setNoCards(true);
-            }
-          }*/
         });
-
-        /* if (cards.length > 0) {
-           console.log("Setting all cards")
-           setAllCards(cards);
-           setCurrentCard(cards[0]);
-         } else {
-           console.log("No cards registered");
-           setNoCards(true);
-         }*/
       })
     }
   }, []);

@@ -60,7 +60,7 @@ const StepTwo = () => {
     } else {
  
       setError(null);
-      const commission = numValue * 0.05;
+      const commission = numValue * 0.048;
       const iva = commission * 0.16;
       const totalCommission = Math.round((commission + iva) * 100) / 100;
       const userId = localStorage.getItem('userId')?.trim();
