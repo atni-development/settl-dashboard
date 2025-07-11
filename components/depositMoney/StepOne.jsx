@@ -74,6 +74,7 @@ const StepOne = () => {
             setAllCards(cards);
             setNoCards(false);
           }
+    
         });
       })
     }
