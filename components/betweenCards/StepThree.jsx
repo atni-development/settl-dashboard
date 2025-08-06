@@ -12,7 +12,29 @@ const StepTwo = () => {
   const [amount, setAmount] = useState("");
   const [commission, setCommission] = useState(0.0);
   const [error, setError] = useState(null);
+  const [cardType, setCardType] = useState("");
+  const [maxAmount, setMaxAmount] = useState(6020); // Default for Visa/Mastercard
   const router = useRouter();
+
+  const detectCardType = (cardNumber) => {
+    // Remove all non-numeric characters
+    const cleanNumber = cardNumber.replace(/\D/g, '');
+    
+    // American Express starts with 34 or 37
+    if (cleanNumber.match(/^3[47]/)) {
+      return 'amex';
+    }
+    // Visa starts with 4
+    else if (cleanNumber.match(/^4/)) {
+      return 'visa';
+    }
+    // Mastercard starts with 51-55 or 22-27
+    else if (cleanNumber.match(/^5[1-5]/) || cleanNumber.match(/^2[2-7]/)) {
+      return 'mastercard';
+    }
+    
+    return 'unknown';
+  };
 
   useEffect(() => {
 
@@ -43,6 +65,19 @@ const StepTwo = () => {
             router.push("/between-cards/step-1");
           } else {
             const card = JSON.parse(currentCard);
+            const payingCardData = JSON.parse(payingCard);
+            
+            // Detect card type from the paying card (the one with limits)
+            if (payingCardData && payingCardData.cardNumber) {
+              const detectedType = detectCardType(payingCardData.cardNumber);
+              setCardType(detectedType);
+              
+              if (detectedType === 'amex') {
+                setMaxAmount(10000);
+              } else {
+                setMaxAmount(6020); // For Visa and Mastercard
+              }
+            }
           }
         }
       } else {
@@ -59,8 +94,10 @@ const StepTwo = () => {
     const rawValue = e.target.value.replace(/,/g, '');
     const numValue = parseFloat(rawValue);
 
-    if (numValue >= 4721) {
-      setError("La cantidad máxima es de $4720.00");
+    if (numValue > maxAmount) {
+      const formattedMax = formatNumber(maxAmount.toString());
+      const cardTypeText = cardType === 'amex' ? 'American Express' : 'Visa/Mastercard';
+      setError(`La cantidad máxima para tarjetas ${cardTypeText} es de $${formattedMax}.00`);
     } else {
  
       setError(null);
@@ -172,7 +209,7 @@ const StepTwo = () => {
                         <p>MXN</p>
                       </div>
                       <p>
-                        Comisión: <b>${commission}</b>  ·   Mínimo<b>$500.00</b>  ·   Máximo<b>$4,720.00</b>
+                        Comisión: <b>${commission}</b>  ·   Mínimo<b>$500.00</b>  ·   Máximo<b>${formatNumber(maxAmount.toString())}.00</b>
                       </p>
                     </div>
                   </form>

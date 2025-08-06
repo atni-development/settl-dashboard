@@ -17,6 +17,7 @@ const StepThree = () => {
   const [error, setError] = useState(null);
   const [phone, setPhone] = useState("");
   const [cvv, setCVV] = useState("");
+  const [cardType, setCardType] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -48,6 +49,40 @@ const StepThree = () => {
     return objURL;
   };
 
+  const detectCardType = (cardNumber) => {
+    // Remove all non-numeric characters
+    const cleanNumber = cardNumber.replace(/\D/g, '');
+    
+    // American Express starts with 34 or 37
+    if (cleanNumber.match(/^3[47]/)) {
+      return 'amex';
+    }
+    // Visa starts with 4
+    else if (cleanNumber.match(/^4/)) {
+      return 'visa';
+    }
+    // Mastercard starts with 51-55 or 22-27
+    else if (cleanNumber.match(/^5[1-5]/) || cleanNumber.match(/^2[2-7]/)) {
+      return 'mastercard';
+    }
+    
+    return 'unknown';
+  };
+
+  const getCVVLength = (cardType) => {
+    return cardType === 'amex' ? 4 : 3;
+  };
+
+  const handleCVVChange = (event) => {
+    const value = event.target.value;
+    const maxLength = getCVVLength(cardType);
+    
+    // Only allow numeric input and limit to max length
+    if (value.length <= maxLength && /^\d*$/.test(value)) {
+      setCVV(value);
+    }
+  };
+
 
 
 
@@ -75,6 +110,12 @@ const StepThree = () => {
             setCurrentCard(data.card);
             setCurrentAmout(data.amount);
             setCurrentCommision(data.comission);
+            
+            // Detect card type
+            if (data.card && data.card.cardNumber) {
+              const detectedType = detectCardType(data.card.cardNumber);
+              setCardType(detectedType);
+            }
             setTimeout(
               function () {
                 const functions = getFunctions();
@@ -98,9 +139,7 @@ const StepThree = () => {
                         setLoading(false);
                         setSuccess(true);
                         showPendingModalRef.current.click();
-                      }
-
-                    
+                      }                    
                     }
                   })
                   .catch((error) => {
@@ -124,6 +163,12 @@ const StepThree = () => {
         if (currentCard !== null || sessionTime !== null) {
           var card = JSON.parse(currentCard);
           setCurrentCard(card);
+          
+          // Detect card type
+          if (card && card.cardNumber) {
+            const detectedType = detectCardType(card.cardNumber);
+            setCardType(detectedType);
+          }
           var date = new Date();
           var currentDate = parseInt(date.getTime());
           var sessionDate = parseInt(sessionTime);
@@ -171,7 +216,8 @@ const StepThree = () => {
     setError(null);
     setLoading(true);
     if (termsAccepted && signature) {
-      if (cvv !== "" && cvv.length === 3) {
+      const expectedCVVLength = getCVVLength(cardType);
+      if (cvv !== "" && cvv.length === expectedCVVLength) {
 
         try {
           var phone = localStorage.getItem('phone');
@@ -285,7 +331,10 @@ const StepThree = () => {
       } else {
         e.preventDefault();
         setLoading(false);
-        setError("Debes especificar el CVV de la tarjeta, que son los 3 dígitos al reverso de la tarjeta");
+        const expectedLength = getCVVLength(cardType);
+        const cardTypeText = cardType === 'amex' ? 'American Express' : 'Visa/Mastercard';
+        const location = cardType === 'amex' ? 'frente' : 'reverso';
+        setError(`Debes especificar el CVV de la tarjeta ${cardTypeText}, que son los ${expectedLength} dígitos al ${location} de la tarjeta`);
       }
     } else {
       e.preventDefault();
@@ -379,11 +428,13 @@ const StepThree = () => {
 
                             <input
                               className="cvvinput"
-                              type="number" id="cvv" placeholder="***"
-                              maxlength="3"
+                              type="text" id="cvv" 
+                              placeholder={cardType === 'amex' ? '****' : '***'}
+                              maxLength={getCVVLength(cardType)}
+                              value={cvv}
                               onWheel={() => document.activeElement.blur()}
 
-                              onChange={(event) => setCVV(event.target.value)} />
+                              onChange={handleCVVChange} />
                           </li>
                           <li>
                             <span>Cantidad a aplazar</span>

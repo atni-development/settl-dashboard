@@ -18,6 +18,8 @@ const AddCardModal = () => {
   const [closingMonth, setClosingMonth] = useState('January');
   const [closingDay, setClosingDay] = useState("");
   const [information, setInformation] = useState(null);
+  const [cardType, setCardType] = useState("");
+  const [cardMask, setCardMask] = useState("9999 - 9999 - 9999 - 9999");
 
   const [postalCode, setPostalCode] = useState("");
   const [stateCity, setStateCity] = useState("Ciudad de México");
@@ -108,7 +110,59 @@ const AddCardModal = () => {
      "2024", "2025", "2026", "2027", "2028", "2029", "2030","2031", "2032", "2033", "2034", "2035"
   ];
 
-  var cardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/
+  // Separate regex patterns for each card type for better validation
+  const cardPatterns = {
+    amex: /^3[47][0-9]{13}$/,                    // American Express: 15 digits, starts with 34 or 37
+    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,           // Visa: 13 or 16 digits, starts with 4
+    mastercard: /^(?:5[1-5][0-9]{14}|2[2-7][0-9]{14})$/ // Mastercard: 16 digits, starts with 51-55 or 22-27
+  };
+
+  const validateCardNumber = (number, cardType) => {
+    const cleanNumber = number.replace(/\D/g, '');
+    
+    switch (cardType) {
+      case 'amex':
+        return cardPatterns.amex.test(cleanNumber);
+      case 'visa':
+        return cardPatterns.visa.test(cleanNumber);
+      case 'mastercard':
+        return cardPatterns.mastercard.test(cleanNumber);
+      default:
+        // If card type is unknown, test against all patterns
+        return Object.values(cardPatterns).some(pattern => pattern.test(cleanNumber));
+    }
+  };
+
+  const detectCardType = (number) => {
+    // Remove all non-numeric characters
+    const cleanNumber = number.replace(/\D/g, '');
+    
+    // American Express starts with 34 or 37
+    if (cleanNumber.match(/^3[47]/)) {
+      return 'amex';
+    }
+    // Visa starts with 4
+    else if (cleanNumber.match(/^4/)) {
+      return 'visa';
+    }
+    // Mastercard starts with 51-55 or 22-27
+    else if (cleanNumber.match(/^5[1-5]/) || cleanNumber.match(/^2[2-7]/)) {
+      return 'mastercard';
+    }
+    
+    return 'unknown';
+  };
+
+  const getCardMask = (cardType) => {
+    switch (cardType) {
+      case 'amex':
+        return '9999 - 999999 - 99999'; // 4-6-5 format for American Express
+      case 'visa':
+      case 'mastercard':
+      default:
+        return '9999 - 9999 - 9999 - 9999'; // 4-4-4-4 format for Visa/Mastercard
+    }
+  };
 
   const handleMonthChange = (event) => {
     console.log(event.target.value);
@@ -170,31 +224,37 @@ const AddCardModal = () => {
     console.log("Number: " + number);
     setCardNumber(number);
 
-    if (!cardRegex.test(number)) {
+    // Validate card number based on detected type
+    const detectedType = detectCardType(number);
+    if (!validateCardNumber(number, detectedType)) {
       error = true;
-      console.log(number);
-      setError("El número de la tarjeta introducido es inválido");
+      console.log("Invalid card number:", number, "Detected type:", detectedType);
+      setError(`El número de la tarjeta introducido es inválido para ${detectedType === 'amex' ? 'American Express' : detectedType === 'visa' ? 'Visa' : detectedType === 'mastercard' ? 'Mastercard' : 'el tipo de tarjeta detectado'}`);
     }
    
     if (error == false) {
       var db = getFirestore();
 
       var finalBin = number.substring(0, 6);
-      
-      console.log("BIN Reg: " + finalBin);
+      var isAmex = number.substring(0, 2) == "34" || number.substring(0, 2) == "37";
+      var shouldContinue = false;
+      if(!isAmex){
       const docRef = doc(db, "Bins", finalBin);
       const docSnap = await getDoc(docRef);
-      console.log("DOC SNAP");
-      console.log(docSnap);
- 
+      shouldContinue = docSnap.exists();
+      }else{
+        shouldContinue = true;
+      }
+      
+
         setLoading(true);
         setLoading(false);
-        if (docSnap.exists()) {
+        if (shouldContinue) {
           var binData = docSnap.data();
           console.log("BIN DATA");
           console.log(binData);
           console.log("BIN RESPONSE");
-          if (binData.brand === "VISA" || binData.brand === "MASTER CARD") {
+          if (binData.brand === "VISA" || binData.brand === "MASTER CARD" || binData.brand === "AMERICAN EXPRESS") {
             console.log("Tarjeta válida");
             setBank(binData.institution);
             if (binData.type.toLowerCase() !== "crédito") {
@@ -239,8 +299,7 @@ const AddCardModal = () => {
                 const q = collection(db, collectionRoute);
                 try{
                   getDocs(q).then((querySnapshot) => {
-                  console.log("SNAPSHOW");
-                  console.log(querySnapshot);
+            
                   querySnapshot.forEach((doc) => {
                     console.log(doc.id, ' => ', doc.data());
                     if(doc.data().cardNumber == number){
@@ -297,7 +356,7 @@ const AddCardModal = () => {
               }
           } else {
             error = true;
-            setError("La tarjeta introducida no es válida, el proceso sólo es compatible con Visa y Mastercard.");
+            setError("La tarjeta introducida no es válida, el proceso sólo es compatible con Visa, Mastercard y American Express.");
           }
         } else {
           error = true;
@@ -372,6 +431,8 @@ const AddCardModal = () => {
     setCardHolderName("");
     setValidTrhuMonth("");
     setValidYear("");
+    setCardType("");
+    setCardMask("9999 - 9999 - 9999 - 9999");
     cardNumberRef.current.value = "";
     nameRef.current.value = "";
     monthRef.current.value = "";
@@ -408,6 +469,23 @@ const AddCardModal = () => {
   const handleValidThruYear = (event) => {
     console.log(event.target.value);
     setValidYear(event.target.value);
+  };
+
+  const handleCardNumberChange = (event) => {
+    const value = event.target.value;
+    setCardNumber(value);
+    
+    // Detect card type and update mask
+    const detectedType = detectCardType(value);
+    const newMask = getCardMask(detectedType);
+    
+    if (detectedType !== cardType) {
+      setCardType(detectedType);
+    }
+    
+    if (newMask !== cardMask) {
+      setCardMask(newMask);
+    }
   };
 
   return (
@@ -491,10 +569,10 @@ const AddCardModal = () => {
 
                                                       ref={cardNumberRef}
 
-                    mask="9999 - 9999 - 9999 - 9999"
-                    onChange={(event) => setCardNumber(event.target.value)}
+                    mask={cardMask}
+                    onChange={handleCardNumberChange}
                   >
-                    {(inputProps) => <input {...inputProps} type="text" placeholder="0000 - 0000 - 0000 - 0000" />}
+                    {(inputProps) => <input {...inputProps} type="text" placeholder={cardType === 'amex' ? "0000 - 000000 - 00000" : "0000 - 0000 - 0000 - 0000"} />}
                   </InputMask>
                         </div>
                       </div>
