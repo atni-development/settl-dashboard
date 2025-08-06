@@ -264,12 +264,12 @@ const AddCardModal = () => {
               const userName = userData.name || "";
 
               // Split the user's name into components
-              const userNameParts = userName.toLowerCase().split(' ');
-              const cardHolderNameParts = cardHolderName.toLowerCase().split(' ');
+              const userNameParts = userName.toLowerCase().trim().split(' ').filter(part => part.length > 0);
+              const cardHolderNameParts = cardHolderName.toLowerCase().trim().split(' ').filter(part => part.length > 0);
 
               // Check if all parts of the user's name appear in the cardholder name
               const allPartsIncluded = userNameParts.every(part =>
-                part.length > 0 && cardHolderNameParts.includes(part)
+                cardHolderNameParts.includes(part)
               );
 
               if (!allPartsIncluded) {
