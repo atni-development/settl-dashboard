@@ -307,7 +307,7 @@ console.log(dataToInsert);
           setInformation("Se ha enviado un correo electrónico para restablecer la contraseña")
         })
         .catch(error => {
-          console.log(error)
+          //console.log(error)
           setError(error.message + " Código: " + error.code)
 
         });
@@ -472,7 +472,7 @@ console.log(dataToInsert);
         })
         .catch(error => {
           console.log("Error logging in user in Firebase")
-          console.log(error)
+          //console.log(error)
           if (error.code == "auth/invalid-credential") {
             setError("El correo electrónico o la contraseña son incorrectos")
           } else {

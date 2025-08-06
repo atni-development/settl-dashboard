@@ -69,7 +69,6 @@ const AccountTab = () => {
       toast.error("Debes seleccionar una imagen");
 
      // toastifyError("Selecciona una imagen");
-      console.log("No image selected");
       return;
     }
     if (file.size > 2 * 1024 * 1024) { // Check if file size is greater than 2MB
@@ -77,7 +76,6 @@ const AccountTab = () => {
       return;
     }
     const imageRef = storageRef(storage, `users/${userId}`);
-    console.log("uploading...");
     var db = getFirestore();
 
     uploadBytes(imageRef, file)
@@ -88,7 +86,6 @@ const AccountTab = () => {
               profilePicture: url,
             };
             updateDoc(doc(db, "Users", userId), dataToInsert).then(() => {
-            console.log("File available at", url);
             setProfilePicture(url);
             localStorage.setItem('profilePicture', url);
             window.location.reload();
@@ -100,14 +97,14 @@ const AccountTab = () => {
           })
           .catch((error) => {
             //toastifyError(error.message);
-            console.log(error.message);
+            //console.log(error.message);
             toast.error("Se produjo un error al subir la imagen");
 
           });
       })
       .catch((error) => {
         toast.error("Se produjo un error al subir la imagen");
-        console.log(error.message);
+        //console.log(error.message);
 
         // toastifyError(error.message);
       });
@@ -137,7 +134,7 @@ const AccountTab = () => {
       router.push("/login");
       
     }).catch((error) => {
-      console.log(error);
+      //console.log(error);
       //router.push("/login");
     });
   };

@@ -38,7 +38,7 @@ const UserArea = () => {
     }).catch((error) => {
       // An error happened.
      // router.push("/login");
-      console.log(error);
+      //console.log(error);
     });
   };
 

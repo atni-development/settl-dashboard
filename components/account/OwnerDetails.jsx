@@ -35,7 +35,7 @@ const OwnerDetails = () => {
       router.push("/login");
       
     }).catch((error) => {
-      console.log(error);
+      //console.log(error);
      // router.push("/login");
 
       // An error happened.

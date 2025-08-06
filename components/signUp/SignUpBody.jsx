@@ -44,7 +44,6 @@ const SignUpBody = () => {
     event.preventDefault();
     var auth = getAuth();
     auth.languageCode = 'es';
-    console.log("Signing up with Google")
     signInWithPopup(auth, provider)
     .then(async(result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
@@ -52,8 +51,7 @@ const SignUpBody = () => {
       const token = credential.accessToken;
       // The signed-in user info.
       const authUser = result.user;
-      console.log("User signed up with Google: "+authUser.uid)
-      console.log(authUser)
+ 
 
       var db = getFirestore();
       
@@ -61,9 +59,7 @@ const docRef = doc(db, "Users", authUser.uid);
 const docSnap = await getDoc(docRef);
 
 if (docSnap.exists()) {
-  console.log("Document data EXIST:", docSnap.data());
   if (docSnap.data() !== null) {
-    console.log("User data is correct")
     var data = docSnap.data();
     localStorage.setItem('email', data.email);
     localStorage.setItem('phone', data.phone);
@@ -72,7 +68,6 @@ if (docSnap.exists()) {
 
     localStorage.setItem('created_date', data.created_date.toDate().toLocaleDateString("es-MX"));
     localStorage.setItem('userId', authUser.uid);
-    console.log("User data is: " + data.email + " " + data.phone + " " + data.name + " " + data.created_date + " " + authUser.uid)
 
     var nVer = navigator.appVersion;
     var nAgt = navigator.userAgent;
@@ -279,7 +274,7 @@ console.log(dataToInsert);
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log("Error: "+errorCode+" "+errorMessage)
+     // console.log("Error: "+errorCode+" "+errorMessage)
   
       const credential = GoogleAuthProvider.credentialFromError(error);
       // ...
@@ -359,13 +354,11 @@ console.log(dataToInsert);
       setError(currentError)
       event.preventDefault();
     } else {
-      console.log("Registering user in Firebase")
       var auth = getAuth();
       auth.languageCode = 'es';
 
       createUserWithEmailAndPassword(auth, email, passwordOne)
         .then(authUser => {
-          console.log("Success. The user is created in Firebase "+authUser.user.uid)
           var db = getFirestore();
 
           

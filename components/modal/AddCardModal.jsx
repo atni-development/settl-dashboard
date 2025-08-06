@@ -52,9 +52,9 @@ const AddCardModal = () => {
     16, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
   ];
 
-  var closingDays = 
-    ["","1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
- 
+  var closingDays =
+    ["", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+
 
 
   var hathMonth = [
@@ -66,48 +66,48 @@ const AddCardModal = () => {
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
     16, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28
   ];
-  var mexStatesAccented = 
-  [
-    'Aguascalientes',
-    'Baja California',
-    'Baja California Sur',
-    'Campeche',
-    'Chiapas',
-    'Chihuahua',
-    'Coahuila',
-    'Colima',
-    'Ciudad de México',
-    'Durango',
-    'Guanajuato',
-    'Guerrero',
-    'Hidalgo',
-    'Jalisco',
-    'Estado de México',
-    'Michoacán',
-    'Morelos',
-    'Nayarit',
-    'Nuevo León',
-    'Oaxaca',
-    'Puebla',
-    'Querétaro',
-    'Quintana Roo',
-    'San Luis Potosí',
-    'Sinaloa',
-    'Sonora',
-    'Tabasco',
-    'Tamaulipas',
-    'Tlaxcala',
-    'Veracruz',
-    'Yucatán',
-    'Zacatecas',
-  ];
+  var mexStatesAccented =
+    [
+      'Aguascalientes',
+      'Baja California',
+      'Baja California Sur',
+      'Campeche',
+      'Chiapas',
+      'Chihuahua',
+      'Coahuila',
+      'Colima',
+      'Ciudad de México',
+      'Durango',
+      'Guanajuato',
+      'Guerrero',
+      'Hidalgo',
+      'Jalisco',
+      'Estado de México',
+      'Michoacán',
+      'Morelos',
+      'Nayarit',
+      'Nuevo León',
+      'Oaxaca',
+      'Puebla',
+      'Querétaro',
+      'Quintana Roo',
+      'San Luis Potosí',
+      'Sinaloa',
+      'Sonora',
+      'Tabasco',
+      'Tamaulipas',
+      'Tlaxcala',
+      'Veracruz',
+      'Yucatán',
+      'Zacatecas',
+    ];
   var countrys = ["México"];
 
   var months = [
     "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
   ];
   var years = [
-     "2024", "2025", "2026", "2027", "2028", "2029", "2030","2031", "2032", "2033", "2034", "2035"
+    "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034", "2035"
   ];
 
   // Separate regex patterns for each card type for better validation
@@ -119,7 +119,7 @@ const AddCardModal = () => {
 
   const validateCardNumber = (number, cardType) => {
     const cleanNumber = number.replace(/\D/g, '');
-    
+
     switch (cardType) {
       case 'amex':
         return cardPatterns.amex.test(cleanNumber);
@@ -136,7 +136,7 @@ const AddCardModal = () => {
   const detectCardType = (number) => {
     // Remove all non-numeric characters
     const cleanNumber = number.replace(/\D/g, '');
-    
+
     // American Express starts with 34 or 37
     if (cleanNumber.match(/^3[47]/)) {
       return 'amex';
@@ -149,7 +149,7 @@ const AddCardModal = () => {
     else if (cleanNumber.match(/^5[1-5]/) || cleanNumber.match(/^2[2-7]/)) {
       return 'mastercard';
     }
-    
+
     return 'unknown';
   };
 
@@ -184,43 +184,43 @@ const AddCardModal = () => {
     setError(null)
     setInformation(null);
     var error = false;
- 
-    if(postalCode === ""){
+
+    if (postalCode === "") {
       error = true;
       setError("Debes ingresar el código postal de la dirección de facturación");
     }
-    if(street === ""){
+    if (street === "") {
       error = true;
       setError("Debes ingresar la calle y el número de la dirección de facturación");
     }
-   
-    if(city === ""){
+
+    if (city === "") {
       error = true;
       setError("Debes ingresar la ciudad de la dirección de facturación");
     }
     var today = new Date();
     var currentMonth = today.getMonth() + 1;
     var currentYear = today.getFullYear();
-    if(validTrhuyear < currentYear){
+    if (validTrhuyear < currentYear) {
       error = true;
       setError("El año de vencimiento de la tarjeta no puede ser menor al año actual");
     }
-    if(validTrhuyear == currentYear && validTrhuMonth < currentMonth){
+    if (validTrhuyear == currentYear && validTrhuMonth < currentMonth) {
       error = true;
       setError("El mes de vencimiento de la tarjeta no puede ser menor al mes actual");
     }
-    
+
     if (cardNumber === "") {
       error = true;
       setError("Debes ingresar el número de tarjeta");
     }
-   
+
     if (cardHolderName === "") {
       error = true;
       setError("Debes ingresar el nombre del titular de la tarjeta");
     }
     var number = cardNumber.replaceAll("-", "").replaceAll(" ", "");
-    
+
     console.log("Number: " + number);
     setCardNumber(number);
 
@@ -231,138 +231,138 @@ const AddCardModal = () => {
       console.log("Invalid card number:", number, "Detected type:", detectedType);
       setError(`El número de la tarjeta introducido es inválido para ${detectedType === 'amex' ? 'American Express' : detectedType === 'visa' ? 'Visa' : detectedType === 'mastercard' ? 'Mastercard' : 'el tipo de tarjeta detectado'}`);
     }
-   
+
     if (error == false) {
       var db = getFirestore();
 
       var finalBin = number.substring(0, 6);
       var isAmex = number.substring(0, 2) == "34" || number.substring(0, 2) == "37";
       var shouldContinue = false;
-      if(!isAmex){
       const docRef = doc(db, "Bins", finalBin);
       const docSnap = await getDoc(docRef);
-      shouldContinue = docSnap.exists();
-      }else{
+      if (!isAmex) {
+        shouldContinue = docSnap.exists();
+      } else {
         shouldContinue = true;
       }
-      
 
-        setLoading(true);
-        setLoading(false);
-        if (shouldContinue) {
-          var binData = docSnap.data();
-          console.log("BIN DATA");
-          console.log(binData);
-          console.log("BIN RESPONSE");
-          if (binData.brand === "VISA" || binData.brand === "MASTER CARD" || binData.brand === "AMERICAN EXPRESS") {
-            console.log("Tarjeta válida");
-            setBank(binData.institution);
-            if (binData.type.toLowerCase() !== "crédito") {
-              setError("La tarjeta introducida es de débito, por favor verifica que la información sea correcta.");
-            } else {
-             
-                let userId = localStorage.getItem('userId').trim();
 
-                const userDocRef = doc(db, "Users", userId);
-                const userDocSnap = await getDoc(userDocRef);
-                
-                if (userDocSnap.exists()) {
-                  const userData = userDocSnap.data();
-                  const userName = userData.name || "";
-                  
-                  // Split the user's name into components
-                  const userNameParts = userName.toLowerCase().split(' ');
-                  const cardHolderNameParts = cardHolderName.toLowerCase().split(' ');
-                  
-                  // Check if all parts of the user's name appear in the cardholder name
-                  const allPartsIncluded = userNameParts.every(part => 
-                    part.length > 0 && cardHolderNameParts.includes(part)
-                  );
-                  
-                  if (!allPartsIncluded) {
-                    error = true;
-                    setError("El nombre del titular de la tarjeta no coincide con el nombre registrado en tu cuenta");
-                    return;
-                  }
-                  
-                  // Continue with adding the card if validation passes
-                  var collectionRoute = "Users/" + userId + "/cards";
-                  console.log("Collection route: " + collectionRoute);
-                } else {
-                  error = true;
-                  setError("No se pudo encontrar tu perfil de usuario. Error 202");
-                  return;
-                }
-
-                var collectionRoute = "Users/" + userId + "/cards";
-                console.log("Collection route: " + collectionRoute)
-                const q = collection(db, collectionRoute);
-                try{
-                  getDocs(q).then((querySnapshot) => {
-            
-                  querySnapshot.forEach((doc) => {
-                    console.log(doc.id, ' => ', doc.data());
-                    if(doc.data().cardNumber == number){
-                      error = true;
-                    }
-                });
-                  if (error) {
-                    error = true;
-                    setError("La tarjeta ya ha sido registrada en tu cuenta");
-                  } else {
-                    console.log("La tarjeta no ha sido registrada");
-                    var cardData = {
-                      status: "ACTIVE",
-                      bank: binData.institution,
-                      cardNumber: number,
-                      validTrhuMonth: validTrhuMonth,
-                      validTrhuYear: validTrhuyear,
-                      cardHolderName: cardHolderName,
-                      closingMonth: closingMonth,
-                      closingDay: closingDay,
-                      city: city,
-                      street: street,
-                      postalCode: postalCode,
-                      country: "México",
-                      state: stateCity,
-                      country_code: "MX",
-                      bin: binData
-                    }
-                    addDoc(collection(db, collectionRoute), cardData).then((docRef) => {
-                      setError(null);
-                      setInformation("La tarjeta ha sido verificada exitosamente");
-                      setSuccess(true);
-  
-                      if (bankRef && bankRef.current) {
-                        bankRef.current.value = binData.institution
-                      }
-                    })
-                      .catch((error) => {
-                        setLoading(false);
-                        setError("Se produjo un error al obtener el perfil del usuario. Error 201")
-                        console.error("Error writing document: ", error);
-                      });
-                  }
-                }) .catch((error) => {
-                  setLoading(false);
-                  setError("Se produjo un error al obtener el perfil del usuario. Error 205")
-                  console.error("Error writing document: ", error);
-                });
-                }catch(error){
-                  setLoading(false);
-                  console.log("ERROR EN EL REQUEST DE FIREBASE")
-                  console.error(error);
-                }
-              }
+      setLoading(true);
+      setLoading(false);
+      if (shouldContinue) {
+        var binData = docSnap.data();
+        console.log("BIN DATA");
+        console.log(binData);
+        console.log("BIN RESPONSE");
+        if (binData.brand === "VISA" || binData.brand === "MASTER CARD" || binData.brand === "AMERICAN EXPRESS") {
+          console.log("Tarjeta válida");
+          setBank(binData.institution);
+          if (binData.type.toLowerCase() !== "crédito") {
+            setError("La tarjeta introducida es de débito, por favor verifica que la información sea correcta.");
           } else {
-            error = true;
-            setError("La tarjeta introducida no es válida, el proceso sólo es compatible con Visa, Mastercard y American Express.");
+
+            let userId = localStorage.getItem('userId').trim();
+
+            const userDocRef = doc(db, "Users", userId);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (userDocSnap.exists()) {
+              const userData = userDocSnap.data();
+              const userName = userData.name || "";
+
+              // Split the user's name into components
+              const userNameParts = userName.toLowerCase().split(' ');
+              const cardHolderNameParts = cardHolderName.toLowerCase().split(' ');
+
+              // Check if all parts of the user's name appear in the cardholder name
+              const allPartsIncluded = userNameParts.every(part =>
+                part.length > 0 && cardHolderNameParts.includes(part)
+              );
+
+              if (!allPartsIncluded) {
+                error = true;
+                setError("El nombre del titular de la tarjeta no coincide con el nombre registrado en tu cuenta");
+                return;
+              }
+
+              // Continue with adding the card if validation passes
+              var collectionRoute = "Users/" + userId + "/cards";
+              console.log("Collection route: " + collectionRoute);
+            } else {
+              error = true;
+              setError("No se pudo encontrar tu perfil de usuario. Error 202");
+              return;
+            }
+
+            var collectionRoute = "Users/" + userId + "/cards";
+            console.log("Collection route: " + collectionRoute)
+            const q = collection(db, collectionRoute);
+            try {
+              getDocs(q).then((querySnapshot) => {
+
+                querySnapshot.forEach((doc) => {
+                  console.log(doc.id, ' => ', doc.data());
+                  if (doc.data().cardNumber == number) {
+                    error = true;
+                  }
+                });
+                if (error) {
+                  error = true;
+                  setError("La tarjeta ya ha sido registrada en tu cuenta");
+                } else {
+                  console.log("La tarjeta no ha sido registrada");
+                  var cardData = {
+                    status: "ACTIVE",
+                    bank: binData.institution,
+                    cardNumber: number,
+                    validTrhuMonth: validTrhuMonth,
+                    validTrhuYear: validTrhuyear,
+                    cardHolderName: cardHolderName,
+                    closingMonth: closingMonth,
+                    closingDay: closingDay,
+                    city: city,
+                    street: street,
+                    postalCode: postalCode,
+                    country: "México",
+                    state: stateCity,
+                    country_code: "MX",
+                    bin: binData
+                  }
+                  addDoc(collection(db, collectionRoute), cardData).then((docRef) => {
+                    setError(null);
+                    setInformation("La tarjeta ha sido verificada exitosamente");
+                    setSuccess(true);
+
+                    if (bankRef && bankRef.current) {
+                      bankRef.current.value = binData.institution
+                    }
+                  })
+                    .catch((error) => {
+                      setLoading(false);
+                      setError("Se produjo un error al obtener el perfil del usuario. Error 201")
+                      console.error("Error writing document: ", error);
+                    });
+                }
+              }).catch((error) => {
+                setLoading(false);
+                setError("Se produjo un error al obtener el perfil del usuario. Error 205")
+                console.error("Error writing document: ", error);
+              });
+            } catch (error) {
+              setLoading(false);
+              console.log("ERROR EN EL REQUEST DE FIREBASE")
+              console.error(error);
+            }
           }
         } else {
           error = true;
-          setError("Se produjo un error al verficar la numeración de la tarjeta. Por favor revisa que la información proporcionada sea correcta y que la tarjeta pertenezca a alguna insitutición bancaria que opere en la República Mexicana.");
+          setError("La tarjeta introducida no es válida, el proceso sólo es compatible con Visa, Mastercard y American Express.");
         }
-    
+      } else {
+        error = true;
+        setError("Se produjo un error al verficar la numeración de la tarjeta. Por favor revisa que la información proporcionada sea correcta y que la tarjeta pertenezca a alguna insitutición bancaria que opere en la República Mexicana.");
+      }
+
 
 
     } else {
@@ -414,36 +414,36 @@ const AddCardModal = () => {
 
 
   const onClose = event => {
-    try{
-    console.log("ON CLOSE");
-    closeRef.current.click();
-    setLoading(false);
-    setError(null);
-    setSuccess(false);
-    setCardNumber("");
-    setClosingMonth("January");
-    setClosingDay(1);
-    setInformation(null);
-    setStateCity("Ciudad de México");
-    setCity("");
-    setStreet("");
-    setPostalCode("");
-    setCardHolderName("");
-    setValidTrhuMonth("");
-    setValidYear("");
-    setCardType("");
-    setCardMask("9999 - 9999 - 9999 - 9999");
-    cardNumberRef.current.value = "";
-    nameRef.current.value = "";
-    monthRef.current.value = "";
-    yearRef.current.value = "";
-    closingMonthRef.current.value = "January";
-    closingDayRef.current.value = 1;
-    if (bankRef && bankRef.current) {
-      bankRef.current.value = "";
+    try {
+      console.log("ON CLOSE");
+      closeRef.current.click();
+      setLoading(false);
+      setError(null);
+      setSuccess(false);
+      setCardNumber("");
+      setClosingMonth("January");
+      setClosingDay(1);
+      setInformation(null);
+      setStateCity("Ciudad de México");
+      setCity("");
+      setStreet("");
+      setPostalCode("");
+      setCardHolderName("");
+      setValidTrhuMonth("");
+      setValidYear("");
+      setCardType("");
+      setCardMask("9999 - 9999 - 9999 - 9999");
+      cardNumberRef.current.value = "";
+      nameRef.current.value = "";
+      monthRef.current.value = "";
+      yearRef.current.value = "";
+      closingMonthRef.current.value = "January";
+      closingDayRef.current.value = 1;
+      if (bankRef && bankRef.current) {
+        bankRef.current.value = "";
+      }
+    } catch (error) {
     }
-  }catch(error){
-  }
   }
 
   const handleBankChange = (event) => {
@@ -474,15 +474,15 @@ const AddCardModal = () => {
   const handleCardNumberChange = (event) => {
     const value = event.target.value;
     setCardNumber(value);
-    
+
     // Detect card type and update mask
     const detectedType = detectCardType(value);
     const newMask = getCardMask(detectedType);
-    
+
     if (detectedType !== cardType) {
       setCardType(detectedType);
     }
-    
+
     if (newMask !== cardMask) {
       setCardMask(newMask);
     }
@@ -541,7 +541,7 @@ const AddCardModal = () => {
                           />
                         </div>
                       </div> : null}
-                   
+
                       <div className="col-md-6">
                         <div className="single-input">
                           <label htmlFor="cardHolder">Nombre del titular</label>
@@ -557,7 +557,7 @@ const AddCardModal = () => {
                       <div className="col-md-6">
                         <div className="single-input">
                           <label htmlFor="cardNumber">Número de tarjeta</label>
-                        {/*   <input
+                          {/*   <input
                             type="text"
                             ref={cardNumberRef}
                             id="cardNumber"
@@ -565,23 +565,23 @@ const AddCardModal = () => {
                             onChange={(event) => setCardNumber(event.target.value)}
                           /> */}
                           <InputMask
-                                                      id="cardNumber"
+                            id="cardNumber"
 
-                                                      ref={cardNumberRef}
+                            ref={cardNumberRef}
 
-                    mask={cardMask}
-                    onChange={handleCardNumberChange}
-                  >
-                    {(inputProps) => <input {...inputProps} type="text" placeholder={cardType === 'amex' ? "0000 - 000000 - 00000" : "0000 - 0000 - 0000 - 0000"} />}
-                  </InputMask>
+                            mask={cardMask}
+                            onChange={handleCardNumberChange}
+                          >
+                            {(inputProps) => <input {...inputProps} type="text" placeholder={cardType === 'amex' ? "0000 - 000000 - 00000" : "0000 - 0000 - 0000 - 0000"} />}
+                          </InputMask>
                         </div>
                       </div>
                       <div className="col-md-4">
                         <div className="single-input">
                           <label htmlFor="month">Mes de vencimiento</label>
-                           <select ref={monthRef} value={validTrhuMonth} onChange={handleValidThruMonth} className="w-100">
+                          <select ref={monthRef} value={validTrhuMonth} onChange={handleValidThruMonth} className="w-100">
                             {months.map((itm) => (
-                              <option value={itm}  key={itm}>{itm}</option>
+                              <option value={itm} key={itm}>{itm}</option>
                             ))}
                           </select>
                         </div>
@@ -591,13 +591,13 @@ const AddCardModal = () => {
                           <label htmlFor="year">Año de vencimiento</label>
                           <select ref={yearRef} value={validTrhuyear} onChange={handleValidThruYear} className="w-100">
                             {years.map((itm) => (
-                              <option value={itm}  key={itm}>{itm}</option>
+                              <option value={itm} key={itm}>{itm}</option>
                             ))}
                           </select>
                         </div>
                       </div>
-                    
-                    
+
+
 
                       {/*<div className="col-md-4">
                         <div className="single-input">
@@ -623,9 +623,9 @@ const AddCardModal = () => {
                           <label htmlFor="year">Día de corte (opcional)</label>
                           <select ref={closingDayRef} value={closingDay} onChange={handleClosingDay} className="w-100">
                             {closingDays.map((itm) => (
-                              <option value={itm}  key={itm}>{itm}</option>
+                              <option value={itm} key={itm}>{itm}</option>
                             ))}
-                            
+
                           </select>
                         </div>
                       </div>
@@ -649,7 +649,7 @@ const AddCardModal = () => {
                             onChange={(event) => setStreet(event.target.value)} />
                         </div>
                       </div>
-                      
+
                       <div className="col-md-6">
                         <div className="single-input">
                           <label htmlFor="postal">Ciudad o población</label>
@@ -664,7 +664,7 @@ const AddCardModal = () => {
                           <label htmlFor="postal">Estado</label>
                           <select ref={stateRef} value={stateCity} onChange={handleStateChange} className="w-100">
                             {mexStatesAccented.map((itm) => (
-                              <option value={itm}  key={itm}>{itm}</option>
+                              <option value={itm} key={itm}>{itm}</option>
                             ))}
                           </select>
                         </div>
@@ -679,7 +679,7 @@ const AddCardModal = () => {
                           </select>
                         </div>
                             </div>*/}
-                       
+
                       <img className="openPayImage" src="/images/cards_accepted.png" alt="icon" />
 
                       <div className="col-12">
