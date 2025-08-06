@@ -80,7 +80,6 @@ const StepOne = () => {
       })
     }
   }, []);
-
   return (
     <section className="dashboard-section body-collapse pay step crypto deposit-money">
           <Head>
