@@ -16,7 +16,6 @@ const OwnerDetails = () => {
   const [profilePicture, setProfilePicture] = useState("");
 
   const onLogOut = event => {
-    console.log("logout");
     const auth = getAuth();
     signOut(auth).then(() => {
       

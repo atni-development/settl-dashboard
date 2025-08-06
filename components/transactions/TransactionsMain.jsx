@@ -112,8 +112,7 @@ const TransactionsMain = () => {
           data.firestoreID = doc.id;
           transactions.push(data);
         });
-        console.log("Transactions: ");
-        console.log(transactions);
+       
         transactions.sort((a, b) => {
           return b.requested_date.toDate() - a.requested_date.toDate();
         });

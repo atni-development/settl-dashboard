@@ -53,7 +53,6 @@ const SettlProvider = ({ children }) => {
         } else {
           router.push("/login");
         }
-        console.log("user is logged out")
       }
     });
   }, [isDesktopOrLaptop]);

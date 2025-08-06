@@ -10,29 +10,24 @@ const NotificationTab = () => {
 
   function onAnnouncementChange(e) {
     setAnnouncement(e.target.checked);
-    console.log(e);  
+
   }
 
   function onConfirmationChange(e) {
     setPayment(e.target.checked);
-    console.log(e);  
   }
 
   function onProblemsChange(e) {
     setProblems(e.target.checked);
-    console.log(e);  
   }
   function onPromoChange(e) {
     setPromos(e.target.checked);
-    console.log(e);  
   }
   function onApplicationChange(e) {
     setRequests(e.target.checked);
-    console.log(e);  
   }
   function onAccountUpdateChange(e) {
     setAnnouncement(e.target.checked);
-    console.log(e);  
   }
 
   return (

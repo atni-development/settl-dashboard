@@ -35,7 +35,6 @@ const LoginBody = () => {
     event.preventDefault();
     var auth = getAuth();
     auth.languageCode = 'es';
-    console.log("Signing up with Google")
     signInWithPopup(auth, provider)
     .then(async(result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
@@ -43,8 +42,7 @@ const LoginBody = () => {
       const token = credential.accessToken;
       // The signed-in user info.
       const authUser = result.user;
-      console.log("User signed up with Google: "+authUser.uid)
-      console.log(authUser)
+  
 
       var db = getFirestore();
       
@@ -52,9 +50,7 @@ const docRef = doc(db, "Users", authUser.uid);
 const docSnap = await getDoc(docRef);
 
 if (docSnap.exists()) {
-  console.log("Document data EXIST:", docSnap.data());
   if (docSnap.data() !== null) {
-    console.log("User data is correct")
     var data = docSnap.data();
     localStorage.setItem('email', data.email);
     localStorage.setItem('phone', data.phone);
@@ -63,7 +59,6 @@ if (docSnap.exists()) {
 
     localStorage.setItem('created_date', data.created_date.toDate().toLocaleDateString("es-MX"));
     localStorage.setItem('userId', authUser.uid);
-    console.log("User data is: " + data.email + " " + data.phone + " " + data.name + " " + data.created_date + " " + authUser.uid)
 
     var nVer = navigator.appVersion;
     var nAgt = navigator.userAgent;
@@ -273,7 +268,7 @@ console.log(dataToInsert);
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log("Error: "+errorCode+" "+errorMessage)
+ 
   
       const credential = GoogleAuthProvider.credentialFromError(error);
       // ...
@@ -323,14 +318,7 @@ console.log(dataToInsert);
     if (passwordOne === "") {
       currentError = "La contraseña es requerida"
     } else {
-      /*var test = "^[A-Za-z0-9]+$".test(passwordOne);
-      console.log("Test: " + passwordOne.match("^[A-Za-z0-9]+$"));
-      console.log("Password)ne: " + passwordOne)
-      if (!passwordOne.match("^[A-Za-z0-9]+$") || passwordOne.length < 6) {
-        currentError = "La contraseña debe tener al menos 6 caracteres con un número y una letra."
-      }else{
-
-      }*/
+    
      var str = passwordOne;
       if (str.length < 6) {
         currentError = "la contraseña debe contener al menos 6 caracteres.";
@@ -359,12 +347,10 @@ console.log(dataToInsert);
       setError(currentError)
       event.preventDefault();
     } else {
-      console.log("Logging user in Firebase")
       var auth = getAuth();
       auth.languageCode = 'es';
       signInWithEmailAndPassword(auth, email, passwordOne)
         .then(authUser => {
-          console.log("Success. The user is created in Firebase " + authUser.user.uid)
           var db = getFirestore();
           const docRef = doc(db, "Users", authUser.user.uid);
           getDoc(docRef).then((doc) => {
@@ -375,7 +361,6 @@ console.log(dataToInsert);
               localStorage.setItem('name', data.name);
               localStorage.setItem('created_date', data.created_date.toDate().toLocaleDateString("es-MX"));
               localStorage.setItem('userId', authUser.user.uid);
-              console.log("User data is: " + data.email + " " + data.phone + " " + data.name + " " + data.created_date + " " + authUser.user.uid)
 
               var nVer = navigator.appVersion;
               var nAgt = navigator.userAgent;
@@ -471,8 +456,7 @@ console.log(dataToInsert);
           });
         })
         .catch(error => {
-          console.log("Error logging in user in Firebase")
-          //console.log(error)
+
           if (error.code == "auth/invalid-credential") {
             setError("El correo electrónico o la contraseña son incorrectos")
           } else {

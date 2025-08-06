@@ -111,7 +111,6 @@ const AccountTab = () => {
   };
 
   const onLogOut = event => {
-    console.log("logout");
     const auth = getAuth();
     signOut(auth).then(() => {
       
@@ -160,9 +159,7 @@ const AccountTab = () => {
         if(doc.exists()) {
           setAddress(doc.data().address);
           setPhone(doc.data().phone);
-          console.log("Document data:", doc.data());
-          console.log("Document data:", doc.data().address);
-          console.log("Document data:", doc.data().phone);
+ 
         }
 
       }).catch((error) => {});

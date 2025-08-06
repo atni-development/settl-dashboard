@@ -41,7 +41,6 @@ const SecurityTab = () => {
       var collectionPath = "Users/" + userId + "/sessions";
       const q = collection(db, collectionPath);
       onSnapshot(q, (querySnapshot) => {
-        console.log("Current cards: ");
         var cards = [];
         querySnapshot.forEach((doc) => {
           cards.push(doc.data());

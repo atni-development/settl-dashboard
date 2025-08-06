@@ -165,10 +165,8 @@ const AddCardModal = () => {
   };
 
   const handleMonthChange = (event) => {
-    console.log(event.target.value);
     setClosingMonth(event.target.value);
     if (event.target.value == "February") {
-      console.log("Setting February");
       setAvailableDays(febDays);
     } else {
       if (event.target.value == "April" || event.target.value == "June" || event.target.value == "September" || event.target.value == "November") {
@@ -221,14 +219,12 @@ const AddCardModal = () => {
     }
     var number = cardNumber.replaceAll("-", "").replaceAll(" ", "");
 
-    console.log("Number: " + number);
     setCardNumber(number);
 
     // Validate card number based on detected type
     const detectedType = detectCardType(number);
     if (!validateCardNumber(number, detectedType)) {
       error = true;
-      console.log("Invalid card number:", number, "Detected type:", detectedType);
       setError(`El número de la tarjeta introducido es inválido para ${detectedType === 'amex' ? 'American Express' : detectedType === 'visa' ? 'Visa' : detectedType === 'mastercard' ? 'Mastercard' : 'el tipo de tarjeta detectado'}`);
     }
 
@@ -251,11 +247,8 @@ const AddCardModal = () => {
       setLoading(false);
       if (shouldContinue) {
         var binData = docSnap.data();
-        console.log("BIN DATA");
-        console.log(binData);
-        console.log("BIN RESPONSE");
+   
         if (binData.brand === "VISA" || binData.brand === "MASTER CARD" || binData.brand === "AMERICAN EXPRESS") {
-          console.log("Tarjeta válida");
           setBank(binData.institution);
           if (binData.type.toLowerCase() !== "crédito") {
             setError("La tarjeta introducida es de débito, por favor verifica que la información sea correcta.");
@@ -287,7 +280,6 @@ const AddCardModal = () => {
 
               // Continue with adding the card if validation passes
               var collectionRoute = "Users/" + userId + "/cards";
-              console.log("Collection route: " + collectionRoute);
             } else {
               error = true;
               setError("No se pudo encontrar tu perfil de usuario. Error 202");
@@ -295,13 +287,11 @@ const AddCardModal = () => {
             }
 
             var collectionRoute = "Users/" + userId + "/cards";
-            console.log("Collection route: " + collectionRoute)
             const q = collection(db, collectionRoute);
             try {
               getDocs(q).then((querySnapshot) => {
 
                 querySnapshot.forEach((doc) => {
-                  console.log(doc.id, ' => ', doc.data());
                   if (doc.data().cardNumber == number) {
                     error = true;
                   }
@@ -310,7 +300,6 @@ const AddCardModal = () => {
                   error = true;
                   setError("La tarjeta ya ha sido registrada en tu cuenta");
                 } else {
-                  console.log("La tarjeta no ha sido registrada");
                   var cardData = {
                     status: "ACTIVE",
                     bank: binData.institution,
@@ -350,7 +339,6 @@ const AddCardModal = () => {
               });
             } catch (error) {
               setLoading(false);
-              console.log("ERROR EN EL REQUEST DE FIREBASE")
               console.error(error);
             }
           }
@@ -366,7 +354,7 @@ const AddCardModal = () => {
 
 
     } else {
-      console.log("Error en el formulario");
+     // console.log("Error en el formulario");
     }
 
   }
@@ -375,24 +363,6 @@ const AddCardModal = () => {
     setSuccess(true);
   }
 
-  /*const setCVV = event => {
-    console.log("CVV: " + event.length);
-    if (isNaN(event)) {
-      cvvRef.current.value = "";
-    } else {
-      if (event.includes('-')) {
-        cvvRef.current.value = "";
-      } else {
-        if (event.length > 3) {
-          var sub = event.substring(0, 3);
-          cvvRef.current.value = sub;
-          setCardCvv(sub);
-        } else {
-          setCardCvv(event);
-        }
-      }
-    }
-  }*/
 
   const setPostal = event => {
     if (isNaN(event)) {
@@ -415,7 +385,6 @@ const AddCardModal = () => {
 
   const onClose = event => {
     try {
-      console.log("ON CLOSE");
       closeRef.current.click();
       setLoading(false);
       setError(null);

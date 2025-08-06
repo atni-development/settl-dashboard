@@ -15,10 +15,8 @@ export default function Home() {
       if (user) { 
         setLoading(false);
         const uid = user.uid;
-        console.log("uid", uid)
       } else {
         router.push("/login");
-        console.log("user is logged out")
       }
     });
   }, [])

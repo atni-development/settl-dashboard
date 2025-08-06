@@ -13,7 +13,6 @@ const LeftSideMenu = () => {
     useContext(SettlContext);
 
   const onLogOut = event => {
-    console.log("logout");
     const auth = getAuth();
     signOut(auth).then(() => {
 

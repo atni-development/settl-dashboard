@@ -46,13 +46,11 @@ const StepOne = () => {
 
   const handleContinue = (e) => {
     setError(null);
-    console.log(currentCard);
     if(currentCard === "") {
       setError("Debes seleccionar una tarjeta para continuar");
     }else{
       router.push("/between-cards/step-2");
     }
-    console.log("Continue");
   };
 
   useEffect(() => {
@@ -63,19 +61,16 @@ const StepOne = () => {
       var collectionPath = "Users/" + userId + "/cards";
       const q = collection(db, collectionPath);
       onSnapshot(q, (querySnapshot) => {
-        console.log("Current cards: ");
         var cards = [];
         querySnapshot.forEach((doc) => {
           cards.push(doc.data());
         });
         if (cards.length > 0) {
-          console.log("Setting all cards")
           cards = cards.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber));
 
           setAllCards(cards);
           //setCurrentCard(cards[0]);
         } else {
-          console.log("No cards registered");
           setNoCards(true);
         }
         querySnapshot.docChanges().forEach((change) => {
@@ -100,11 +95,9 @@ const StepOne = () => {
         });
 
         /* if (cards.length > 0) {
-           console.log("Setting all cards")
            setAllCards(cards);
            setCurrentCard(cards[0]);
          } else {
-           console.log("No cards registered");
            setNoCards(true);
          }*/
       })

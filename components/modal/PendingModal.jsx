@@ -13,13 +13,12 @@ const PendingModal = () => {
     if (typeof window !== 'undefined' && window.localStorage) {
       var currentAmount = localStorage.getItem('amountToPay');
       setCurrentAmout(currentAmount);
-      console.log("Current amount: " + currentAmount);
+      //console.log("Current amount: " + currentAmount);
     }
   }, []);
 
 
   const onClose = event => {
-    console.log("ON CLOSE");
     var userId = localStorage.getItem('userId').trim();
 
     localStorage.removeItem(userId+'session_date');

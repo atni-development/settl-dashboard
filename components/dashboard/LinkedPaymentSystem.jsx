@@ -27,7 +27,7 @@ const LinkedPaymentSystem = ({ data = {}, noCards = true }) => {
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <li>
-                <Button className="dropdown-item" onClick={() => console.log("Agregar tarjeta")}
+                <Button className="dropdown-item" onClick={() => console.log("")}
                   data-bs-toggle="modal"
                   data-backdrop="static" data-keyboard="false"
                   data-bs-target="#addcardMod">

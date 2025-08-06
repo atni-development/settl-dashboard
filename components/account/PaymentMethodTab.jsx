@@ -28,17 +28,14 @@ const PaymentMethodTab = () => {
       var collectionPath = "Users/" + userId + "/cards";
       const q = collection(db, collectionPath);
       onSnapshot(q, (querySnapshot) => {
-        console.log("Current cards: ");
         var cards = [];
         querySnapshot.forEach((doc) => {
           cards.push(doc.data());
         });
         if (cards.length > 0) {
-          console.log("Setting all cards")
           setAllCards(cards);
           //setCurrentCard(cards[0]);
         } else {
-          console.log("No cards registered");
           setNoCards(true);
         }
 
