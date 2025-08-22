@@ -7,6 +7,7 @@ import paylio_card from "/public/images/paylio-card-large.png";
 import paypal_card from "/public/images/paypal-card-large.png";
 import visa_card from "/public/images/visa-card-large.png";
 import master_card from "/public/images/master-card-large.png";
+import american_express from "/public/images/american-express-large.png";
 
 import { Button } from "reactstrap";
 
@@ -46,7 +47,11 @@ const LinkedPaymentSystem = ({ data = {}, noCards = true }) => {
             <label htmlFor={item.cardNumber} key={index}>
               <div className="col-xl-12 col-lg-12 col-md-12" key={index}>
                 <span className="wrapper"></span>
-                <Image src={item.bin.brand == "VISA" ?visa_card:master_card} alt="image" />
+                <Image src={
+                  item.bin.brand == "VISA" ? visa_card : 
+                  item.bin.brand == "AMERICAN EXPRESS" ? american_express : 
+                  master_card
+                } alt="image" />
                 <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
             </label>
 

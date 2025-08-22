@@ -146,10 +146,10 @@ const StepOne = () => {
                       </Link>
                     </li>
                   </ul>
-                  <button className="cmn-btn" onClick={() => setShowVideoModal(true)}>
+                  {/* <button className="cmn-btn" onClick={() => setShowVideoModal(true)}>
             ¿Cómo funciona?
             <Image className="play-icon" src={play_icon} alt="Play Icon" />
-          </button>
+          </button> */}
                 </div>
               </div>
               <div className="col-xl-9 col-lg-8 col-md-7">
