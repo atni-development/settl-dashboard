@@ -94,7 +94,7 @@ const StepTwo = () => {
     const rawValue = e.target.value.replace(/,/g, '');
     const numValue = parseFloat(rawValue);
 
-    if (numValue >= maxAmount) {
+    if (numValue >= maxAmount+1) {
       const formattedMax = formatNumber(maxAmount.toString());
       const cardTypeText = cardType === 'amex' ? 'American Express' : 'Visa/Mastercard';
       setError(`La cantidad máxima para tarjetas ${cardTypeText} es de $${formattedMax}.00`);

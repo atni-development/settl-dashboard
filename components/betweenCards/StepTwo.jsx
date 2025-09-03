@@ -16,6 +16,7 @@ import paylio_card from "/public/images/paylio-card.png";
 import paypal_card from "/public/images/paypal-card.png";
 import visa_card from "/public/images/visa-card.png";
 import master_card from "/public/images/master-card-card.png";
+import american_express from "/public/images/american-express-card.png";
 
 import { Button } from "reactstrap";
 
@@ -171,45 +172,34 @@ const StepOne = () => {
                     {/* Combined cards display - sorted alphabetically */}
                     {combinedCards.map((item, index) => (
                       <div className="single-card" key={`combined-${item.cardNumber}-${index}`}>
-                        {isPreselected(item.cardNumber) ? (
-                          // Preselected card - show as selected but not selectable
-                          <>
-                            <input
-                              type="radio"
-                              checked={true}
-                              name="preselectedCard"
-                              id={`preselected-${item.cardNumber}`}
-                              value={item.cardNumber}
-                              disabled
-                            />
-                            <label htmlFor={`preselected-${item.cardNumber}`} className="preselected-card">
-                              <div className="col-xl-12 col-lg-12 col-md-12">
-                                <span className="wrapper"></span>
-                                <Image src={item.bin.brand == "VISA" ? visa_card : master_card} alt="image" />
-                                <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)} (Seleccionada)</p>
-                              </div>
-                            </label>
-                          </>
-                        ) : (
-                          // Regular selectable card
-                          <>
-                            <input
-                              type="radio"
-                              checked={currentCard === item.cardNumber}
-                              name="cardSelection"
-                              id={item.cardNumber}
-                              value={item.cardNumber}
-                              onClick={(e) => handleChecked(e, item)}
-                            />
-                            <label htmlFor={item.cardNumber}>
-                              <div className="col-xl-12 col-lg-12 col-md-12">
-                                <span className="wrapper"></span>
-                                <Image src={item.bin.brand == "VISA" ? visa_card : master_card} alt="image" />
-                                <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p>
-                              </div>
-                            </label>
-                          </>
-                        )}
+                        <input
+                          type="radio"
+                          checked={currentCard === item.cardNumber}
+                          name="cardSelection"
+                          id={item.cardNumber}
+                          value={item.cardNumber}
+                          onClick={(e) => {
+                            // Don't allow selecting the preselected card
+                            if (!isPreselected(item.cardNumber)) {
+                              handleChecked(e, item);
+                            }
+                          }}
+                          disabled={isPreselected(item.cardNumber)}
+                        />
+                        <label htmlFor={item.cardNumber}>
+                          <div className="col-xl-12 col-lg-12 col-md-12">
+                            <span className="wrapper"></span>
+                            <Image src={
+                              item.bin.brand == "VISA" ? visa_card : 
+                              item.bin.brand == "AMERICAN EXPRESS" ? american_express : 
+                              master_card
+                            } alt="image" />
+                            <p>
+                              Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}
+                              {isPreselected(item.cardNumber) ? " (Tarjeta a pagar)" : ""}
+                            </p>
+                          </div>
+                        </label>
                       </div>
                     ))}
                     
