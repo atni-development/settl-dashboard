@@ -95,7 +95,7 @@ const StepTwo = () => {
       setError(`La cantidad máxima para tarjetas ${cardTypeText} es de $${formattedMax}.00`);
     } else {
  
-      if(numValue < 501){
+      if(numValue > 501){
         setError(null);
       const commission = numValue * 0.048;
       const iva = commission * 0.16;
