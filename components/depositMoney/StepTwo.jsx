@@ -95,7 +95,7 @@ const StepTwo = () => {
       setError(`La cantidad máxima para tarjetas ${cardTypeText} es de $${formattedMax}.00`);
     } else {
  
-      if(numValue > 501){
+
         setError(null);
       const commission = numValue * 0.048;
       const iva = commission * 0.16;
@@ -109,20 +109,19 @@ const StepTwo = () => {
 
       setAmount(rawValue);
       setCommission(totalCommission);
-      }else{
-      const cardTypeText = cardType === 'amex' ? 'American Express' : 'Visa/Mastercard';
-      setError(`La cantidad mínima para tarjetas ${cardTypeText} es de $500.00`);
-      }
+      
     }
   };
 
   const handleContinue = () => {
     setError(null);
-    if (parseFloat(amount) > 0) {
-       if(parseFloat(amount) >= 500){
-      router.push("/deposit-money/step-3");
-      }else{
+    const amountValue = parseFloat(amount);
+    if (amountValue > 0) {
+      // Validate minimum amount when button is pressed
+      if (amountValue < 501) {
         setError("El monto mínimo a pagar es de $500.00");
+      } else {
+        router.push("/deposit-money/step-3");
       }
     } else {
       setError("Debes indicar el monto para continuar");
