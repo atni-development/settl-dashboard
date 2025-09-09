@@ -100,7 +100,8 @@ const StepTwo = () => {
       setError(`La cantidad máxima para tarjetas ${cardTypeText} es de $${formattedMax}.00`);
     } else {
  
-      setError(null);
+      if(numValue < 501){
+        setError(null);
       const commission = numValue * 0.05;
       const iva = commission * 0.16;
       const totalCommission = Math.round((commission + iva) * 100) / 100;
@@ -112,6 +113,11 @@ const StepTwo = () => {
 
       setAmount(rawValue);
       setCommission(totalCommission);
+      }else{
+            
+      const cardTypeText = cardType === 'amex' ? 'American Express' : 'Visa/Mastercard';
+      setError(`La cantidad máxima para tarjetas ${cardTypeText} es de $500.00`);
+      }
      
     }
   };

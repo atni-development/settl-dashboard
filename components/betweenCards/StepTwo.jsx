@@ -196,7 +196,7 @@ const StepOne = () => {
                             } alt="image" />
                             <p>
                               Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}
-                              {isPreselected(item.cardNumber) ? " (Tarjeta a pagar)" : ""}
+                              {isPreselected(item.cardNumber) ? " (Tarjeta a pagar)" : "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"}
                             </p>
                           </div>
                         </label>
