@@ -73,7 +73,7 @@ const StepTwo = () => {
               setCardType(detectedType);
               
               if (detectedType === 'amex') {
-                setMaxAmount(10001);
+                setMaxAmount(10000);
               } else {
                 setMaxAmount(6020); // For Visa and Mastercard
               }
@@ -94,7 +94,7 @@ const StepTwo = () => {
     const rawValue = e.target.value.replace(/,/g, '');
     const numValue = parseFloat(rawValue);
 
-    if (numValue >= maxAmount+1) {
+    if (numValue >= (maxAmount+1)) {
       const formattedMax = formatNumber(maxAmount.toString());
       const cardTypeText = cardType === 'amex' ? 'American Express' : 'Visa/Mastercard';
       setError(`La cantidad máxima para tarjetas ${cardTypeText} es de $${formattedMax}.00`);
@@ -202,7 +202,7 @@ const StepTwo = () => {
                           onChange={handleAmountChange}
                           className="xxlr"
                           min="0"
-                          maxLength={4}
+                          maxLength={5}
                           onWheel={() => document.activeElement.blur()}
 
                           placeholder="Ejemplo 1,000.00"
