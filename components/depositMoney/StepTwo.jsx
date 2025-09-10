@@ -68,7 +68,7 @@ const StepTwo = () => {
               setCardType(detectedType);
               
               if (detectedType === 'amex') {
-                setMaxAmount(10000);
+                setMaxAmount(10001);
               } else {
                 setMaxAmount(6020); // For Visa and Mastercard
               }
