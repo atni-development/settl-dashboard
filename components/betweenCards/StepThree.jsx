@@ -87,7 +87,12 @@ const StepTwo = () => {
   }, [router]);
 
   const formatNumber = (num) => {
-    return num.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    if (!num) return '';
+    const parts = num.toString().split('.');
+    const intPart = parts[0];
+    const decPart = parts[1] ? '.' + parts[1] : '';
+    const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return formattedInt + decPart;
   };
 
   const handleAmountChange = (e) => {
@@ -202,10 +207,10 @@ const StepTwo = () => {
                           onChange={handleAmountChange}
                           className="xxlr"
                           min="0"
-                          maxLength={5}
+                          maxLength={10}
                           onWheel={() => document.activeElement.blur()}
 
-                          placeholder="Ejemplo 1,000.00"
+                          placeholder="Ejemplo 10,000.00"
                           type="text"
                           value={formatNumber(amount)}
                         />
