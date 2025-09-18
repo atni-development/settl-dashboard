@@ -25,7 +25,7 @@ const StepTwo = () => {
       const paymentRequestsRef = collection(db, 'Users', userId, 'payment_requests');
       const q = query(paymentRequestsRef, where('chargeStatus', '==', 'completed'));
       const querySnapshot = await getDocs(q);
-      console.log("querySnapshot: ", querySnapshot);
+ 
       
       return !querySnapshot.empty; // Returns true if there are completed payments
     } catch (error) {
