@@ -1,12 +1,18 @@
-import Image from "next/image";
+import Imagconst StepTwo = () => {
+  const [amount, setAmount] = useState("");
+  const [commission, setCommission] = useState(0.0);
+  const [error, setError] = useState(null);
+  const [cardType, setCardType] = useState("");
+  const [maxAmount, setMaxAmount] = useState(6020); // Default for Visa/Mastercard
+  const [minAmount, setMinAmount] = useState(51); // Default minimum amount
+  const router = useRouter;"next/image";
 import Link from "next/link";
 import support_icon from "/public/images/icon/support-icon.png";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from "next/head";
-import cards_match from "/public/images/money_card.png";
+import { db } from '/firebase/config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase/config';
 
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 
@@ -16,23 +22,7 @@ const StepTwo = () => {
   const [error, setError] = useState(null);
   const [cardType, setCardType] = useState("");
   const [maxAmount, setMaxAmount] = useState(6020); // Default for Visa/Mastercard
-  const [minAmount, setMinAmount] = useState(51); // Default minimum amount
   const router = useRouter();
-
-  // Function to check if user has completed payment requests
-  const checkUserPaymentHistory = async (userId) => {
-    try {
-      const paymentRequestsRef = collection(db, 'Users', userId, 'payment_requests');
-      const q = query(paymentRequestsRef, where('chargeStatus', '==', 'completed'));
-      const querySnapshot = await getDocs(q);
-      console.log("querySnapshot: ", querySnapshot);
-      
-      return !querySnapshot.empty; // Returns true if there are completed payments
-    } catch (error) {
-      console.error('Error checking payment history:', error);
-      return false; // Default to false if error occurs
-    }
-  };
 
   const detectCardType = (cardNumber) => {
     // Remove all non-numeric characters
@@ -58,23 +48,12 @@ const StepTwo = () => {
 
     if (typeof window !== 'undefined' && window.localStorage) {
       const userId = localStorage.getItem('userId')?.trim();
-      const currentCard = localStorage.getItem(userId+'bc_current_card');
-      const payingCard = localStorage.getItem(userId+'bc_paying_card');
-    
-      // Check user payment history to set minimum amount
-      const setMinimumAmount = async () => {
-        if (userId) {
-          const hasCompletedPayments = await checkUserPaymentHistory(userId);
-          setMinAmount(hasCompletedPayments ? 501 : 51);
-        }
-      };
+      const currentCard = localStorage.getItem(userId+'current_card');
 
-      setMinimumAmount();
-
-      if (currentCard && payingCard) {
-        const sessionTime = localStorage.getItem(userId+'bc_session_date');
+      if (currentCard) {
+        const sessionTime = localStorage.getItem(userId+'session_date');
         if (!sessionTime) {
-          router.push("/between-cards/step-1");
+          router.push("/deposit-money/step-1");
         } else {
           const date = new Date();
           const currentDate = date.getTime();
@@ -82,21 +61,19 @@ const StepTwo = () => {
           const diff = currentDate - sessionDate;
           const diffMinutes = Math.round(diff / 60000);
 
-          if (diffMinutes > 2) {
-            localStorage.removeItem(userId+'bc_paying_card');
-            localStorage.removeItem(userId+'bc_session_date');
-            localStorage.removeItem(userId+'bc_current_card');
-            localStorage.removeItem(userId+'bc_amountToPay');
-            localStorage.removeItem(userId+'bc_commissionToPay');
+          if (diffMinutes > 1) {
+            localStorage.removeItem(userId+'session_date');
+            localStorage.removeItem(userId+'current_card');
+            localStorage.removeItem(userId+'amountToPay');
+            localStorage.removeItem(userId+'commissionToPay');
 
-            router.push("/between-cards/step-1");
+            router.push("/deposit-money/step-1");
           } else {
             const card = JSON.parse(currentCard);
-            const payingCardData = JSON.parse(payingCard);
             
-            // Detect card type from the paying card (the one with limits)
-            if (payingCardData && payingCardData.cardNumber) {
-              const detectedType = detectCardType(payingCardData.cardNumber);
+            // Detect card type and set appropriate max amount
+            if (card && card.cardNumber) {
+              const detectedType = detectCardType(card.cardNumber);
               setCardType(detectedType);
               
               if (detectedType === 'amex') {
@@ -108,7 +85,7 @@ const StepTwo = () => {
           }
         }
       } else {
-        router.push("/between-cards/step-2");
+        router.push("/deposit-money/step-1");
       }
     }
   }, [router]);
@@ -132,34 +109,33 @@ const StepTwo = () => {
       setError(`La cantidad máxima para tarjetas ${cardTypeText} es de $${formattedMax}.00`);
     } else {
  
-  
+
         setError(null);
-      const commission = numValue * 0.05;
+      const commission = numValue * 0.048;
       const iva = commission * 0.16;
       const totalCommission = Math.round((commission + iva) * 100) / 100;
       const userId = localStorage.getItem('userId')?.trim();
+  
+      
 
-
-      localStorage.setItem(userId + 'bc_amountToPay', rawValue);
-      localStorage.setItem(userId + 'bc_commisionToPay', totalCommission);
+      localStorage.setItem(userId + 'amountToPay', rawValue);
+      localStorage.setItem(userId + 'commisionToPay', totalCommission);
 
       setAmount(rawValue);
       setCommission(totalCommission);
-     
+      
     }
   };
 
   const handleContinue = () => {
-
-     setError(null);
+    setError(null);
     const amountValue = parseFloat(amount);
     if (amountValue > 0) {
-      // Validate minimum amount when button is pressed using dynamic minimum
-      if (amountValue < minAmount) {
-        const formattedMin = formatNumber((minAmount - 1).toString());
-        setError(`El monto mínimo a pagar es de $${formattedMin}.00`);
+      // Validate minimum amount when button is pressed
+      if (amountValue < 501) {
+        setError("El monto mínimo a pagar es de $500.00");
       } else {
-      router.push("/between-cards/step-4");
+        router.push("/deposit-money/step-3");
       }
     } else {
       setError("Debes indicar el monto para continuar");
@@ -177,8 +153,10 @@ const StepTwo = () => {
         <div className="container-fruid">
           <div className="main-content">
             <div className="head-area d-flex align-items-center justify-content-between">
-            <h4>Entre tarjetas <span>(Paga una tarjeta de crédito con otra)</span></h4>
-            
+              <h4>Comprar tiempo</h4>
+              <div className="icon-area">
+                <Image src={support_icon} alt="icon" />
+              </div>
             </div>
             <div className="row justify-content-between pb-120">
               <div className="col-xl-3 col-lg-4 col-md-5">
@@ -186,12 +164,7 @@ const StepTwo = () => {
                   <ul>
                     <li>
                       <Link href="" className="single-link active">
-                      Selecciona la tarjeta que recibirá el pago
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="" className="single-link active">
-                      Selecciona la tarjeta con la que pagarás
+                      Selecciona a qué tarjeta quieres comprarle tiempo
                       </Link>
                     </li>
                     <li>
@@ -209,25 +182,11 @@ const StepTwo = () => {
               </div>
               <div className="col-xl-9 col-lg-8 col-md-7">
                 <div className="table-area">
-                  <div className="head-area"   style={{ display: "flex", alignItems: "center" }}                  >
-                    <h4>Introduce la cantidad</h4>
-                    <div style={{ flexGrow: 0.05 }} /> {/* Flexible empty space */}
-
-                    <Image
-    src={cards_match}
-    alt="image"
-    width={100}
-    height={100}
-    style={{ marginLeft: "auto !important" }}
-  />
-
-
-                  </div>
                   <form action="#">
                     <div className="send-banance">
                       {error && <Alert color="danger">{error}</Alert>}
 
-                      <p>Escribe la cantidad a pagar entre tarjetas</p>
+                      <p>Escribe la cantidad a aplazar con Settl</p>
 
                       <div className="input-area">
                         <p><b>$</b></p>
@@ -235,7 +194,7 @@ const StepTwo = () => {
                           onChange={handleAmountChange}
                           className="xxlr"
                           min="0"
-                          maxLength={10}
+                          maxLength={8}
                           onWheel={() => document.activeElement.blur()}
 
                           placeholder="Ejemplo 10,000.00"
@@ -245,13 +204,14 @@ const StepTwo = () => {
                         <p>MXN</p>
                       </div>
                       <p>
-                        Comisión: <b>${commission}</b>  ·   Mínimo<b>${formatNumber((minAmount - 1).toString())}.00</b>  ·   Máximo<b>${formatNumber(maxAmount.toString())}.00</b>
+                        Comisión: <b>${commission}</b>  ·   Mínimo a aplazar <b>$500.00</b>  ·   Máximo a aplazar <b>${formatNumber(maxAmount.toString())}.00</b>
                       </p>
                     </div>
+                    <p><br></br><b>Importante:</b><br></br>Tu tarjeta deberá tener como <b>saldo disponible</b> la cantidad a aplazar con Settl + la comisión por el servicio.</p>
                   </form>
                 </div>
                 <div className="footer-area mt-40">
-                  <Link href="/between-cards/step-2">Regresar</Link>
+                  <Link href="/deposit-money/step-1">Regresar</Link>
                   <Button className="cmn-btn" onClick={handleContinue}>
                     Siguiente
                   </Button>

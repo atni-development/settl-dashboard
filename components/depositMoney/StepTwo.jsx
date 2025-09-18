@@ -4,6 +4,8 @@ import support_icon from "/public/images/icon/support-icon.png";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from "next/head";
+import { db } from '/firebase/config';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 
@@ -12,7 +14,8 @@ const StepTwo = () => {
   const [commission, setCommission] = useState(0.0);
   const [error, setError] = useState(null);
   const [cardType, setCardType] = useState("");
-  const [maxAmount, setMaxAmount] = useState(6020); // Default for Visa/Mastercard
+  const [maxAmount, setMaxAmount] = useState(6020); 
+  const [minAmount, setMinAmount] = useState(51);
   const router = useRouter();
 
   const detectCardType = (cardNumber) => {
@@ -35,8 +38,20 @@ const StepTwo = () => {
     return 'unknown';
   };
 
-  useEffect(() => {
+  // Function to check if user has completed payment requests
+  const checkUserPaymentHistory = async (userId) => {
+    try {
+      const paymentRequestsRef = collection(db, 'Users', userId, 'payment_requests');
+      const q = query(paymentRequestsRef, where('chargeStatus', '==', 'completed'));
+      const querySnapshot = await getDocs(q);
+      return !querySnapshot.empty; // Returns true if there are completed payments
+    } catch (error) {
+      console.error('Error checking payment history:', error);
+      return false; // Default to false if error occurs
+    }
+  };
 
+  useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
       const userId = localStorage.getItem('userId')?.trim();
       const currentCard = localStorage.getItem(userId+'current_card');
@@ -73,6 +88,17 @@ const StepTwo = () => {
                 setMaxAmount(6020); // For Visa and Mastercard
               }
             }
+
+            // Check payment history to determine minimum amount
+            if (userId) {
+              checkUserPaymentHistory(userId).then(hasCompletedPayments => {
+                if (hasCompletedPayments) {
+                  setMinAmount(500);
+                } else {
+                  setMinAmount(50);
+                }
+              });
+            }
           }
         }
       } else {
@@ -99,22 +125,17 @@ const StepTwo = () => {
       const cardTypeText = cardType === 'amex' ? 'American Express' : 'Visa/Mastercard';
       setError(`La cantidad máxima para tarjetas ${cardTypeText} es de $${formattedMax}.00`);
     } else {
- 
-
-        setError(null);
+      setError(null);
       const commission = numValue * 0.048;
       const iva = commission * 0.16;
       const totalCommission = Math.round((commission + iva) * 100) / 100;
       const userId = localStorage.getItem('userId')?.trim();
-  
-      
 
       localStorage.setItem(userId + 'amountToPay', rawValue);
-      localStorage.setItem(userId + 'commisionToPay', totalCommission);
+      localStorage.setItem(userId + 'commissionToPay', totalCommission);
 
       setAmount(rawValue);
       setCommission(totalCommission);
-      
     }
   };
 
@@ -123,8 +144,8 @@ const StepTwo = () => {
     const amountValue = parseFloat(amount);
     if (amountValue > 0) {
       // Validate minimum amount when button is pressed
-      if (amountValue < 501) {
-        setError("El monto mínimo a pagar es de $500.00");
+      if (amountValue < minAmount) {
+        setError(`El monto mínimo a pagar es de $${formatNumber(minAmount.toString())}.00`);
       } else {
         router.push("/deposit-money/step-3");
       }
@@ -187,7 +208,6 @@ const StepTwo = () => {
                           min="0"
                           maxLength={8}
                           onWheel={() => document.activeElement.blur()}
-
                           placeholder="Ejemplo 10,000.00"
                           type="text"
                           value={formatNumber(amount)}
@@ -195,7 +215,7 @@ const StepTwo = () => {
                         <p>MXN</p>
                       </div>
                       <p>
-                        Comisión: <b>${commission}</b>  ·   Mínimo a aplazar <b>$500.00</b>  ·   Máximo a aplazar <b>${formatNumber(maxAmount.toString())}.00</b>
+                        Comisión: <b>${commission}</b>  ·   Mínimo a aplazar <b>${formatNumber(minAmount.toString())}.00</b>  ·   Máximo a aplazar <b>${formatNumber(maxAmount.toString())}.00</b>
                       </p>
                     </div>
                     <p><br></br><b>Importante:</b><br></br>Tu tarjeta deberá tener como <b>saldo disponible</b> la cantidad a aplazar con Settl + la comisión por el servicio.</p>
