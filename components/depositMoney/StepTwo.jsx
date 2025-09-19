@@ -4,7 +4,7 @@ import support_icon from "/public/images/icon/support-icon.png";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from "next/head";
-import { db } from '/firebase/config';
+import { db } from '../../firebase/config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 
