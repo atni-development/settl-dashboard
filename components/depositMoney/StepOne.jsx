@@ -53,6 +53,7 @@ const StepOne = () => {
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
       //setCurrentCard(card);
+      console.log("Email", localStorage.getItem('email'));
       var db = getFirestore();
       let userId = localStorage.getItem('userId').trim();
       var collectionPath = "Users/" + userId + "/cards";

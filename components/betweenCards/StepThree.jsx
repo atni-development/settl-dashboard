@@ -247,6 +247,7 @@ const StepTwo = () => {
                       <p>
                         Comisión: <b>${commission}</b>  ·   Mínimo<b>${formatNumber((minAmount - 1).toString())}.00</b>  ·   Máximo<b>${formatNumber(maxAmount.toString())}.00</b>
                       </p>
+                      { (minAmount === 51) ? <p> <br></br>Por ser tu primera transacción el mínimo a pagar es de $50.00</p> : ""}
                     </div>
                   </form>
                 </div>

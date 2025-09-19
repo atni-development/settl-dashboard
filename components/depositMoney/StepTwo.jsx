@@ -70,7 +70,7 @@ const StepTwo = () => {
             localStorage.removeItem(userId+'session_date');
             localStorage.removeItem(userId+'current_card');
             localStorage.removeItem(userId+'amountToPay');
-            localStorage.removeItem(userId+'commissionToPay');
+            localStorage.removeItem(userId+'commisionToPay');
 
             router.push("/deposit-money/step-1");
           } else {
@@ -127,14 +127,14 @@ const StepTwo = () => {
       setError(null);
       const commission = numValue * 0.048;
       const iva = commission * 0.16;
-      const totalCommission = Math.round((commission + iva) * 100) / 100;
+      const comission = Math.round((commission + iva) * 100) / 100;
       const userId = localStorage.getItem('userId')?.trim();
 
       localStorage.setItem(userId + 'amountToPay', rawValue);
-      localStorage.setItem(userId + 'commissionToPay', totalCommission);
+      localStorage.setItem(userId + 'commisionToPay', comission);
 
       setAmount(rawValue);
-      setCommission(totalCommission);
+      setCommission(comission);
     }
   };
 
@@ -217,7 +217,7 @@ const StepTwo = () => {
                         Comisión: <b>${commission}</b>  ·   Mínimo a aplazar <b>${formatNumber(minAmount.toString())}.00</b>  ·   Máximo a aplazar <b>${formatNumber(maxAmount.toString())}.00</b>
                       </p>
                     </div>
-                    <p><br></br><b>Importante:</b><br></br>Tu tarjeta deberá tener como <b>saldo disponible</b> la cantidad a aplazar con Settl + la comisión por el servicio.</p>
+                    <p><br></br><b>Importante:</b><br></br>Tu tarjeta deberá tener como <b>saldo disponible</b> la cantidad a aplazar con Settl + la comisión por el servicio<br></br> <br></br>{ (minAmount === 50) ? "Por ser tu primera transacción el mínimo a aplazar es de $50.00" : ""}</p>
                   </form>
                 </div>
                 <div className="footer-area mt-40">

@@ -35,6 +35,7 @@ const StepThree = () => {
   const [currentComission, setCurrentCommision] = useState(0);
   const router = useRouter();
   const searchParams = useSearchParams()
+
   var parseQueryString = function () {
     var str = window.location.search;
     var objURL = {};
@@ -50,18 +51,14 @@ const StepThree = () => {
   };
 
   const detectCardType = (cardNumber) => {
-    // Remove all non-numeric characters
     const cleanNumber = cardNumber.replace(/\D/g, '');
     
-    // American Express starts with 34 or 37
     if (cleanNumber.match(/^3[47]/)) {
       return 'amex';
     }
-    // Visa starts with 4
     else if (cleanNumber.match(/^4/)) {
       return 'visa';
     }
-    // Mastercard starts with 51-55 or 22-27
     else if (cleanNumber.match(/^5[1-5]/) || cleanNumber.match(/^2[2-7]/)) {
       return 'mastercard';
     }
@@ -84,9 +81,8 @@ const StepThree = () => {
   };
 
 
-
-
   useEffect(() => {
+   
     if (typeof window !== 'undefined' && window.localStorage) {
       //setCurrentCard(card);
       setCurrentEmail(localStorage.getItem('email'));
@@ -182,6 +178,7 @@ const StepThree = () => {
             localStorage.removeItem(userId + 'commisionToPay');
             router.push("/deposit-money/step-1");
           } else {
+            
 
             if (currentAmount !== null && currentCommision !== null) {
               var amount = currentAmount;
@@ -196,7 +193,11 @@ const StepThree = () => {
         } else {
           router.push("/deposit-money/step-1");
         }
+
       }
+      console.log("Current Amount:", currentAmount);
+      console.log("Current Commission:", currentComission);
+      console.log("Card Type:", cardType);
     }
   }, []);
 
@@ -256,7 +257,8 @@ const StepThree = () => {
               let userId = localStorage.getItem('userId').trim();
               var collectionPath = "Users/" + userId + "/payment_requests";
               const q = collection(db, collectionPath);
-              addDoc(q, paymentData).then((docRef) => {
+              console.log("Submitting payment data:", paymentData);
+              /*addDoc(q, paymentData).then((docRef) => {
                 const functions = getFunctions();
                 const processsPayment = httpsCallable(functions, 'processNewPayment');
                 processsPayment({ paymentId: docRef.id, deviceId: deviceDataId, phoneNumber: phone, cardCVV: cvv })
@@ -313,7 +315,7 @@ const StepThree = () => {
                 .catch((error) => {
                   setLoading(false);
                   setError("Se produjo un error al registar la información de pago Error 569")
-                });
+                });*/
 
             } else {
               setLoading(false);
