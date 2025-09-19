@@ -258,7 +258,7 @@ const StepThree = () => {
               var collectionPath = "Users/" + userId + "/payment_requests";
               const q = collection(db, collectionPath);
               console.log("Submitting payment data:", paymentData);
-              /*addDoc(q, paymentData).then((docRef) => {
+              addDoc(q, paymentData).then((docRef) => {
                 const functions = getFunctions();
                 const processsPayment = httpsCallable(functions, 'processNewPayment');
                 processsPayment({ paymentId: docRef.id, deviceId: deviceDataId, phoneNumber: phone, cardCVV: cvv })
@@ -315,7 +315,7 @@ const StepThree = () => {
                 .catch((error) => {
                   setLoading(false);
                   setError("Se produjo un error al registar la información de pago Error 569")
-                });*/
+                });
 
             } else {
               setLoading(false);
