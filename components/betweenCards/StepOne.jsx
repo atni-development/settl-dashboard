@@ -184,15 +184,30 @@ const StepOne = () => {
                           value={item.cardNumber}
                           onClick={(e) => handleChecked(e, item)}
                         />
-                        <label htmlFor={item.cardNumber}     key={index}>
-                        <div className="col-xl-12 col-lg-12 col-md-12"     key={index}>
-                          <span className="wrapper"></span>
-                          <Image src={
-                            item.bin.brand == "VISA" ? visa_card : 
-                            item.bin.brand == "AMERICAN EXPRESS" ? american_express : 
-                            master_card
-                          } alt="image" />
-                          <p>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}</p></div>
+                        <label htmlFor={item.cardNumber} key={index}>
+                          <div className="col-xl-12 col-lg-12 col-md-12" key={index}>
+                            <span className="wrapper"></span>
+                            
+                            <div style={{position: 'relative', display: 'inline-block', width: '100%'}}>
+                              <Image 
+                                src={
+                                  item.bin.brand == "VISA" ? visa_card : 
+                                  item.bin.brand == "AMERICAN EXPRESS" ? american_express : 
+                                  master_card
+                                } 
+                                alt="image"
+                                style={{
+                                  width: '100%',
+                                  height: 'auto',
+                                  display: 'block'
+                                }}
+                              />
+                            </div>
+                            
+                            <p className="" style={{zIndex: 20, position: 'relative'}}>
+                              Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}
+                            </p>
+                          </div>
                         </label>
 
                       </div>
@@ -243,11 +258,19 @@ const StepOne = () => {
                         data-bs-toggle="modal"
                         data-backdrop="static" data-keyboard="false"
                         data-bs-target="#addcardMod"
+                        style={{cursor: 'pointer'}}
                       >
-                            <div className="col-xl-12 col-lg-12 col-md-12">          
-                              <Image src={add_card} alt="image" className="w-100" />
-                            </div>
-              
+                        <div className="col-xl-12 col-lg-12 col-md-12">
+                          <Image 
+                            src={add_card} 
+                            alt="image" 
+                            style={{
+                              width: '100%',
+                              height: 'auto',
+                              objectFit: 'contain'
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -319,9 +319,62 @@
       }
       .single-card {
         margin-bottom: 20px;
+        position: relative;
         button {
           background-color: transparent;
           padding: 0;
+        }
+        
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(128, 128, 128, 0.6) !important;
+            border-radius: 10px;
+            pointer-events: none;
+            z-index: 999 !important;
+            display: block !important;
+          }
+        
+        &.selected {
+          label {
+            border: 3px solid #5b2edf;
+            border-radius: 12px;
+          }
+        }
+        
+        // Mobile only - make cards full width
+        @media (max-width: 767px) {
+          width: 100% !important;
+          flex: 0 0 100% !important;
+          height: auto !important;
+          max-width: 100% !important;
+          margin-bottom: 30px;
+          
+          label {
+            width: 100% !important;
+            
+            .col-xl-12, .col-lg-12, .col-md-12 {
+              padding: 0 !important;
+              width: 100% !important;
+              
+              > div {
+                width: 100% !important;
+                min-height: 200px;
+              }
+              
+              img {
+                width: 100% !important;
+                height: auto !important;
+                min-height: 180px;
+                max-width: 100% !important;
+                display: block !important;
+                object-fit: contain;
+              }
+            }
+          }
         }
       }
       .add-card {
@@ -336,6 +389,35 @@
           padding: 0;
         }
       }
+      
+      // Make add card button same size as regular cards in desktop
+      .single-card {
+        .reg {
+          background: var(--bs-white);
+          border: 1px solid #eae9f5;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 150px;
+          padding: 15px;
+          cursor: pointer;
+          
+          .col-xl-12, .col-lg-12, .col-md-12 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            img {
+              width: 100%;
+              height: auto;
+              max-height: 120px;
+              object-fit: contain;
+            }
+          }
+        }
+      }
+      
       .view-all {
         img {
           margin-left: 5px;
@@ -1641,6 +1723,34 @@
       position: relative;
       gap: 20px;
       width: 100%;
+      
+      // Mobile only - force single column layout with larger cards
+      @media (max-width: 767px) {
+        flex-direction: column !important;
+        gap: 30px !important;
+        padding: 0 !important;
+        
+        .single-card {
+          width: 100% !important;
+          flex: 0 0 100% !important;
+          max-width: 100% !important;
+          min-height: 220px;
+          
+          label {
+            width: 100% !important;
+            min-height: 200px;
+            
+            img {
+              width: 100% !important;
+              height: auto !important;
+              min-height: 180px;
+              max-width: 100% !important;
+              object-fit: contain;
+            }
+          }
+        }
+      }
+      
       input {
         position: absolute;
         opacity: 0;

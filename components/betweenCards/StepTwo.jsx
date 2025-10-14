@@ -36,6 +36,7 @@ const StepOne = () => {
     setError(null);
 
     setCurrentCard(data.cardNumber);
+    console.log('Card selected:', data.cardNumber);
     var userId = localStorage.getItem('userId').trim();
     localStorage.setItem(userId + 'bc_paying_card', JSON.stringify(data));
   };
@@ -109,6 +110,9 @@ const StepOne = () => {
 
   const combinedCards = getAllCombinedCards();
 
+  console.log('Current selected card:', currentCard);
+  console.log('Combined cards:', combinedCards.map(c => c.cardNumber));
+
   return (
     <section className="dashboard-section body-collapse pay step crypto deposit-money">
       <Head>
@@ -170,38 +174,74 @@ const StepOne = () => {
                   {error && <Alert color="danger">{error}</Alert>}
                   <div className="card-area d-flex flex-wrap">
                     {/* Combined cards display - sorted alphabetically */}
-                    {combinedCards.map((item, index) => (
-                      <div className="single-card" key={`combined-${item.cardNumber}-${index}`}>
-                        <input
-                          type="radio"
-                          checked={currentCard === item.cardNumber}
-                          name="cardSelection"
-                          id={item.cardNumber}
-                          value={item.cardNumber}
-                          onClick={(e) => {
-                            // Don't allow selecting the preselected card
-                            if (!isPreselected(item.cardNumber)) {
-                              handleChecked(e, item);
-                            }
-                          }}
-                          disabled={isPreselected(item.cardNumber)}
-                        />
-                        <label htmlFor={item.cardNumber}>
-                          <div className="col-xl-12 col-lg-12 col-md-12">
-                            <span className="wrapper"></span>
-                            <Image src={
-                              item.bin.brand == "VISA" ? visa_card : 
-                              item.bin.brand == "AMERICAN EXPRESS" ? american_express : 
-                              master_card
-                            } alt="image" />
-                            <p>
-                              Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}
-                              {isPreselected(item.cardNumber) ? " (Tarjeta a pagar)" : "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"}
-                            </p>
-                          </div>
-                        </label>
-                      </div>
-                    ))}
+                    {combinedCards.map((item, index) => {
+                      const isSelected = currentCard === item.cardNumber;
+                      const isDisabled = isPreselected(item.cardNumber);
+                      console.log(`Card ${item.cardNumber.slice(-4)}: selected=${isSelected}, disabled=${isDisabled}`);
+                      
+                      return (
+                        <div 
+                          className={`single-card ${isSelected ? 'selected' : ''}`} 
+                          key={`combined-${item.cardNumber}-${index}`}
+                        >
+                          <input
+                            type="radio"
+                            checked={isSelected}
+                            name="cardSelection"
+                            id={item.cardNumber}
+                            value={item.cardNumber}
+                            onClick={(e) => {
+                              // Don't allow selecting the preselected card
+                              if (!isDisabled) {
+                                handleChecked(e, item);
+                              }
+                            }}
+                            disabled={isDisabled}
+                          />
+                          <label htmlFor={item.cardNumber}>
+                            <div className="col-xl-12 col-lg-12 col-md-12">
+                              <span className="wrapper"></span>
+                              
+                              <div style={{position: 'relative', display: 'inline-block', width: '100%'}}>
+                                <Image 
+                                  src={
+                                    item.bin.brand == "VISA" ? visa_card : 
+                                    item.bin.brand == "AMERICAN EXPRESS" ? american_express : 
+                                    master_card
+                                  } 
+                                  alt="image"
+                                  style={{
+                                    width: '100%',
+                                    height: 'auto',
+                                    display: 'block'
+                                  }}
+                                />
+                                {isDisabled && (
+                                  <div 
+                                    className="card-image-overlay"
+                                    style={{
+                                      position: 'absolute',
+                                      top: 0,
+                                      left: 0,
+                                      width: '100%',
+                                      height: '100%',
+                                      backgroundColor: 'rgba(45, 41, 41, 0.7)',
+                                      borderRadius: '10px',
+                                      zIndex: 10,
+                                      pointerEvents: 'none'
+                                    }}
+                                  ></div>
+                                )}
+                              </div>
+                              
+                              <p className="text-center" style={{zIndex: 20, position: 'relative'}}>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}
+                                {isDisabled ? " (Tarjeta a pagar)" : "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"}
+                              </p>
+                            </div>
+                          </label>
+                        </div>
+                      );
+                    })}
                     
                     <div className="single-card">
                       <div
@@ -210,9 +250,18 @@ const StepOne = () => {
                         data-bs-toggle="modal"
                         data-backdrop="static" data-keyboard="false"
                         data-bs-target="#addcardMod"
+                        style={{cursor: 'pointer'}}
                       >
                         <div className="col-xl-12 col-lg-12 col-md-12">
-                          <Image src={add_card} alt="image" className="w-100" />
+                          <Image 
+                            src={add_card} 
+                            alt="image" 
+                            style={{
+                              width: '100%',
+                              height: 'auto',
+                              objectFit: 'contain'
+                            }}
+                          />
                         </div>
 
                       </div>
