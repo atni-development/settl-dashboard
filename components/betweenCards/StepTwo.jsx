@@ -198,7 +198,24 @@ const StepOne = () => {
                             }}
                             disabled={isDisabled}
                           />
-                          <label htmlFor={item.cardNumber}>
+                          <label htmlFor={item.cardNumber} style={{position: 'relative'}}>
+                            {isDisabled && (
+                              <div 
+                                className="card-overlay"
+                                style={{
+                                  position: 'absolute',
+                                  top: 0,
+                                  left: 0,
+                                  width: '100%',
+                                  height: '100%',
+                                  backgroundColor: 'rgba(36, 63, 91, 0.75)',
+                                  borderRadius: '10px',
+                                  zIndex: 999,
+                                  pointerEvents: 'none',
+                                  display: 'block'
+                                }}
+                              ></div>
+                            )}
                             <div className="col-xl-12 col-lg-12 col-md-12">
                               <span className="wrapper"></span>
                               
@@ -216,26 +233,9 @@ const StepOne = () => {
                                     display: 'block'
                                   }}
                                 />
-                                {isDisabled && (
-                                  <div 
-                                    className="card-image-overlay"
-                                    style={{
-                                      position: 'absolute',
-                                      top: 0,
-                                      left: 0,
-                                      width: '100%',
-                                      height: '100%',
-                                      backgroundColor: 'rgba(45, 41, 41, 0.7)',
-                                      borderRadius: '10px',
-                                      zIndex: 10,
-                                      pointerEvents: 'none'
-                                    }}
-                                  ></div>
-                                )}
                               </div>
-                              
-                              <p className="text-center" style={{zIndex: 20, position: 'relative'}}>Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}
-                                {isDisabled ? " (Tarjeta a pagar)" : "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"}
+
+                              <p className="text" style={{position: 'relative'}}>&nbsp;Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}
                               </p>
                             </div>
                           </label>

@@ -205,7 +205,7 @@ const StepOne = () => {
                             </div>
                             
                             <p className="" style={{zIndex: 20, position: 'relative'}}>
-                              Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}
+                              &nbsp;Tarjeta Terminación {item.cardNumber.substring(item.cardNumber.length, item.cardNumber.length - 4)}
                             </p>
                           </div>
                         </label>
