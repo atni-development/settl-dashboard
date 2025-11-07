@@ -214,7 +214,44 @@ const StepOne = () => {
                                   pointerEvents: 'none',
                                   display: 'block'
                                 }}
-                              ></div>
+                              >
+                                <div 
+                                  style={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: '33px',
+                                    height: '33px',
+                                    backgroundColor: 'white',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    zIndex: 1000
+                                  }}
+                                >
+                                  <svg 
+                                    width="12" 
+                                    height="12" 
+                                    viewBox="0 0 24 24" 
+                                    fill="none" 
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    style={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center'
+                                    }}
+                                  >
+                                    <path 
+                                      d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" 
+                                      fill="#6C3AFF"
+                                      strokeWidth="1.5"
+                                      stroke="#6C3AFF"
+                                    />
+                                  </svg>
+                                </div>
+                              </div>
                             )}
                             <div className="col-xl-12 col-lg-12 col-md-12">
                               <span className="wrapper"></span>
